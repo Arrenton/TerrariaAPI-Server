@@ -54,1083 +54,1144 @@ namespace Terraria
 				text = "";
 			}
 
-			switch (msgType)
-			{
-				case 1:
-					writer.Write("Terraria" + Main.curRelease);
-					break;
-				case 2:
-					writer.Write(text);
-					if (Main.dedServ)
-					{
-						Console.WriteLine(Netplay.Clients[num].Socket.GetRemoteAddress().ToString() + " was booted: " + text);
-					}
-					break;
-				case 3:
-					writer.Write((byte) remoteClient);
-					break;
-				case 4:
-				{
-					Player player = Main.player[number];
-					writer.Write((byte) number);
-					writer.Write((byte) player.skinVariant);
-					writer.Write((byte) player.hair);
-					writer.Write(text);
-					writer.Write(player.hairDye);
-					BitsByte hideVisual = 0;
-					for (int i = 0; i < 8; i++)
-						hideVisual[i] = player.hideVisual[i];
-					writer.Write(hideVisual);
-					hideVisual = 0;
-					for (int i = 0; i < 2; i++)
-						hideVisual[i] = player.hideVisual[i + 8];
-					writer.Write(hideVisual);
-					writer.Write(player.hideMisc);
-					writer.WriteRGB(player.hairColor);
-					writer.WriteRGB(player.skinColor);
-					writer.WriteRGB(player.eyeColor);
-					writer.WriteRGB(player.shirtColor);
-					writer.WriteRGB(player.underShirtColor);
-					writer.WriteRGB(player.pantsColor);
-					writer.WriteRGB(player.shoeColor);
+            switch (msgType)
+            {
+                case 1:
+                    writer.Write("Terraria" + Main.curRelease);
+                    break;
+                case 2:
+                    writer.Write(text);
+                    if (Main.dedServ)
+                    {
+                        Console.WriteLine(Netplay.Clients[num].Socket.GetRemoteAddress().ToString() + " was booted: " + text);
+                    }
+                    break;
+                case 3:
+                    writer.Write((byte)remoteClient);
+                    break;
+                case 4:
+                    {
+                        Player player = Main.player[number];
+                        writer.Write((byte)number);
+                        writer.Write((byte)player.skinVariant);
+                        writer.Write((byte)player.hair);
+                        writer.Write(text);
+                        writer.Write(player.hairDye);
+                        BitsByte hideVisual = 0;
+                        for (int i = 0; i < 8; i++)
+                            hideVisual[i] = player.hideVisual[i];
+                        writer.Write(hideVisual);
+                        hideVisual = 0;
+                        for (int i = 0; i < 2; i++)
+                            hideVisual[i] = player.hideVisual[i + 8];
+                        writer.Write(hideVisual);
+                        writer.Write(player.hideMisc);
+                        writer.WriteRGB(player.hairColor);
+                        writer.WriteRGB(player.skinColor);
+                        writer.WriteRGB(player.eyeColor);
+                        writer.WriteRGB(player.shirtColor);
+                        writer.WriteRGB(player.underShirtColor);
+                        writer.WriteRGB(player.pantsColor);
+                        writer.WriteRGB(player.shoeColor);
 
-					BitsByte bb2 = 0;
-					if (player.difficulty == 1)
-					{
-						bb2[0] = true;
-					}
-					else if (player.difficulty == 2)
-					{
-						bb2[1] = true;
-					}
-					bb2[2] = player.extraAccessory;
-					writer.Write(bb2);
-					break;
-				}
-				case 5:
-				{
-					writer.Write((byte) number);
-					writer.Write((byte) number2);
-					Player player2 = Main.player[number];
-					Item item;
-					if (number2 >
-					    (float)
-						    (58 + player2.armor.Length + player2.dye.Length + player2.miscEquips.Length + player2.miscDyes.Length +
-						     player2.bank.item.Length + player2.bank2.item.Length))
-					{
-						item = player2.trashItem;
-					}
-					else if (number2 >
-					         (float)
-						         (58 + player2.armor.Length + player2.dye.Length + player2.miscEquips.Length + player2.miscDyes.Length +
-						          player2.bank.item.Length))
-					{
-						item =
-							player2.bank2.item[
-								(int) number2 - 58 -
-								(player2.armor.Length + player2.dye.Length + player2.miscEquips.Length + player2.miscDyes.Length +
-								 player2.bank.item.Length) - 1];
-					}
-					else if (number2 >
-					         (float)
-						         (58 + player2.armor.Length + player2.dye.Length + player2.miscEquips.Length + player2.miscDyes.Length))
-					{
-						item =
-							player2.bank.item[
-								(int) number2 - 58 -
-								(player2.armor.Length + player2.dye.Length + player2.miscEquips.Length + player2.miscDyes.Length) - 1];
-					}
-					else if (number2 > (float) (58 + player2.armor.Length + player2.dye.Length + player2.miscEquips.Length))
-					{
-						item =
-							player2.miscDyes[
-								(int) number2 - 58 - (player2.armor.Length + player2.dye.Length + player2.miscEquips.Length) - 1];
-					}
-					else if (number2 > (float) (58 + player2.armor.Length + player2.dye.Length))
-					{
-						item = player2.miscEquips[(int) number2 - 58 - (player2.armor.Length + player2.dye.Length) - 1];
-					}
-					else if (number2 > (float) (58 + player2.armor.Length))
-					{
-						item = player2.dye[(int) number2 - 58 - player2.armor.Length - 1];
-					}
-					else if (number2 > 58f)
-					{
-						item = player2.armor[(int) number2 - 58 - 1];
-					}
-					else
-					{
-						item = player2.inventory[(int) number2];
-					}
-					if (item.name == "" || item.stack == 0 || item.type == 0)
-					{
-						item.SetDefaults(0, false);
-					}
-					int num2 = item.stack;
-					int netID = item.netID;
-					if (num2 < 0)
-					{
-						num2 = 0;
-					}
-					writer.Write((short) num2);
-					writer.Write((byte) number3);
-					writer.Write((short) netID);
-					break;
-				}
-				case 7:
-				{
-					writer.Write((int) Main.time);
-					BitsByte bb3 = 0;
-					bb3[0] = Main.dayTime;
-					bb3[1] = Main.bloodMoon;
-					bb3[2] = Main.eclipse;
-					writer.Write(bb3);
-					writer.Write((byte) Main.moonPhase);
-					writer.Write((short) Main.maxTilesX);
-					writer.Write((short) Main.maxTilesY);
-					writer.Write((short) Main.spawnTileX);
-					writer.Write((short) Main.spawnTileY);
-					writer.Write((short) Main.worldSurface);
-					writer.Write((short) Main.rockLayer);
-					writer.Write(Main.worldID);
-					writer.Write(Main.worldName); //possibly null?
-					writer.Write((byte) Main.moonType);
-					writer.Write((byte) WorldGen.treeBG);
-					writer.Write((byte) WorldGen.corruptBG);
-					writer.Write((byte) WorldGen.jungleBG);
-					writer.Write((byte) WorldGen.snowBG);
-					writer.Write((byte) WorldGen.hallowBG);
-					writer.Write((byte) WorldGen.crimsonBG);
-					writer.Write((byte) WorldGen.desertBG);
-					writer.Write((byte) WorldGen.oceanBG);
-					writer.Write((byte) Main.iceBackStyle);
-					writer.Write((byte) Main.jungleBackStyle);
-					writer.Write((byte) Main.hellBackStyle);
-					writer.Write(Main.windSpeedSet);
-					writer.Write((byte) Main.numClouds);
-					for (int k = 0; k < 3; k++)
-					{
-						writer.Write(Main.treeX[k]);
-					}
-					for (int l = 0; l < 4; l++)
-					{
-						writer.Write((byte) Main.treeStyle[l]);
-					}
-					for (int m = 0; m < 3; m++)
-					{
-						writer.Write(Main.caveBackX[m]);
-					}
-					for (int n = 0; n < 4; n++)
-					{
-						writer.Write((byte) Main.caveBackStyle[n]);
-					}
-					if (!Main.raining)
-					{
-						Main.maxRaining = 0f;
-					}
-					writer.Write(Main.maxRaining);
-					BitsByte bb4 = 0;
-					bb4[0] = WorldGen.shadowOrbSmashed;
-					bb4[1] = NPC.downedBoss1;
-					bb4[2] = NPC.downedBoss2;
-					bb4[3] = NPC.downedBoss3;
-					bb4[4] = Main.hardMode;
-					bb4[5] = NPC.downedClown;
-					bb4[6] = Main.ServerSideCharacter;
-					bb4[7] = NPC.downedPlantBoss;
-					writer.Write(bb4);
-					BitsByte bb5 = 0;
-					bb5[0] = NPC.downedMechBoss1;
-					bb5[1] = NPC.downedMechBoss2;
-					bb5[2] = NPC.downedMechBoss3;
-					bb5[3] = NPC.downedMechBossAny;
-					bb5[4] = (Main.cloudBGActive >= 1f);
-					bb5[5] = WorldGen.crimson;
-					bb5[6] = Main.pumpkinMoon;
-					bb5[7] = Main.snowMoon;
-					writer.Write(bb5);
-					BitsByte bb6 = 0;
-					bb6[0] = Main.expertMode;
-					bb6[1] = Main.fastForwardTime;
-					bb6[2] = Main.slimeRain;
-					bb6[3] = NPC.downedSlimeKing;
-					bb6[4] = NPC.downedQueenBee;
-					bb6[5] = NPC.downedFishron;
-					bb6[6] = NPC.downedMartians;
-					bb6[7] = NPC.downedAncientCultist;
-					writer.Write(bb6);
-					BitsByte bb7 = 0;
-					bb7[0] = NPC.downedMoonlord;
-					bb7[1] = NPC.downedHalloweenKing;
-					bb7[2] = NPC.downedHalloweenTree;
-					bb7[3] = NPC.downedChristmasIceQueen;
-					bb7[4] = NPC.downedChristmasSantank;
-					bb7[5] = NPC.downedChristmasTree;
-					bb7[6] = NPC.downedGolemBoss; 
-					writer.Write(bb7);
-					writer.Write((sbyte) Main.invasionType);
-					writer.Write(Main.LobbyId);
-					break;
-				}
-				case 8:
-					writer.Write(number);
-					writer.Write((int) number2);
-					break;
-				case 9:
-					writer.Write(number);
-					writer.Write(text);
-					break;
-				case 10:
-				{
-					/*
-					 * TileSection packets must be sent and arrive in the same order
-					 * on the client and before the TileFrameSection packet or else 
-					 * we will end up with graphical tile glitches.
-					 */
+                        BitsByte bb2 = 0;
+                        if (player.difficulty == 1)
+                        {
+                            bb2[0] = true;
+                        }
+                        else if (player.difficulty == 2)
+                        {
+                            bb2[1] = true;
+                        }
+                        bb2[2] = player.extraAccessory;
+                        writer.Write(bb2);
+                        writer.Write(player.Level);
+                        writer.Write(player.Exp);
+                        writer.Write((byte)player.StatPoints);
+                        writer.Write((byte)player.baseHP);
+                        writer.Write((byte)player.baseStr);
+                        writer.Write((byte)player.baseRng);
+                        writer.Write((byte)player.baseMag);
+                        writer.Write((byte)player.baseDef);
+                        writer.Write((byte)player.bonusStr);
+                        writer.Write((byte)player.bonusRng);
+                        writer.Write((byte)player.bonusMag);
+                        writer.Write((byte)player.bonusDef);
+                        BitsByte bb3 = 0;
+                        bb3[0] = player.Regenerate;
+                        bb3[1] = player.MRegenerate;
+                        writer.Write(bb3);
+                        writer.Write(player.Spec);
+                        writer.Write(player.EXPRate);
+                        break;
+                    }
+                case 5:
+                    {
+                        writer.Write((byte)number);
+                        writer.Write((byte)number2);
+                        Player player2 = Main.player[number];
+                        Item item;
+                        if (number2 >
+                            (float)
+                                (58 + player2.armor.Length + player2.dye.Length + player2.miscEquips.Length + player2.miscDyes.Length +
+                                 player2.bank.item.Length + player2.bank2.item.Length))
+                        {
+                            item = player2.trashItem;
+                        }
+                        else if (number2 >
+                                 (float)
+                                     (58 + player2.armor.Length + player2.dye.Length + player2.miscEquips.Length + player2.miscDyes.Length +
+                                      player2.bank.item.Length))
+                        {
+                            item =
+                                player2.bank2.item[
+                                    (int)number2 - 58 -
+                                    (player2.armor.Length + player2.dye.Length + player2.miscEquips.Length + player2.miscDyes.Length +
+                                     player2.bank.item.Length) - 1];
+                        }
+                        else if (number2 >
+                                 (float)
+                                     (58 + player2.armor.Length + player2.dye.Length + player2.miscEquips.Length + player2.miscDyes.Length))
+                        {
+                            item =
+                                player2.bank.item[
+                                    (int)number2 - 58 -
+                                    (player2.armor.Length + player2.dye.Length + player2.miscEquips.Length + player2.miscDyes.Length) - 1];
+                        }
+                        else if (number2 > (float)(58 + player2.armor.Length + player2.dye.Length + player2.miscEquips.Length))
+                        {
+                            item =
+                                player2.miscDyes[
+                                    (int)number2 - 58 - (player2.armor.Length + player2.dye.Length + player2.miscEquips.Length) - 1];
+                        }
+                        else if (number2 > (float)(58 + player2.armor.Length + player2.dye.Length))
+                        {
+                            item = player2.miscEquips[(int)number2 - 58 - (player2.armor.Length + player2.dye.Length) - 1];
+                        }
+                        else if (number2 > (float)(58 + player2.armor.Length))
+                        {
+                            item = player2.dye[(int)number2 - 58 - player2.armor.Length - 1];
+                        }
+                        else if (number2 > 58f)
+                        {
+                            item = player2.armor[(int)number2 - 58 - 1];
+                        }
+                        else
+                        {
+                            item = player2.inventory[(int)number2];
+                        }
+                        if (item.name == "" || item.stack == 0 || item.type == 0)
+                        {
+                            item.SetDefaults(0, false);
+                        }
+                        int num2 = item.stack;
+                        int netID = item.netID;
+                        if (num2 < 0)
+                        {
+                            num2 = 0;
+                        }
+                        writer.Write((short)num2);
+                        writer.Write((byte)number3);
+                        writer.Write((short)netID);
+                        break;
+                    }
+                case 7:
+                    {
+                        writer.Write((int)Main.time);
+                        BitsByte bb3 = 0;
+                        bb3[0] = Main.dayTime;
+                        bb3[1] = Main.bloodMoon;
+                        bb3[2] = Main.eclipse;
+                        writer.Write(bb3);
+                        writer.Write((byte)Main.moonPhase);
+                        writer.Write((short)Main.maxTilesX);
+                        writer.Write((short)Main.maxTilesY);
+                        writer.Write((short)Main.spawnTileX);
+                        writer.Write((short)Main.spawnTileY);
+                        writer.Write((short)Main.worldSurface);
+                        writer.Write((short)Main.rockLayer);
+                        writer.Write(Main.worldID);
+                        writer.Write(Main.worldName); //possibly null?
+                        writer.Write((byte)Main.moonType);
+                        writer.Write((byte)WorldGen.treeBG);
+                        writer.Write((byte)WorldGen.corruptBG);
+                        writer.Write((byte)WorldGen.jungleBG);
+                        writer.Write((byte)WorldGen.snowBG);
+                        writer.Write((byte)WorldGen.hallowBG);
+                        writer.Write((byte)WorldGen.crimsonBG);
+                        writer.Write((byte)WorldGen.desertBG);
+                        writer.Write((byte)WorldGen.oceanBG);
+                        writer.Write((byte)Main.iceBackStyle);
+                        writer.Write((byte)Main.jungleBackStyle);
+                        writer.Write((byte)Main.hellBackStyle);
+                        writer.Write(Main.windSpeedSet);
+                        writer.Write((byte)Main.numClouds);
+                        for (int k = 0; k < 3; k++)
+                        {
+                            writer.Write(Main.treeX[k]);
+                        }
+                        for (int l = 0; l < 4; l++)
+                        {
+                            writer.Write((byte)Main.treeStyle[l]);
+                        }
+                        for (int m = 0; m < 3; m++)
+                        {
+                            writer.Write(Main.caveBackX[m]);
+                        }
+                        for (int n = 0; n < 4; n++)
+                        {
+                            writer.Write((byte)Main.caveBackStyle[n]);
+                        }
+                        if (!Main.raining)
+                        {
+                            Main.maxRaining = 0f;
+                        }
+                        writer.Write(Main.maxRaining);
+                        BitsByte bb4 = 0;
+                        bb4[0] = WorldGen.shadowOrbSmashed;
+                        bb4[1] = NPC.downedBoss1;
+                        bb4[2] = NPC.downedBoss2;
+                        bb4[3] = NPC.downedBoss3;
+                        bb4[4] = Main.hardMode;
+                        bb4[5] = NPC.downedClown;
+                        bb4[6] = Main.ServerSideCharacter;
+                        bb4[7] = NPC.downedPlantBoss;
+                        writer.Write(bb4);
+                        BitsByte bb5 = 0;
+                        bb5[0] = NPC.downedMechBoss1;
+                        bb5[1] = NPC.downedMechBoss2;
+                        bb5[2] = NPC.downedMechBoss3;
+                        bb5[3] = NPC.downedMechBossAny;
+                        bb5[4] = (Main.cloudBGActive >= 1f);
+                        bb5[5] = WorldGen.crimson;
+                        bb5[6] = Main.pumpkinMoon;
+                        bb5[7] = Main.snowMoon;
+                        writer.Write(bb5);
+                        BitsByte bb6 = 0;
+                        bb6[0] = Main.expertMode;
+                        bb6[1] = Main.fastForwardTime;
+                        bb6[2] = Main.slimeRain;
+                        bb6[3] = NPC.downedSlimeKing;
+                        bb6[4] = NPC.downedQueenBee;
+                        bb6[5] = NPC.downedFishron;
+                        bb6[6] = NPC.downedMartians;
+                        bb6[7] = NPC.downedAncientCultist;
+                        writer.Write(bb6);
+                        BitsByte bb7 = 0;
+                        bb7[0] = NPC.downedMoonlord;
+                        bb7[1] = NPC.downedHalloweenKing;
+                        bb7[2] = NPC.downedHalloweenTree;
+                        bb7[3] = NPC.downedChristmasIceQueen;
+                        bb7[4] = NPC.downedChristmasSantank;
+                        bb7[5] = NPC.downedChristmasTree;
+                        bb7[6] = NPC.downedGolemBoss;
+                        writer.Write(bb7);
+                        writer.Write((sbyte)Main.invasionType);
+                        writer.Write(Main.LobbyId);
+                        break;
+                    }
+                case 8:
+                    writer.Write(number);
+                    writer.Write((int)number2);
+                    break;
+                case 9:
+                    writer.Write(number);
+                    writer.Write(text);
+                    break;
+                case 10:
+                    {
+                        /*
+                         * TileSection packets must be sent and arrive in the same order
+                         * on the client and before the TileFrameSection packet or else 
+                         * we will end up with graphical tile glitches.
+                         */
 
-					Netplay.Clients[remoteClient].sendQueue.AllocAndSet(SendQueue.kSendQueueLargeBlockSize, (seg) =>
-					{
-						seg.Heap[seg.Offset + 2] = (byte)PacketTypes.TileSendSection;
-						seg.Heap[seg.Offset + 3] = 1; //compressed flag
+                        Netplay.Clients[remoteClient].sendQueue.AllocAndSet(SendQueue.kSendQueueLargeBlockSize, (seg) =>
+                        {
+                            seg.Heap[seg.Offset + 2] = (byte)PacketTypes.TileSendSection;
+                            seg.Heap[seg.Offset + 3] = 1; //compressed flag
 
-						int len = NetMessage.CompressTileBlock(number, (int)number2, (short)number3, (short)number4, seg.Heap, seg.Offset + 4);
-						Array.Copy(BitConverter.GetBytes(len + 4), 0, seg.Heap, seg.Offset, 2);
+                        int len = NetMessage.CompressTileBlock(number, (int)number2, (short)number3, (short)number4, seg.Heap, seg.Offset + 4);
+                            Array.Copy(BitConverter.GetBytes(len + 4), 0, seg.Heap, seg.Offset, 2);
 
-						return true;
-					});
+                            return true;
+                        });
 
-					return;
-				}
-				case 11:
-					writer.Write((short) number);
-					writer.Write((short) number2);
-					writer.Write((short) number3);
-					writer.Write((short) number4);
-					break;
-				case 12:
-					writer.Write((byte) number);
-					writer.Write((short) Main.player[number].SpawnX);
-					writer.Write((short) Main.player[number].SpawnY);
-					break;
-				case 13:
-				{
-					Player player3 = Main.player[number];
-					writer.Write((byte) number);
-					BitsByte bb8 = 0;
-					bb8[0] = player3.controlUp;
-					bb8[1] = player3.controlDown;
-					bb8[2] = player3.controlLeft;
-					bb8[3] = player3.controlRight;
-					bb8[4] = player3.controlJump;
-					bb8[5] = player3.controlUseItem;
-					bb8[6] = (player3.direction == 1);
-					writer.Write(bb8);
-					BitsByte bb9 = 0;
-					bb9[0] = player3.pulley;
-					bb9[1] = (player3.pulley && player3.pulleyDir == 2);
-					bb9[2] = (player3.velocity != Vector2.Zero);
-					bb9[3] = player3.vortexStealthActive;
-					bb9[4] = (player3.gravDir == 1f);
-					writer.Write(bb9);
-					writer.Write((byte) player3.selectedItem);
-					writer.WriteVector2(player3.position);
-					if (bb9[2])
-					{
-						writer.WriteVector2(player3.velocity);
-					}
-					else
-					{
-						writer.WriteVector2(Vector2.Zero);
-					}
-					break;
-				}
-				case 14:
-					writer.Write((byte) number);
-					writer.Write((byte) number2);
-					break;
-				case 16:
-					writer.Write((byte) number);
-					writer.Write((short) Main.player[number].statLife);
-					writer.Write((short) Main.player[number].statLifeMax);
-					break;
-				case 17:
-					writer.Write((byte) number);
-					writer.Write((short) number2);
-					writer.Write((short) number3);
-					writer.Write((short) number4);
-					writer.Write((byte) number5);
-					break;
-				case 18:
-					writer.Write((byte) (Main.dayTime ? 1 : 0));
-					writer.Write((int) Main.time);
-					writer.Write(Main.sunModY);
-					writer.Write(Main.moonModY);
-					break;
-				case 19:
-					writer.Write((byte) number);
-					writer.Write((short) number2);
-					writer.Write((short) number3);
-					writer.Write((number4 == 1f) ? 1 : 0);
-					break;
-				case 20:
-				{
-					int num4 = (int) number2;
-					int num5 = (int) number3;
-					if (num4 < number)
-					{
-						num4 = number;
-					}
-					if (num4 >= Main.maxTilesX + number)
-					{
-						num4 = Main.maxTilesX - number - 1;
-					}
-					if (num5 < number)
-					{
-						num5 = number;
-					}
-					if (num5 >= Main.maxTilesY + number)
-					{
-						num5 = Main.maxTilesY - number - 1;
-					}
-					writer.Write((short) number);
-					writer.Write((short) num4);
-					writer.Write((short) num5);
-					for (int num6 = num4; num6 < num4 + number; num6++)
-					{
-						for (int num7 = num5; num7 < num5 + number; num7++)
-						{
-							BitsByte bb10 = 0;
-							BitsByte bb11 = 0;
-							byte b = 0;
-							byte b2 = 0;
-							Tile tile = Main.tile[num6, num7];
-							bb10[0] = tile.active();
-							bb10[2] = (tile.wall > 0);
-							bb10[3] = (tile.liquid > 0 && Main.netMode == 2);
-							bb10[4] = tile.wire();
-							bb10[5] = tile.halfBrick();
-							bb10[6] = tile.actuator();
-							bb10[7] = tile.inActive();
-							bb11[0] = tile.wire2();
-							bb11[1] = tile.wire3();
-							if (tile.active() && tile.color() > 0)
-							{
-								bb11[2] = true;
-								b = tile.color();
-							}
-							if (tile.wall > 0 && tile.wallColor() > 0)
-							{
-								bb11[3] = true;
-								b2 = tile.wallColor();
-							}
-							bb11 += (byte) (tile.slope() << 4);
-							writer.Write(bb10);
-							writer.Write(bb11);
-							if (b > 0)
-							{
-								writer.Write(b);
-							}
-							if (b2 > 0)
-							{
-								writer.Write(b2);
-							}
-							if (tile.active())
-							{
-								writer.Write(tile.type);
-								if (Main.tileFrameImportant[(int) tile.type])
-								{
-									writer.Write(tile.frameX);
-									writer.Write(tile.frameY);
-								}
-							}
-							if (tile.wall > 0)
-							{
-								writer.Write(tile.wall);
-							}
-							if (tile.liquid > 0 && Main.netMode == 2)
-							{
-								writer.Write(tile.liquid);
-								writer.Write(tile.liquidType());
-							}
-						}
-					}
-					break;
-				}
-				case 21:
-				case 90:
-				{
-					Item item2 = Main.item[number];
-					writer.Write((short) number);
-					writer.WriteVector2(item2.position);
-					writer.WriteVector2(item2.velocity);
-					writer.Write((short) item2.stack);
-					writer.Write(item2.prefix);
-					writer.Write((byte) number2);
-					short value = 0;
-					if (item2.active && item2.stack > 0)
-					{
-						value = (short) item2.netID;
-					}
-					writer.Write(value);
-					break;
-				}
-				case 22:
-					writer.Write((short) number);
-					writer.Write((byte) Main.item[number].owner);
-					break;
-				case 23:
-				{
-					if (number > Main.npc.Length || number < 0)
-					{
-						return;
-					}
+                        return;
+                    }
+                case 11:
+                    writer.Write((short)number);
+                    writer.Write((short)number2);
+                    writer.Write((short)number3);
+                    writer.Write((short)number4);
+                    break;
+                case 12:
+                    writer.Write((byte)number);
+                    writer.Write((short)Main.player[number].SpawnX);
+                    writer.Write((short)Main.player[number].SpawnY);
+                    break;
+                case 13:
+                    {
+                        Player player3 = Main.player[number];
+                        writer.Write((byte)number);
+                        BitsByte bb8 = 0;
+                        bb8[0] = player3.controlUp;
+                        bb8[1] = player3.controlDown;
+                        bb8[2] = player3.controlLeft;
+                        bb8[3] = player3.controlRight;
+                        bb8[4] = player3.controlJump;
+                        bb8[5] = player3.controlUseItem;
+                        bb8[6] = (player3.direction == 1);
+                        writer.Write(bb8);
+                        BitsByte bb9 = 0;
+                        bb9[0] = player3.pulley;
+                        bb9[1] = (player3.pulley && player3.pulleyDir == 2);
+                        bb9[2] = (player3.velocity != Vector2.Zero);
+                        bb9[3] = player3.vortexStealthActive;
+                        bb9[4] = (player3.gravDir == 1f);
+                        writer.Write(bb9);
+                        writer.Write((byte)player3.selectedItem);
+                        writer.WriteVector2(player3.position);
+                        if (bb9[2])
+                        {
+                            writer.WriteVector2(player3.velocity);
+                        }
+                        else
+                        {
+                            writer.WriteVector2(Vector2.Zero);
+                        }
+                        break;
+                    }
+                case 14:
+                    writer.Write((byte)number);
+                    writer.Write((byte)number2);
+                    break;
+                case 16:
+                    writer.Write((byte)number);
+                    writer.Write((short)Main.player[number].statLife);
+                    writer.Write((short)Main.player[number].statLifeMax);
+                    writer.Write((int)Main.player[number].Exp);
+                    writer.Write((byte)Main.player[number].Level);
+                    writer.Write((byte)Main.player[number].bonusDef);
+                    writer.Write((byte)Main.player[number].baseDef);
+                    writer.Write((byte)Main.player[number].baseHP);
+                    writer.Write((short)Main.player[number].lifeRegenCount);
+                    writer.Write((byte)Main.player[number].lifeRegenCount2);
+                    BitsByte bb1 = 0;
+                    bb1[0] = Main.player[number].Regenerate;
+                    bb1[1] = Main.player[number].MRegenerate;
+                    writer.Write(bb1);
+                    //writer.Write((byte)(Main.player[number].Regenerate ? 1 : 0));
+                    //writer.Write((byte)(Main.player[number].MRegenerate ? 1 : 0));
+                    break;
+                case 17:
+                    writer.Write((byte)number);
+                    writer.Write((short)number2);
+                    writer.Write((short)number3);
+                    writer.Write((short)number4);
+                    writer.Write((byte)number5);
+                    break;
+                case 18:
+                    writer.Write((byte)(Main.dayTime ? 1 : 0));
+                    writer.Write((int)Main.time);
+                    writer.Write(Main.sunModY);
+                    writer.Write(Main.moonModY);
+                    break;
+                case 19:
+                    writer.Write((byte)number);
+                    writer.Write((short)number2);
+                    writer.Write((short)number3);
+                    writer.Write((number4 == 1f) ? 1 : 0);
+                    break;
+                case 20:
+                    {
+                        int num4 = (int)number2;
+                        int num5 = (int)number3;
+                        if (num4 < number)
+                        {
+                            num4 = number;
+                        }
+                        if (num4 >= Main.maxTilesX + number)
+                        {
+                            num4 = Main.maxTilesX - number - 1;
+                        }
+                        if (num5 < number)
+                        {
+                            num5 = number;
+                        }
+                        if (num5 >= Main.maxTilesY + number)
+                        {
+                            num5 = Main.maxTilesY - number - 1;
+                        }
+                        writer.Write((short)number);
+                        writer.Write((short)num4);
+                        writer.Write((short)num5);
+                        for (int num6 = num4; num6 < num4 + number; num6++)
+                        {
+                            for (int num7 = num5; num7 < num5 + number; num7++)
+                            {
+                                BitsByte bb10 = 0;
+                                BitsByte bb11 = 0;
+                                byte b = 0;
+                                byte b2 = 0;
+                                Tile tile = Main.tile[num6, num7];
+                                bb10[0] = tile.active();
+                                bb10[2] = (tile.wall > 0);
+                                bb10[3] = (tile.liquid > 0 && Main.netMode == 2);
+                                bb10[4] = tile.wire();
+                                bb10[5] = tile.halfBrick();
+                                bb10[6] = tile.actuator();
+                                bb10[7] = tile.inActive();
+                                bb11[0] = tile.wire2();
+                                bb11[1] = tile.wire3();
+                                if (tile.active() && tile.color() > 0)
+                                {
+                                    bb11[2] = true;
+                                    b = tile.color();
+                                }
+                                if (tile.wall > 0 && tile.wallColor() > 0)
+                                {
+                                    bb11[3] = true;
+                                    b2 = tile.wallColor();
+                                }
+                                bb11 += (byte)(tile.slope() << 4);
+                                writer.Write(bb10);
+                                writer.Write(bb11);
+                                if (b > 0)
+                                {
+                                    writer.Write(b);
+                                }
+                                if (b2 > 0)
+                                {
+                                    writer.Write(b2);
+                                }
+                                if (tile.active())
+                                {
+                                    writer.Write(tile.type);
+                                    if (Main.tileFrameImportant[(int)tile.type])
+                                    {
+                                        writer.Write(tile.frameX);
+                                        writer.Write(tile.frameY);
+                                    }
+                                }
+                                if (tile.wall > 0)
+                                {
+                                    writer.Write(tile.wall);
+                                }
+                                if (tile.liquid > 0 && Main.netMode == 2)
+                                {
+                                    writer.Write(tile.liquid);
+                                    writer.Write(tile.liquidType());
+                                }
+                            }
+                        }
+                        break;
+                    }
+                case 21:
+                case 90:
+                    {
+                        Item item2 = Main.item[number];
+                        writer.Write((short)number);
+                        writer.WriteVector2(item2.position);
+                        writer.WriteVector2(item2.velocity);
+                        writer.Write((short)item2.stack);
+                        writer.Write(item2.prefix);
+                        writer.Write((byte)number2);
+                        short value = 0;
+                        if (item2.active && item2.stack > 0)
+                        {
+                            value = (short)item2.netID;
+                        }
+                        writer.Write(value);
+                        break;
+                    }
+                case 22:
+                    writer.Write((short)number);
+                    writer.Write((byte)Main.item[number].owner);
+                    break;
+                case 23:
+                    {
+                        if (number > Main.npc.Length || number < 0)
+                        {
+                            return;
+                        }
 
-					NPC nPC = Main.npc[number];
+                        NPC nPC = Main.npc[number];
 
-					if (nPC == null)
-					{
-						return;
-					}
+                        if (nPC == null)
+                        {
+                            return;
+                        }
 
-					writer.Write((short) number);
-					writer.WriteVector2(nPC.position);
-					writer.WriteVector2(nPC.velocity);
-					writer.Write((byte) nPC.target);
-					int num8 = nPC.life;
-					if (!nPC.active)
-					{
-						num8 = 0;
-					}
-					if (!nPC.active || nPC.life <= 0)
-					{
-						nPC.netSkip = 0;
-					}
-					if (nPC.name == null)
-					{
-						nPC.name = "";
-					}
-					short value2 = (short) nPC.netID;
-					bool[] array = new bool[4];
-					BitsByte bb12 = 0;
-					bb12[0] = (nPC.direction > 0);
-					bb12[1] = (nPC.directionY > 0);
-					bb12[2] = (array[0] = (nPC.ai[0] != 0f));
-					bb12[3] = (array[1] = (nPC.ai[1] != 0f));
-					bb12[4] = (array[2] = (nPC.ai[2] != 0f));
-					bb12[5] = (array[3] = (nPC.ai[3] != 0f));
-					bb12[6] = (nPC.spriteDirection > 0);
-					bb12[7] = (num8 == nPC.lifeMax);
-					writer.Write(bb12);
-					for (int num9 = 0; num9 < NPC.maxAI; num9++)
-					{
-						if (array[num9])
-						{
-							writer.Write(nPC.ai[num9]);
-						}
-					}
-					writer.Write(value2);
-					if (!bb12[7])
-					{
-						if (Main.npcLifeBytes.ContainsKey(nPC.netID) == false)
-						{
-							break;
-						}
-						byte b3 = Main.npcLifeBytes[nPC.netID];
-						writer.Write(b3);
-						if (b3 == 2)
-						{
-							writer.Write((short) num8);
-						}
-						else if (b3 == 4)
-						{
-							writer.Write(num8);
-						}
-						else
-						{
-							writer.Write((sbyte) num8);
-						}
-					}
-					if (Main.npcCatchable[nPC.type])
-					{
-						writer.Write((byte) nPC.releaseOwner);
-					}
-					break;
-				}
-				case 24:
-					writer.Write((short) number);
-					writer.Write((byte) number2);
-					break;
-				case 25:
-					if (remoteClient == -1
-						&& ServerApi.Hooks.InvokeServerBroadcast(ref text, ref number2, ref number3, ref number4))
-					{
-						return;
-					}
-					writer.Write((byte) number);
-					writer.Write((byte) number2);
-					writer.Write((byte) number3);
-					writer.Write((byte) number4);
-					writer.Write(text);
-					break;
-				case 26:
-				{
-					writer.Write((byte) number); //player id
-					writer.Write((byte) (number2 + 1f)); //hit direction
-					writer.Write((short) number3); //damage
-					writer.Write(text); //death text
-					BitsByte bb13 = 0;
-					bb13[0] = (number4 == 1f); //pvp
-					bb13[1] = (number5 == 1); //critical hit
-					bb13[2] = (number6 == 0); //cooldownCounter
-					bb13[3] = (number6 == 1); //something with cooldownCounter = 1, 1.3.0.6 -P
-					writer.Write(bb13);
-					break;
-				}
-				case 27:
-				{
-					Projectile projectile = Main.projectile[number];
-					writer.Write((short) projectile.identity);
-					writer.WriteVector2(projectile.position);
-					writer.WriteVector2(projectile.velocity);
-					writer.Write(projectile.knockBack);
-					writer.Write((short) projectile.damage);
-					writer.Write((byte) projectile.owner);
-					writer.Write((short) projectile.type);
-					BitsByte bb14 = 0;
-					for (int num10 = 0; num10 < Projectile.maxAI; num10++)
-					{
-						if (projectile.ai[num10] != 0f)
-						{
-							bb14[num10] = true;
-						}
-					}
-					if (projectile.type > 0 && projectile.type < 651 && ProjectileID.Sets.NeedsUUID[projectile.type])
-					{
-						bb14[Projectile.maxAI] = true;
-					}
-					writer.Write(bb14);
-					for (int num11 = 0; num11 < Projectile.maxAI; num11++)
-					{
-						if (bb14[num11])
-						{
-							writer.Write(projectile.ai[num11]);
-						}
-					}
-					if (bb14[Projectile.maxAI])
-					{
-						writer.Write((short)projectile.projUUID);
-					}
-					break;
-				}
-				case 28:
-					writer.Write((short) number);
-					writer.Write((short) number2);
-					writer.Write(number3);
-					writer.Write((byte) (number4 + 1f));
-					writer.Write((byte) number5);
-					break;
-				case 29:
-					writer.Write((short) number);
-					writer.Write((byte) number2);
-					break;
-				case 30:
-					writer.Write((byte) number);
-					writer.Write(Main.player[number].hostile);
-					break;
-				case 31:
-					writer.Write((short) number);
-					writer.Write((short) number2);
-					break;
-				case 32:
-				{
-					Item item3 = Main.chest[number].item[(int)number2];
-					writer.Write((short) number);
-					writer.Write((byte) number2);
-					short value3 = (short) item3.netID;
-					if (item3.name == null)
-					{
-						value3 = 0;
-					}
-					writer.Write((short) item3.stack);
-					writer.Write(item3.prefix);
-					writer.Write(value3);
-					break;
-				}
-				case 33:
-				{
-					int chestX = 0;
-					int chestY = 0;
-					int nameLen = 0;
-					string text2 = null;
-					if (number > -1)
-					{
-						chestX = Main.chest[number].x;
-						chestY = Main.chest[number].y;
-					}
-					if (number2 == 1f)
-					{
-						nameLen = text.Length;
-						if (nameLen == 0 || nameLen > 20)
-						{
-							nameLen = 255;
-						}
-						else
-						{
-							text2 = text;
-						}
-					}
-					writer.Write((short) number);
-					writer.Write((short)chestX);
-					writer.Write((short)chestY);
-					writer.Write((byte)nameLen);
-					if (text2 != null)
-					{
-						writer.Write(text2);
-					}
-					break;
-				}
-				case 34:
-					writer.Write((byte) number);
-					writer.Write((short) number2);
-					writer.Write((short) number3);
-					writer.Write((short) number4);
-					if (Main.netMode == 2)
-					{
-						Netplay.GetSectionX((int) number2);
-						Netplay.GetSectionY((int) number3);
-						writer.Write((short) number5);
-					}
-					break;
-				case 35:
-				case 66:
-					writer.Write((byte) number);
-					writer.Write((short) number2);
-					break;
-				case 36:
-				{
-					Player player4 = Main.player[number];
-					writer.Write((byte) number);
-					writer.Write(player4.zone1);
-					writer.Write(player4.zone2);
-					break;
-				}
-				case 38:
-					writer.Write(text);
-					break;
-				case 39:
-					writer.Write((short) number);
-					break;
-				case 40:
-					writer.Write((byte) number);
-					writer.Write((short) Main.player[number].talkNPC);
-					break;
-				case 41:
-					writer.Write((byte) number);
-					writer.Write(Main.player[number].itemRotation);
-					writer.Write((short) Main.player[number].itemAnimation);
-					break;
-				case 42:
-					writer.Write((byte) number);
-					writer.Write((short) Main.player[number].statMana);
-					writer.Write((short) Main.player[number].statManaMax);
-					break;
-				case 43:
-					writer.Write((byte) number);
-					writer.Write((short) number2);
-					break;
-				case 44:
-					writer.Write((byte) number);
-					writer.Write((byte) (number2 + 1f));
-					writer.Write((short) number3);
-					writer.Write((byte) number4);
-					writer.Write(text);
-					break;
-				case 45:
-					writer.Write((byte) number);
-					writer.Write((byte) Main.player[number].team);
-					break;
-				case 46:
-					writer.Write((short) number);
-					writer.Write((short) number2);
-					break;
-				case 47:
-					writer.Write((short) number);
-					writer.Write((short) Main.sign[number].x);
-					writer.Write((short) Main.sign[number].y);
-					writer.Write(Main.sign[number].text); //possibly null?
-					writer.Write((byte) number2);
-					break;
-				case 48:
-				{
-					Tile tile2 = Main.tile[number, (int) number2];
-					writer.Write((short) number);
-					writer.Write((short) number2);
-					writer.Write(tile2.liquid);
-					writer.Write(tile2.liquidType());
-					break;
-				}
-				case 50:
-					writer.Write((byte) number);
-					for (int num15 = 0; num15 < 22; num15++)
-					{
-						writer.Write((byte) Main.player[number].buffType[num15]);
-					}
-					break;
-				case 51:
-					writer.Write((byte) number);
-					writer.Write((byte) number2);
-					break;
-				case 52:
-					writer.Write((byte) number2);
-					writer.Write((short) number3);
-					writer.Write((short) number4);
-					break;
-				case 53:
-					writer.Write((short) number);
-					writer.Write((byte) number2);
-					writer.Write((short) number3);
-					break;
-				case 54:
-					writer.Write((short) number);
-					for (int num16 = 0; num16 < 5; num16++)
-					{
-						writer.Write((byte) Main.npc[number].buffType[num16]);
-						writer.Write((short) Main.npc[number].buffTime[num16]);
-					}
-					break;
-				case 55:
-					writer.Write((byte) number);
-					writer.Write((byte) number2);
-					writer.Write((short) number3);
-					break;
-				case 56:
-				{
-					string value4 = "";
-					if (Main.netMode == 2)
-					{
-						value4 = Main.npc[number].displayName;
-					}
-					writer.Write((short) number);
-					writer.Write(value4);
-					break;
-				}
-				case 57:
-					writer.Write(WorldGen.tGood);
-					writer.Write(WorldGen.tEvil);
-					writer.Write(WorldGen.tBlood);
-					break;
-				case 58:
-					writer.Write((byte) number);
-					writer.Write(number2);
-					break;
-				case 59:
-					writer.Write((short) number);
-					writer.Write((short) number2);
-					break;
-				case 60:
-					writer.Write((short) number);
-					writer.Write((short) number2);
-					writer.Write((short) number3);
-					writer.Write((byte) number4);
-					break;
-				case 61:
-					writer.Write((short) number);
-					writer.Write((short) number2);
-					break;
-				case 62:
-					writer.Write((byte) number);
-					writer.Write((byte) number2);
-					break;
-				case 63:
-				case 64:
-					writer.Write((short) number);
-					writer.Write((short) number2);
-					writer.Write((byte) number3);
-					break;
-				case 65:
-				{
-					BitsByte bb15 = 0;
-					bb15[0] = ((number & 1) == 1);
-					bb15[1] = ((number & 2) == 2);
-					bb15[2] = ((number5 & 1) == 1);
-					bb15[3] = ((number5 & 2) == 2);
-					writer.Write(bb15);
-					writer.Write((short) number2);
-					writer.Write(number3);
-					writer.Write(number4);
-					break;
-				}
-				case 68:
-					writer.Write(Main.clientUUID);
-					break;
-				case 69:
-					Netplay.GetSectionX((int) number2);
-					Netplay.GetSectionY((int) number3);
-					writer.Write((short) number);
-					writer.Write((short) number2);
-					writer.Write((short) number3);
-					writer.Write(text);
-					break;
-				case 70:
-					writer.Write((short) number);
-					writer.Write((byte) number2);
-					break;
-				case 71:
-					writer.Write(number);
-					writer.Write((int) number2);
-					writer.Write((short) number3);
-					writer.Write((byte) number4);
-					break;
-				case 72:
-					for (int num17 = 0; num17 < 40; num17++)
-					{
-						writer.Write((short) Main.travelShop[num17]);
-					}
-					break;
-				case 74:
-				{
-					writer.Write((byte) Main.anglerQuest);
-					bool value5 = Main.anglerWhoFinishedToday.Contains(text);
-					writer.Write(value5);
-					break;
-				}
-				case 76:
-					writer.Write((byte) number);
-					writer.Write(Main.player[number].anglerQuestsFinished);
-					break;
-				case 77:
-					if (Main.netMode != 2)
-					{
-						return;
-					}
-					writer.Write((short) number);
-					writer.Write((ushort) number2);
-					writer.Write((short) number3);
-					writer.Write((short) number4);
-					break;
-				case 78:
-					writer.Write(number);
-					writer.Write((int) number2);
-					writer.Write((sbyte) number3);
-					writer.Write((sbyte) number4);
-					break;
-				case 79:
-					writer.Write((short) number);
-					writer.Write((short) number2);
-					writer.Write((short) number3);
-					writer.Write((short) number4);
-					writer.Write((byte) number5);
-					writer.Write((sbyte) number6);
-					writer.Write(number7 == 1);
-					break;
-				case 80:
-					writer.Write((byte) number);
-					writer.Write((short) number2);
-					break;
-				case 81:
-				{
-					writer.Write(number2);
-					writer.Write(number3);
-					Color c = default(Color);
-					c.PackedValue = (uint) number;
-					writer.WriteRGB(c);
-					writer.Write(text);
-					break;
-				}
-				case 83:
-				{
-					int num18 = number;
-					if (num18 < 0 && num18 >= 251)
-					{
-						num18 = 1;
-					}
-					int value6 = NPC.killCount[num18];
-					writer.Write((short) num18);
-					writer.Write(value6);
-					break;
-				}
-				case 84:
-				{
-					byte b3 = (byte) number;
-					float stealth = Main.player[(int) b3].stealth;
-					writer.Write(b3);
-					writer.Write(stealth);
-					break;
-				}
-				case 85:
-				{
-					byte value7 = (byte) number;
-					writer.Write(value7);
-					break;
-				}
-				case 86:
-				{
-					writer.Write(number);
-					bool flag2 = TileEntity.ByID.ContainsKey(number);
-					writer.Write(flag2);
-					if (flag2)
-					{
-						TileEntity.Write(writer, TileEntity.ByID[number]);
-					}
-					break;
-				}
-				case 87:
-					writer.Write((short) number);
-					writer.Write((short) number2);
-					writer.Write((byte) number3);
-					break;
-				case 88:
-				{
-					BitsByte bb16 = (byte) number2;
-					BitsByte bb17 = (byte) number3;
-					writer.Write((short) number);
-					writer.Write(bb16);
-					Item item4 = Main.item[number];
-					if (bb16[0])
-					{
-						writer.Write(item4.color.PackedValue);
-					}
-					if (bb16[1])
-					{
-						writer.Write((ushort) item4.damage);
-					}
-					if (bb16[2])
-					{
-						writer.Write(item4.knockBack);
-					}
-					if (bb16[3])
-					{
-						writer.Write((ushort) item4.useAnimation);
-					}
-					if (bb16[4])
-					{
-						writer.Write((ushort) item4.useTime);
-					}
-					if (bb16[5])
-					{
-						writer.Write((short) item4.shoot);
-					}
-					if (bb16[6])
-					{
-						writer.Write(item4.shootSpeed);
-					}
-					if (bb16[7])
-					{
-						writer.Write(bb17);
-						if (bb17[0])
-						{
-							writer.Write((ushort) item4.width);
-						}
-						if (bb17[1])
-						{
-							writer.Write((ushort) item4.height);
-						}
-						if (bb17[2])
-						{
-							writer.Write(item4.scale);
-						}
-						if (bb17[3])
-						{
-							writer.Write((short) item4.ammo);
-						}
-						if (bb17[4])
-						{
-							writer.Write((short) item4.useAmmo);
-						}
-						if (bb17[5])
-						{
-							writer.Write(item4.notAmmo);
-						}
-					}
-					break;
-				}
-				case 89:
-				{
-					writer.Write((short) number);
-					writer.Write((short) number2);
-					Item item5 = Main.player[(int) number4].inventory[(int) number3];
-					writer.Write((short) item5.netID);
-					writer.Write(item5.prefix);
-					writer.Write(item5.stack);
-					break;
-				}
-				case 91:
-					writer.Write(number);
-					writer.Write((byte) number2);
-					if (number2 != 255f)
-					{
-						writer.Write((ushort) number3);
-						writer.Write((byte) number4);
-						writer.Write((byte) number5);
-						if (number5 < 0)
-						{
-							writer.Write((short) number6);
-						}
-					}
-					break;
-				case 92:
-					writer.Write((short) number);
-					writer.Write(number2);
-					writer.Write(number3);
-					writer.Write(number4);
-					break;
-				case 95:
-					writer.Write((ushort) number);
-					break;
-				case 96:
-				{
-					writer.Write((byte) number);
-					Player player5 = Main.player[number];
-					writer.Write((short) number4);
-					writer.Write(number2);
-					writer.Write(number3);
-					writer.WriteVector2(player5.velocity);
-					break;
-				}
-				case 97:
-					writer.Write((short) number);
-					break;
-				case 98:
-					writer.Write((short) number);
-					break;
-				case 99:
-					writer.Write((byte) number);
-					writer.WriteVector2(Main.player[number].MinionTargetPoint);
-					break;
-				case 100:
-				{
-					writer.Write((ushort) number);
-					NPC nPC2 = Main.npc[number];
-					writer.Write((short) number4);
-					writer.Write(number2);
-					writer.Write(number3);
-					writer.WriteVector2(nPC2.velocity);
-					break;
-				}
-				case 101:
-					writer.Write((ushort) NPC.ShieldStrengthTowerSolar);
-					writer.Write((ushort) NPC.ShieldStrengthTowerVortex);
-					writer.Write((ushort) NPC.ShieldStrengthTowerNebula);
-					writer.Write((ushort) NPC.ShieldStrengthTowerStardust);
-					break;
-				case 102:
-					writer.Write((byte) number);
-					writer.Write((byte) number2);
-					writer.Write(number3);
-					writer.Write(number4);
-					break;
-				case 103:
-					writer.Write(NPC.MoonLordCountdown);
-					break;
-				case 104:
-					writer.Write((byte) number);
-					writer.Write((short) number2);
-					writer.Write(((short) number3 < 0) ? 0f : number3);
-					writer.Write((byte) number4);
-					writer.Write(number5);
-					writer.Write((byte) number6);
-					break;
-			}
+                        writer.Write((short)number);
+                        writer.WriteVector2(nPC.position);
+                        writer.WriteVector2(nPC.velocity);
+                        writer.Write((byte)nPC.target);
+                        int num8 = nPC.life;
+                        if (!nPC.active)
+                        {
+                            num8 = 0;
+                        }
+                        if (!nPC.active || nPC.life <= 0)
+                        {
+                            nPC.netSkip = 0;
+                        }
+                        if (nPC.name == null)
+                        {
+                            nPC.name = "";
+                        }
+                        short value2 = (short)nPC.netID;
+                        bool[] array = new bool[4];
+                        BitsByte bb12 = 0;
+                        bb12[0] = (nPC.direction > 0);
+                        bb12[1] = (nPC.directionY > 0);
+                        bb12[2] = (array[0] = (nPC.ai[0] != 0f));
+                        bb12[3] = (array[1] = (nPC.ai[1] != 0f));
+                        bb12[4] = (array[2] = (nPC.ai[2] != 0f));
+                        bb12[5] = (array[3] = (nPC.ai[3] != 0f));
+                        bb12[6] = (nPC.spriteDirection > 0);
+                        bb12[7] = (num8 == nPC.lifeMax);
+                        writer.Write(bb12);
+                        for (int num9 = 0; num9 < NPC.maxAI; num9++)
+                        {
+                            if (array[num9])
+                            {
+                                writer.Write(nPC.ai[num9]);
+                            }
+                        }
+                        writer.Write(value2);
+                        if (!bb12[7])
+                        {
+                            if (Main.npcLifeBytes.ContainsKey(nPC.netID) == false)
+                            {
+                                break;
+                            }
+                            byte b3 = Main.npcLifeBytes[nPC.netID];
+                            writer.Write(b3);
+                            if (b3 == 2)
+                            {
+                                writer.Write((short)num8);
+                            }
+                            else if (b3 == 4)
+                            {
+                                writer.Write(num8);
+                            }
+                            else
+                            {
+                                writer.Write((sbyte)num8);
+                            }
+                        }
+                        if (Main.npcCatchable[nPC.type])
+                        {
+                            writer.Write((byte)nPC.releaseOwner);
+                        }
+                        break;
+                    }
+                case 24:
+                    writer.Write((short)number);
+                    writer.Write((byte)number2);
+                    break;
+                case 25:
+                    if (remoteClient == -1
+                        && ServerApi.Hooks.InvokeServerBroadcast(ref text, ref number2, ref number3, ref number4))
+                    {
+                        return;
+                    }
+                    writer.Write((byte)number);
+                    writer.Write((byte)number2);
+                    writer.Write((byte)number3);
+                    writer.Write((byte)number4);
+                    writer.Write(text);
+                    break;
+                case 26:
+                    {
+                        writer.Write((byte)number); //player id
+                        writer.Write((byte)(number2 + 1f)); //hit direction
+                        writer.Write((short)number3); //damage
+                        writer.Write(text); //death text
+                        BitsByte bb13 = 0;
+                        bb13[0] = (number4 == 1f); //pvp
+                        bb13[1] = (number5 == 1); //critical hit
+                        bb13[2] = (number6 == 0); //cooldownCounter
+                        bb13[3] = (number6 == 1); //something with cooldownCounter = 1, 1.3.0.6 -P
+                        writer.Write(bb13);
+                        break;
+                    }
+                case 27:
+                    {
+                        Projectile projectile = Main.projectile[number];
+                        writer.Write((short)projectile.identity);
+                        writer.WriteVector2(projectile.position);
+                        writer.WriteVector2(projectile.velocity);
+                        writer.Write(projectile.knockBack);
+                        writer.Write((short)projectile.damage);
+                        writer.Write((byte)projectile.owner);
+                        writer.Write((short)projectile.type);
+                        BitsByte bb14 = 0;
+                        for (int num10 = 0; num10 < Projectile.maxAI; num10++)
+                        {
+                            if (projectile.ai[num10] != 0f)
+                            {
+                                bb14[num10] = true;
+                            }
+                        }
+                        if (projectile.type > 0 && projectile.type < 651 && ProjectileID.Sets.NeedsUUID[projectile.type])
+                        {
+                            bb14[Projectile.maxAI] = true;
+                        }
+                        writer.Write(bb14);
+                        for (int num11 = 0; num11 < Projectile.maxAI; num11++)
+                        {
+                            if (bb14[num11])
+                            {
+                                writer.Write(projectile.ai[num11]);
+                            }
+                        }
+                        if (bb14[Projectile.maxAI])
+                        {
+                            writer.Write((short)projectile.projUUID);
+                        }
+                        break;
+                    }
+                case 28:
+                    writer.Write((short)number);
+                    writer.Write((short)number2);
+                    writer.Write(number3);
+                    writer.Write((byte)(number4 + 1f));
+                    writer.Write((byte)number5);
+                    break;
+                case 29:
+                    writer.Write((short)number);
+                    writer.Write((byte)number2);
+                    break;
+                case 30:
+                    writer.Write((byte)number);
+                    writer.Write(Main.player[number].hostile);
+                    break;
+                case 31:
+                    writer.Write((short)number);
+                    writer.Write((short)number2);
+                    break;
+                case 32:
+                    {
+                        Item item3 = Main.chest[number].item[(int)number2];
+                        writer.Write((short)number);
+                        writer.Write((byte)number2);
+                        short value3 = (short)item3.netID;
+                        if (item3.name == null)
+                        {
+                            value3 = 0;
+                        }
+                        writer.Write((short)item3.stack);
+                        writer.Write(item3.prefix);
+                        writer.Write(value3);
+                        break;
+                    }
+                case 33:
+                    {
+                        int chestX = 0;
+                        int chestY = 0;
+                        int nameLen = 0;
+                        string text2 = null;
+                        if (number > -1)
+                        {
+                            chestX = Main.chest[number].x;
+                            chestY = Main.chest[number].y;
+                        }
+                        if (number2 == 1f)
+                        {
+                            nameLen = text.Length;
+                            if (nameLen == 0 || nameLen > 20)
+                            {
+                                nameLen = 255;
+                            }
+                            else
+                            {
+                                text2 = text;
+                            }
+                        }
+                        writer.Write((short)number);
+                        writer.Write((short)chestX);
+                        writer.Write((short)chestY);
+                        writer.Write((byte)nameLen);
+                        if (text2 != null)
+                        {
+                            writer.Write(text2);
+                        }
+                        break;
+                    }
+                case 34:
+                    writer.Write((byte)number);
+                    writer.Write((short)number2);
+                    writer.Write((short)number3);
+                    writer.Write((short)number4);
+                    if (Main.netMode == 2)
+                    {
+                        Netplay.GetSectionX((int)number2);
+                        Netplay.GetSectionY((int)number3);
+                        writer.Write((short)number5);
+                    }
+                    break;
+                case 35:
+                case 66:
+                    writer.Write((byte)number);
+                    writer.Write((short)number2);
+                    break;
+                case 36:
+                    {
+                        Player player4 = Main.player[number];
+                        writer.Write((byte)number);
+                        writer.Write(player4.zone1);
+                        writer.Write(player4.zone2);
+                        break;
+                    }
+                case 38:
+                    writer.Write(text);
+                    break;
+                case 39:
+                    writer.Write((short)number);
+                    break;
+                case 40:
+                    writer.Write((byte)number);
+                    writer.Write((short)Main.player[number].talkNPC);
+                    break;
+                case 41:
+                    writer.Write((byte)number);
+                    writer.Write(Main.player[number].itemRotation);
+                    writer.Write((short)Main.player[number].itemAnimation);
+                    break;
+                case 42:
+                    writer.Write((byte)number);
+                    writer.Write((short)Main.player[number].statMana);
+                    writer.Write((short)Main.player[number].statManaMax);
+                    break;
+                case 43:
+                    writer.Write((byte)number);
+                    writer.Write((short)number2);
+                    break;
+                case 44:
+                    writer.Write((byte)number);
+                    writer.Write((byte)(number2 + 1f));
+                    writer.Write((short)number3);
+                    writer.Write((byte)number4);
+                    writer.Write(text);
+                    break;
+                case 45:
+                    writer.Write((byte)number);
+                    writer.Write((byte)Main.player[number].team);
+                    break;
+                case 46:
+                    writer.Write((short)number);
+                    writer.Write((short)number2);
+                    break;
+                case 47:
+                    writer.Write((short)number);
+                    writer.Write((short)Main.sign[number].x);
+                    writer.Write((short)Main.sign[number].y);
+                    writer.Write(Main.sign[number].text); //possibly null?
+                    writer.Write((byte)number2);
+                    break;
+                case 48:
+                    {
+                        Tile tile2 = Main.tile[number, (int)number2];
+                        writer.Write((short)number);
+                        writer.Write((short)number2);
+                        writer.Write(tile2.liquid);
+                        writer.Write(tile2.liquidType());
+                        break;
+                    }
+                case 50:
+                    writer.Write((byte)number);
+                    for (int num15 = 0; num15 < 22; num15++)
+                    {
+                        writer.Write((byte)Main.player[number].buffType[num15]);
+                    }
+                    break;
+                case 51:
+                    writer.Write((byte)number);
+                    writer.Write((byte)number2);
+                    break;
+                case 52:
+                    writer.Write((byte)number2);
+                    writer.Write((short)number3);
+                    writer.Write((short)number4);
+                    break;
+                case 53:
+                    writer.Write((short)number);
+                    writer.Write((byte)number2);
+                    writer.Write((short)number3);
+                    break;
+                case 54:
+                    writer.Write((short)number);
+                    for (int num16 = 0; num16 < 5; num16++)
+                    {
+                        writer.Write((byte)Main.npc[number].buffType[num16]);
+                        writer.Write((short)Main.npc[number].buffTime[num16]);
+                    }
+                    break;
+                case 55:
+                    writer.Write((byte)number);
+                    writer.Write((byte)number2);
+                    writer.Write((short)number3);
+                    break;
+                case 56:
+                    {
+                        string value4 = "";
+                        if (Main.netMode == 2)
+                        {
+                            value4 = Main.npc[number].displayName;
+                        }
+                        writer.Write((short)number);
+                        writer.Write(value4);
+                        break;
+                    }
+                case 57:
+                    writer.Write(WorldGen.tGood);
+                    writer.Write(WorldGen.tEvil);
+                    writer.Write(WorldGen.tBlood);
+                    break;
+                case 58:
+                    writer.Write((byte)number);
+                    writer.Write(number2);
+                    break;
+                case 59:
+                    writer.Write((short)number);
+                    writer.Write((short)number2);
+                    break;
+                case 60:
+                    writer.Write((short)number);
+                    writer.Write((short)number2);
+                    writer.Write((short)number3);
+                    writer.Write((byte)number4);
+                    break;
+                case 61:
+                    writer.Write((short)number);
+                    writer.Write((short)number2);
+                    break;
+                case 62:
+                    writer.Write((byte)number);
+                    writer.Write((byte)number2);
+                    break;
+                case 63:
+                case 64:
+                    writer.Write((short)number);
+                    writer.Write((short)number2);
+                    writer.Write((byte)number3);
+                    break;
+                case 65:
+                    {
+                        BitsByte bb15 = 0;
+                        bb15[0] = ((number & 1) == 1);
+                        bb15[1] = ((number & 2) == 2);
+                        bb15[2] = ((number5 & 1) == 1);
+                        bb15[3] = ((number5 & 2) == 2);
+                        writer.Write(bb15);
+                        writer.Write((short)number2);
+                        writer.Write(number3);
+                        writer.Write(number4);
+                        break;
+                    }
+                case 68:
+                    writer.Write(Main.clientUUID);
+                    break;
+                case 69:
+                    Netplay.GetSectionX((int)number2);
+                    Netplay.GetSectionY((int)number3);
+                    writer.Write((short)number);
+                    writer.Write((short)number2);
+                    writer.Write((short)number3);
+                    writer.Write(text);
+                    break;
+                case 70:
+                    writer.Write((short)number);
+                    writer.Write((byte)number2);
+                    break;
+                case 71:
+                    writer.Write(number);
+                    writer.Write((int)number2);
+                    writer.Write((short)number3);
+                    writer.Write((byte)number4);
+                    break;
+                case 72:
+                    for (int num17 = 0; num17 < 40; num17++)
+                    {
+                        writer.Write((short)Main.travelShop[num17]);
+                    }
+                    break;
+                case 74:
+                    {
+                        writer.Write((byte)Main.anglerQuest);
+                        bool value5 = Main.anglerWhoFinishedToday.Contains(text);
+                        writer.Write(value5);
+                        break;
+                    }
+                case 76:
+                    writer.Write((byte)number);
+                    writer.Write(Main.player[number].anglerQuestsFinished);
+                    break;
+                case 77:
+                    if (Main.netMode != 2)
+                    {
+                        return;
+                    }
+                    writer.Write((short)number);
+                    writer.Write((ushort)number2);
+                    writer.Write((short)number3);
+                    writer.Write((short)number4);
+                    break;
+                case 78:
+                    writer.Write(number);
+                    writer.Write((int)number2);
+                    writer.Write((sbyte)number3);
+                    writer.Write((sbyte)number4);
+                    break;
+                case 79:
+                    writer.Write((short)number);
+                    writer.Write((short)number2);
+                    writer.Write((short)number3);
+                    writer.Write((short)number4);
+                    writer.Write((byte)number5);
+                    writer.Write((sbyte)number6);
+                    writer.Write(number7 == 1);
+                    break;
+                case 80:
+                    writer.Write((byte)number);
+                    writer.Write((short)number2);
+                    break;
+                case 81:
+                    {
+                        writer.Write(number2);
+                        writer.Write(number3);
+                        Color c = default(Color);
+                        c.PackedValue = (uint)number;
+                        writer.WriteRGB(c);
+                        writer.Write(text);
+                        break;
+                    }
+                case 83:
+                    {
+                        int num18 = number;
+                        if (num18 < 0 && num18 >= 251)
+                        {
+                            num18 = 1;
+                        }
+                        int value6 = NPC.killCount[num18];
+                        writer.Write((short)num18);
+                        writer.Write(value6);
+                        break;
+                    }
+                case 84:
+                    {
+                        byte b3 = (byte)number;
+                        float stealth = Main.player[(int)b3].stealth;
+                        writer.Write(b3);
+                        writer.Write(stealth);
+                        break;
+                    }
+                case 85:
+                    {
+                        byte value7 = (byte)number;
+                        writer.Write(value7);
+                        break;
+                    }
+                case 86:
+                    {
+                        writer.Write(number);
+                        bool flag2 = TileEntity.ByID.ContainsKey(number);
+                        writer.Write(flag2);
+                        if (flag2)
+                        {
+                            TileEntity.Write(writer, TileEntity.ByID[number]);
+                        }
+                        break;
+                    }
+                case 87:
+                    writer.Write((short)number);
+                    writer.Write((short)number2);
+                    writer.Write((byte)number3);
+                    break;
+                case 88:
+                    {
+                        BitsByte bb16 = (byte)number2;
+                        BitsByte bb17 = (byte)number3;
+                        writer.Write((short)number);
+                        writer.Write(bb16);
+                        Item item4 = Main.item[number];
+                        if (bb16[0])
+                        {
+                            writer.Write(item4.color.PackedValue);
+                        }
+                        if (bb16[1])
+                        {
+                            writer.Write((ushort)item4.damage);
+                        }
+                        if (bb16[2])
+                        {
+                            writer.Write(item4.knockBack);
+                        }
+                        if (bb16[3])
+                        {
+                            writer.Write((ushort)item4.useAnimation);
+                        }
+                        if (bb16[4])
+                        {
+                            writer.Write((ushort)item4.useTime);
+                        }
+                        if (bb16[5])
+                        {
+                            writer.Write((short)item4.shoot);
+                        }
+                        if (bb16[6])
+                        {
+                            writer.Write(item4.shootSpeed);
+                        }
+                        if (bb16[7])
+                        {
+                            writer.Write(bb17);
+                            if (bb17[0])
+                            {
+                                writer.Write((ushort)item4.width);
+                            }
+                            if (bb17[1])
+                            {
+                                writer.Write((ushort)item4.height);
+                            }
+                            if (bb17[2])
+                            {
+                                writer.Write(item4.scale);
+                            }
+                            if (bb17[3])
+                            {
+                                writer.Write((short)item4.ammo);
+                            }
+                            if (bb17[4])
+                            {
+                                writer.Write((short)item4.useAmmo);
+                            }
+                            if (bb17[5])
+                            {
+                                writer.Write(item4.notAmmo);
+                            }
+                        }
+                        break;
+                    }
+                case 89:
+                    {
+                        writer.Write((short)number);
+                        writer.Write((short)number2);
+                        Item item5 = Main.player[(int)number4].inventory[(int)number3];
+                        writer.Write((short)item5.netID);
+                        writer.Write(item5.prefix);
+                        writer.Write(item5.stack);
+                        break;
+                    }
+                case 91:
+                    writer.Write(number);
+                    writer.Write((byte)number2);
+                    if (number2 != 255f)
+                    {
+                        writer.Write((ushort)number3);
+                        writer.Write((byte)number4);
+                        writer.Write((byte)number5);
+                        if (number5 < 0)
+                        {
+                            writer.Write((short)number6);
+                        }
+                    }
+                    break;
+                case 92:
+                    writer.Write((short)number);
+                    writer.Write(number2);
+                    writer.Write(number3);
+                    writer.Write(number4);
+                    break;
+                case 95:
+                    writer.Write((ushort)number);
+                    break;
+                case 96:
+                    {
+                        writer.Write((byte)number);
+                        Player player5 = Main.player[number];
+                        writer.Write((short)number4);
+                        writer.Write(number2);
+                        writer.Write(number3);
+                        writer.WriteVector2(player5.velocity);
+                        break;
+                    }
+                case 97:
+                    writer.Write((short)number);
+                    break;
+                case 98:
+                    writer.Write((short)number);
+                    break;
+                case 99:
+                    writer.Write((byte)number);
+                    writer.WriteVector2(Main.player[number].MinionTargetPoint);
+                    break;
+                case 100:
+                    {
+                        writer.Write((ushort)number);
+                        NPC nPC2 = Main.npc[number];
+                        writer.Write((short)number4);
+                        writer.Write(number2);
+                        writer.Write(number3);
+                        writer.WriteVector2(nPC2.velocity);
+                        break;
+                    }
+                case 101:
+                    writer.Write((ushort)NPC.ShieldStrengthTowerSolar);
+                    writer.Write((ushort)NPC.ShieldStrengthTowerVortex);
+                    writer.Write((ushort)NPC.ShieldStrengthTowerNebula);
+                    writer.Write((ushort)NPC.ShieldStrengthTowerStardust);
+                    break;
+                case 102:
+                    writer.Write((byte)number);
+                    writer.Write((byte)number2);
+                    writer.Write(number3);
+                    writer.Write(number4);
+                    break;
+                case 103:
+                    writer.Write(NPC.MoonLordCountdown);
+                    break;
+                case 104:
+                    writer.Write((byte)number);
+                    writer.Write((short)number2);
+                    writer.Write(((short)number3 < 0) ? 0f : number3);
+                    writer.Write((byte)number4);
+                    writer.Write(number5);
+                    writer.Write((byte)number6);
+                    break;
+                //New
+                case 105:
+                    writer.Write((byte)number);
+                    break;
+                case 106:
+                    writer.Write(number);
+                    writer.Write((int)number2);
+                    writer.Write((short)number3);
+                    writer.Write((short)number4);
+                    for (int i = (int)number2; i < (int)number2 + (int)number4; i++)
+                    {
+                        for (int j = number; j < number + (int)number3; j++)
+                        {
+                            if (Main.tile[j, i].active())
+                                writer.Write(Main.tile[j, i].Worldspawned);
+                        }
+                    }
+                    break;
+                case 107:
+                    writer.Write((byte)number);
+                    writer.Write((byte)Main.player[number].StatPoints);
+                    writer.Write((byte)Main.player[number].bonusStr);
+                    writer.Write((byte)Main.player[number].bonusRng);
+                    writer.Write((byte)Main.player[number].bonusMag);
+                    writer.Write((byte)Main.player[number].bonusDef);
+                    break;
+                case 108:
+                    writer.Write((byte)number);
+                    writer.Write((int)number2);
+                    break;
+            }
 			int num19 = (int) writer.BaseStream.Position;
 			writer.BaseStream.Position = position;
 			writer.Write((short) num19);

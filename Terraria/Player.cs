@@ -21,7 +21,64 @@ namespace Terraria
 {
 	public class Player : Entity
 	{
-		public const int maxSolarShields = 3;
+        public byte Level = 1;
+        public short StatPoints = 0;
+        public short baseHP = 1;
+        public short MaxAP = 1;
+        public short statStr = 1;
+        public short statRng = 1;
+        public short statMag = 1;
+        public short statDef = 1;
+        public short statAP = 1;
+        public short breathPoint = 0;
+        public byte[] Ability = new byte[255];
+        public short At = 0;
+        public short Def = 0;
+        public short St = 0;
+        public short Rg = 0;
+        public short Mg = 0;
+        public short Df = 0;
+        public short Sp = 0;
+        public short Mp = 0;
+        public short Br = 0;
+        public short Hp = 0;
+        public short Ap = 0;
+        public short boostStr = 0;
+        public short boostRng = 0;
+        public short boostMag = 0;
+        public short boostDef = 0;
+        public short boostHP = 0;
+        public short bonusStr = 0;
+        public short bonusRng = 0;
+        public short bonusMag = 0;
+        public short bonusDef = 0;
+        public short baseStr = 1;
+        public short baseRng = 1;
+        public short baseMag = 1;
+        public short baseDef = 1;
+        public short baseDefense = 0;
+        public byte Spec = 0;
+        private byte tt = 0;
+        public int lifeRegen2 = 0;
+        public bool Regenerate = true;
+        public bool MRegenerate = true;
+        public bool Lvup = false;
+        public float EXPRate = 0f;
+        public byte lifeRegenCount2 = 0;
+        public short lifedrain = 0;
+        public short heartPoint = 20;
+        public short heartPoint2 = 20;
+        public short statLifeMax3 = 0;
+        public short Lf = 0;
+        public short starPoint = 20;
+        public short statManaMax3 = 9;
+        public float minionDamage2 = 1f;
+        public int backupLife = 0;
+        public int Exp = 0;
+        public int XP = 0;
+        public int MaxExp = 65;
+        //End new VARs
+        public const int maxSolarShields = 3;
 
 		public const int nebulaMaxLevel = 3;
 
@@ -2566,9 +2623,305 @@ namespace Terraria
 			this.spI[0] = Main.worldID;
 			this.spX[0] = x;
 			this.spY[0] = y;
-		}
+        }
+        public int ReturnAmmoDamage(Item sItem)
+        {
 
-		public void checkArmor()
+            Item item2 = new Item();
+            bool flag8 = false;
+            for (int num67 = 54; num67 < 58; num67++)
+            {
+                if (this.inventory[num67].ammo == sItem.useAmmo && this.inventory[num67].stack > 0)
+                {
+                    item2 = this.inventory[num67];
+                    flag8 = true;
+                    break;
+                }
+            }
+            if (!flag8)
+            {
+                for (int num68 = 0; num68 < 54; num68++)
+                {
+                    if (this.inventory[num68].ammo == sItem.useAmmo && this.inventory[num68].stack > 0)
+                    {
+                        item2 = this.inventory[num68];
+                        break;
+                    }
+                }
+            }
+            return item2.damage;
+        }
+        public void FishingExperience(int Type)
+        {
+            switch (Type)
+            {
+                case 2290:
+                    this.GainExperience(10);
+                    break;
+                case 2297:
+                    this.GainExperience(31);
+                    break;
+                case 2298:
+                    this.GainExperience(20);
+                    break;
+                case 2299:
+                    this.GainExperience(31);
+                    break;
+                case 2300:
+                    this.GainExperience(33);
+                    break;
+                case 2301:
+                    this.GainExperience(35);
+                    break;
+                case 2302:
+                    this.GainExperience(34);
+                    break;
+                case 2303:
+                    this.GainExperience(98);
+                    break;
+                case 2304:
+                    this.GainExperience(40);
+                    break;
+                case 2305:
+                    this.GainExperience(34);
+                    break;
+                case 2306:
+                    this.GainExperience(17);
+                    break;
+                case 2307:
+                    this.GainExperience(202);
+                    break;
+                case 2308:
+                    this.GainExperience(600);
+                    break;
+                case 2309:
+                    this.GainExperience(48);
+                    break;
+                case 2310:
+                    this.GainExperience(575);
+                    break;
+                case 2311:
+                    this.GainExperience(58);
+                    break;
+                case 2312:
+                    this.GainExperience(85);
+                    break;
+                case 2313:
+                    this.GainExperience(56);
+                    break;
+                case 2314:
+                    this.GainExperience(45);
+                    break;
+                case 2315:
+                    this.GainExperience(65);
+                    break;
+                case 2316:
+                    this.GainExperience(39);
+                    break;
+                case 2317:
+                    this.GainExperience(195);
+                    break;
+                case 2318:
+                    this.GainExperience(43);
+                    break;
+                case 2319:
+                    this.GainExperience(44);
+                    break;
+                case 2320:
+                    this.GainExperience(225);
+                    break;
+                case 2321:
+                    this.GainExperience(37);
+                    break;
+                case 2330:
+                    this.GainExperience(650);
+                    break;
+                case 2331:
+                    this.GainExperience(1750);
+                    break;
+                case 2332:
+                    this.GainExperience(200);
+                    break;
+                case 2334:
+                    this.GainExperience(45);
+                    break;
+                case 2335:
+                    this.GainExperience(100);
+                    break;
+                case 2336:
+                    this.GainExperience(444);
+                    break;
+                case 2337:
+                    this.GainExperience(4);
+                    break;
+                case 2338:
+                    this.GainExperience(5);
+                    break;
+                case 2339:
+                    this.GainExperience(3);
+                    break;
+                case 2341:
+                    this.GainExperience(775);
+                    break;
+                case 2342:
+                    this.GainExperience(750);
+                    break;
+                case 2420:
+                    this.GainExperience(2500);
+                    break;
+                case 2423:
+                    this.GainExperience(270);
+                    break;
+                case 2429:
+                    this.GainExperience(5000);
+                    break;
+            }
+        }
+        public void PlayerLevelCalculate()
+        {
+            if (this.Level == 100)
+            {
+                this.Exp = 0;
+            }
+            if (this.Level > 100)
+            {
+                this.Level = 100;
+            }
+            if (this.Level < 0)
+            {
+                this.Level = 0;
+            }
+            this.XP = 0;
+            for (byte i = 0; i <= this.Level - 1; i++)
+            {
+                if (i == 0)
+                    this.XP -= 40;
+                this.XP += 40 + (int)((i * (35 + 0)) + Math.Round((i * 2.52f) * ((i * 1.18f) * (i * 0.087f))));
+                if (i == 79)
+                    this.XP += 2935;
+                if (i == 80)
+                    this.XP += 75000;
+                if (i == 89)
+                    this.XP += 3726;
+                if (i == 98)
+                    this.XP += 31780;
+            }
+            this.XP += this.Exp;
+            this.CheckExp();
+            this.StatPoints = 0;
+            this.heartPoint = 18;
+            this.starPoint = 20;
+            this.breathPoint = 0;
+            for (byte lv = 0; lv < this.Level; lv++)
+            {
+                if (lv <= 9)
+                {
+                    this.heartPoint += 1;
+                }
+                else if (lv > 9 && lv <= 18)
+                {
+                    this.heartPoint += 2;
+                }
+                else if (lv > 18 && lv <= 20)
+                {
+                    this.heartPoint += 3;
+                }
+                else if (lv > 20 && lv <= 30)
+                {
+                    this.heartPoint += 2;
+                }
+                else if (lv > 30 && lv <= 60)
+                {
+                    this.heartPoint += 1;
+                }
+                else if (lv > 60 && lv <= 74)
+                {
+                    this.heartPoint += 2;
+                }
+                else if (lv > 74 && lv <= 78)
+                {
+                    this.heartPoint += 3;
+                }
+                else if (lv > 78 && lv <= 85)
+                {
+                    this.heartPoint += 4;
+                }
+                else if (lv > 85 && lv <= 95)
+                {
+                    this.heartPoint += 5;
+                }
+                else if (lv > 95 && lv <= 100)
+                {
+                    this.heartPoint += 4;
+                }
+            }
+            this.heartPoint = (short)Math.Round((float)this.heartPoint * ((float)this.baseHP / 100f));
+            this.starPoint += (short)(Math.Floor((float)this.Level / 10));
+            this.breathPoint += (short)(Math.Floor(((float)this.Level / 20)) * 20);
+            this.breathMax = 200 + this.breathPoint;
+            this.statLifeMax3 = (short)(this.heartPoint2 * ((float)this.statLifeMax2 / 20f));
+            this.Lf = (short)(this.heartPoint * ((float)this.statLifeMax2 / 20f));
+            this.statManaMax3 = (short)(this.starPoint * ((float)this.statManaMax2 / 20f));
+            this.StatPoints = (short)(Math.Floor((float)(this.Level + 4) / 6f) - this.bonusStr - this.bonusRng - this.bonusMag - this.bonusDef);
+            if ((this.StatPoints > (short)(Math.Floor((float)(this.Level + 4) / 6f) - this.bonusStr - this.bonusRng - this.bonusMag - this.bonusDef)) || (this.StatPoints < 0))
+            {
+                this.bonusStr = 0;
+                this.bonusRng = 0;
+                this.bonusMag = 0;
+                this.bonusDef = 0;
+            }
+            this.MaxAP = (short)(Math.Round((double)((99) * ((((float)this.Level / 3f) * 3) / 85f) + (4))));
+            this.statStr = (short)(this.bonusStr + Math.Round((double)((this.baseStr) * (this.Level / 100f) + (7) * (this.baseStr / 100f))));
+            this.statRng = (short)(this.bonusRng + Math.Round((double)((this.baseRng) * (this.Level / 100f) + (7) * (this.baseRng / 100f))));
+            this.statMag = (short)(this.bonusMag + Math.Round((double)((this.baseMag) * (this.Level / 100f) + (7) * (this.baseMag / 100f))));
+            this.statDef = (short)(this.bonusDef + Math.Round((double)((this.baseDef) * (this.Level / 100f) + (7) * (this.baseDef / 100f))));
+        }
+        public void GainExperience(int EXP)
+        {
+            EXP = (int)((float)EXP * (1f - this.EXPRate));
+            if (this.Level == 100)
+            {
+                return;
+            }
+            this.Exp += EXP;
+            Lvup = false;
+            for (byte i = 0; i < 101; i++)
+            {
+                this.LevelUpCheck();
+            }
+            if (Lvup)
+            {
+                if (Main.netMode == 1)
+                    NetMessage.SendData(77, -1, -1, "", whoAmI, 0, 0f, 0f, 0);
+            }
+        }
+        public void LevelUpCheck()
+        {
+            if (this.Exp >= this.MaxExp && this.Level < 100)
+            {
+                this.Level++;
+                this.Exp -= this.MaxExp;
+                this.PlayerLevelCalculate();
+                Lvup = true;
+            }
+        }
+        public void CheckExp()
+        {
+            this.MaxExp = 0;
+            this.MaxExp = 40 + (int)((this.Level * 35) + Math.Round((this.Level * 2.52f) * ((this.Level * 1.18f) * (this.Level * 0.087f))));
+            if (this.Level == 79)
+                this.MaxExp += 2935;
+            if (this.Level == 80)
+                this.MaxExp += 75000;
+            if (this.Level == 89)
+                this.MaxExp += 3726;
+            if (this.Level == 98)
+                this.MaxExp += 31780;
+            if (this.Level == 80)
+                this.MaxExp = 0;
+        }
+
+        public void checkArmor()
 		{
 		}
 
@@ -5120,48 +5473,79 @@ namespace Terraria
 			}
 			return KnockBack;
 		}
-		public int GetWeaponDamage(Item sItem)
-		{
-			int num = sItem.damage;
-			if (num > 0)
-			{
-				if (sItem.melee)
-				{
-					num = (int)((float)num * this.meleeDamage + 5E-06f);
-				}
-				else if (sItem.ranged)
-				{
-					num = (int)((float)num * this.rangedDamage + 5E-06f);
-					if (sItem.useAmmo == 1 || sItem.useAmmo == 323)
-					{
-						num = (int)((float)num * this.arrowDamage + 5E-06f);
-					}
-					if (sItem.useAmmo == 14 || sItem.useAmmo == 311)
-					{
-						num = (int)((float)num * this.bulletDamage + 5E-06f);
-					}
-					if (sItem.useAmmo == 771 || sItem.useAmmo == 246 || sItem.useAmmo == 312 || sItem.useAmmo == 514)
-					{
-						num = (int)((float)num * this.rocketDamage + 5E-06f);
-					}
-				}
-				else if (sItem.thrown)
-				{
-					num = (int)((float)num * this.thrownDamage + 5E-06f);
-				}
-				else if (sItem.magic)
-				{
-					num = (int)((float)num * this.magicDamage + 5E-06f);
-				}
-				else if (sItem.summon)
-				{
-					num = (int)((float)num * this.minionDamage);
-				}
-			}
-			return num;
-		}
+        public int GetWeaponDamage(Item sItem)
+        {
+            int num = 0;
+            int AmmoDamage = 0;
+            int damage = sItem.damage;
+            int DMG = 0;
+            float BonusArrow = 1f;
+            if (damage > 0)
+            {
+                if (sItem.melee)
+                {
+                    num = (int)((float)(damage) * (this.meleeDamage * (1f / (1f + (float)damage / 125f))) + 5E-06f);
+                }
+                else if (sItem.ranged)
+                {
+                    if (sItem.ranged && sItem.useAmmo != 0)
+                    {
+                        AmmoDamage = this.ReturnAmmoDamage(sItem);
+                    }
+                    if (sItem.useAmmo == 1 && this.archery)
+                    {
+                        BonusArrow = 1.2f;
+                    }
+                    if (sItem.ammo > 0 && (this.inventory[this.selectedItem].ranged && this.inventory[this.selectedItem].useAmmo != 0 && this.inventory[this.selectedItem].useAmmo == sItem.ammo))
+                    {
+                        DMG = this.inventory[this.selectedItem].damage;
+                    }
+                    //Normal Damage
+                    num = (int)((float)damage * (this.rangedDamage * (1f / (1f + (float)(damage + AmmoDamage) / 125f))));
+                    //Ammo
+                    if (sItem.ammo == 1 || sItem.ammo == 323)
+                    {
+                        num = (int)((float)damage * (this.rangedDamage * (1f / (1f + (float)(damage + DMG) / 125f))));
+                    }
+                    if (sItem.ammo == 14 || sItem.ammo == 311)
+                    {
+                        num = (int)((float)damage * (this.rangedDamage * (1f / (1f + (float)(damage + DMG) / 125f))));
+                    }
+                    if (sItem.ammo == 771 || sItem.ammo == 246 || sItem.ammo == 312 || sItem.ammo == 514)
+                    {
+                        num = (int)((float)damage * (this.rangedDamage * (1f / (1f + (float)(damage + DMG) / 125f))));
+                    }
+                    //Ranged Weapon Type
+                    if (sItem.useAmmo == 1 || sItem.useAmmo == 323)
+                    {
+                        num = (int)((float)(damage * BonusArrow) * ((this.arrowDamage + this.rangedDamage - 1) * (1f / (1f + (float)((damage * BonusArrow) + AmmoDamage) / 125f))));
+                    }
+                    if (sItem.useAmmo == 14 || sItem.useAmmo == 311)
+                    {
+                        num = (int)((float)(damage) * ((this.bulletDamage + this.rangedDamage - 1) * (1f / (1f + (float)(damage + AmmoDamage) / 125f))));
+                    }
+                    if (sItem.useAmmo == 771 || sItem.useAmmo == 246 || sItem.useAmmo == 312 || sItem.useAmmo == 514)
+                    {
+                        num = (int)((float)(damage) * ((this.rocketDamage + this.rangedDamage - 1) * (1f / (1f + (float)(damage + AmmoDamage) / 125f))));
+                    }
+                }
+                else if (sItem.thrown)
+                {
+                    num = (int)((float)(damage) * (this.thrownDamage * (1f / (1f + (float)damage / 125f))) + 5E-06f);
+                }
+                else if (sItem.magic)
+                {
+                    num = (int)((float)(damage) * (this.magicDamage * (1f / (1f + (float)damage / 125f))) + 5E-06f);
+                }
+                else if (sItem.summon)
+                {
+                    num = (int)((float)(damage) * (this.minionDamage * (1f / (1f + (float)damage / 125f))));
+                }
+            }
+            return num;
+        }
 
-		public void Ghost()
+        public void Ghost()
 		{
 		}
 
@@ -13924,6 +14308,9 @@ namespace Terraria
 			Item item = new Item();
 			bool flag = false;
 			int num = 54;
+            int WDam = sItem.damage;
+            int Dam = 0;
+            int DMG = 0;
 			while (num < 58)
 			{
 				if (this.inventory[num].ammo != sItem.useAmmo || this.inventory[num].stack <= 0)
@@ -13954,8 +14341,9 @@ namespace Terraria
 						break;
 					}
 				}
-			}
-			if (canShoot)
+            }
+            Dam = item.damage;
+            if (canShoot)
 			{
 				if (sItem.type == 1946)
 				{
@@ -14015,12 +14403,16 @@ namespace Terraria
 				speed = speed + item.shootSpeed;
 				if (!item.ranged)
 				{
-					Damage = Damage + item.damage;
+					Damage = Damage + Dam;
 				}
 				else if (item.damage > 0)
 				{
-					Damage = Damage + (int)((float)item.damage * this.rangedDamage);
-				}
+                    if (item.damage > 0)
+                    {
+                        DMG = WDam;
+                        Damage += (int)((float)Dam * (this.rangedDamage * (1f / (1f + (float)(Dam + DMG) / 125f))));
+                    }
+                }
 				if (sItem.useAmmo == 1 && this.archery)
 				{
 					if (speed < 20f)
@@ -14031,7 +14423,7 @@ namespace Terraria
 							speed = 20f;
 						}
 					}
-					Damage = (int)((double)((float)Damage) * 1.2);
+					//Damage = (int)((double)((float)Damage) * 1.2);
 				}
 				KnockBack = KnockBack + item.knockBack;
 				bool flag1 = dontConsume;
@@ -17298,8 +17690,61 @@ namespace Terraria
 			x = vector2.X;
 			y = vector2.Y;
 		}
-
-		public static void SavePlayer(PlayerFileData playerFile, bool skipMapSave = false)
+        public static void SaveStats(Player player)
+        {
+            string str = Main.playerPathName.Substring(0, Main.playerPathName.Length - 4);
+            try
+            {
+                    Directory.CreateDirectory(str);
+            }
+            catch
+            {
+            }
+            object[] directorySeparatorChar = new object[] { str, Path.DirectorySeparatorChar, Main.ActivePlayerFileData.Name, ".lvl" };
+            str = string.Concat(directorySeparatorChar);
+            RijndaelManaged rijndaelManaged = new RijndaelManaged();
+            Stream stream;
+                stream = new FileStream(str, FileMode.Create);
+            using (stream)
+            {
+                using (CryptoStream cryptoStream = new CryptoStream(stream, rijndaelManaged.CreateEncryptor(Player.ENCRYPTION_KEY, Player.ENCRYPTION_KEY), CryptoStreamMode.Write))
+                {
+                    using (BinaryWriter binaryWriter = new BinaryWriter(cryptoStream))
+                    {
+                        binaryWriter.Write((int)1005);
+                        binaryWriter.Write(player.Level);
+                        binaryWriter.Write(player.Spec);
+                        binaryWriter.Write(player.baseHP);
+                        binaryWriter.Write(player.baseStr);
+                        binaryWriter.Write(player.baseRng);
+                        binaryWriter.Write(player.baseMag);
+                        binaryWriter.Write(player.baseDef);
+                        binaryWriter.Write(player.bonusStr);
+                        binaryWriter.Write(player.bonusRng);
+                        binaryWriter.Write(player.bonusMag);
+                        binaryWriter.Write(player.bonusDef);
+                        binaryWriter.Write(player.Exp);
+                        binaryWriter.Write(player.StatPoints);
+                        binaryWriter.Write(player.Regenerate);
+                        binaryWriter.Write(player.MRegenerate);
+                        binaryWriter.Write(player.EXPRate);
+                        binaryWriter.Write((int)0);
+                        binaryWriter.Write((short)0);
+                        binaryWriter.Write((byte)0);
+                        binaryWriter.Write(false);
+                        binaryWriter.Write((int)0);
+                        binaryWriter.Write((int)0);
+                        binaryWriter.Write((int)0);
+                        binaryWriter.Write((byte)0);
+                        binaryWriter.Write((byte)0);
+                        binaryWriter.Flush();
+                        cryptoStream.FlushFinalBlock();
+                        stream.Flush();
+                    }
+                }
+            }
+        }
+        public static void SavePlayer(PlayerFileData playerFile, bool skipMapSave = false)
 		{
 			Stream memoryStream;
 			Main.Achievements.Save();
@@ -17481,8 +17926,9 @@ namespace Terraria
 						stream.Flush();
 					}
 				}
-			}
-		}
+            }
+            SaveStats(player);
+        }
 
 		public bool SellItem(int price, int stack)
 		{
@@ -22136,8 +22582,32 @@ namespace Terraria
 			else if (this.chilled)
 			{
 				this.moveSpeed *= 0.75f;
-			}
-			this.meleeSpeed = 1f / this.meleeSpeed;
+            }
+            //////Level Stat Bonuses
+            this.meleeDamage += (0.07f * (float)(0 + this.statStr + this.boostStr));
+            this.rangedDamage += (0.07f * (float)(0 + this.statRng + this.boostRng));
+            this.thrownDamage += (0.07f * (float)(0 + this.statRng + this.boostRng));
+            this.magicDamage += (0.07f * (float)(0 + this.statMag + this.boostMag));
+            this.minionDamage2 += (0.07f * (float)(0 + this.statMag + this.boostMag));
+            this.minionDamage = this.minionDamage2 * this.minionDamage;
+            if (this.meleeDamage < 0.25f)
+                this.meleeDamage = 0.25f;
+            if (this.rangedDamage < 0.25f)
+                this.rangedDamage = 0.25f;
+            if (this.magicDamage < 0.25f)
+                this.magicDamage = 0.25f;
+            if (this.minionDamage2 < 0.25f)
+                this.minionDamage2 = 0.25f;
+            this.baseDefense = (short)this.statDefense;
+            this.statDefense = (int)(this.statDefense * (1 + ((this.statDef + this.boostDef) * 0.07f)));
+            this.statLifeMax2 = (short)((float)this.statLifeMax2 * (float)((100 + this.boostHP) / 100f));
+            short hp = (short)((float)this.heartPoint);// * (float)(((float)(100 + this.boostHP) / 100f)));
+
+            if (hp < 1)
+                hp = 1;
+            this.statLifeMax3 = (short)(hp * ((float)((float)this.statLifeMax2) / 20f));
+            this.heartPoint2 = hp;
+            this.meleeSpeed = 1f / this.meleeSpeed;
 			this.UpdateLifeRegen();
 			this.soulDrain = 0;
 			this.UpdateManaRegen();

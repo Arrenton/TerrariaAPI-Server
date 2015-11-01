@@ -41,7 +41,9 @@ namespace Terraria
 
 		public virtual short frameY { get; set; }
 
-		public virtual int collisionType
+        public byte Worldspawned = 0;
+
+        public virtual int collisionType
 		{
 			get
 			{

@@ -29,7 +29,9 @@ namespace Terraria
 {
 	public class Main
 	{
-		public const int offLimitBorderTiles = 40;
+        public static int playerCount = 0;
+        // End new variables
+        public const int offLimitBorderTiles = 40;
 
 		public const int maxItemTypes = 3602;
 
@@ -2229,12 +2231,12 @@ namespace Terraria
 			Main.PendingPlayer = null;
 			Main.WorldList = new List<WorldFileData>();
 			Main.ActiveWorldFileData = new WorldFileData();
-			object[] objArray = new object[] { Environment.GetFolderPath(Environment.SpecialFolder.Personal), Path.DirectorySeparatorChar, "My Games", Path.DirectorySeparatorChar, "Terraria" };
+			object[] objArray = new object[] { Environment.GetFolderPath(Environment.SpecialFolder.Personal), Path.DirectorySeparatorChar, "My Games", Path.DirectorySeparatorChar, "Terraria Leveled" };
 			Main.SavePath = string.Concat(objArray);
 			Main.WorldPath = string.Concat(Main.SavePath, Path.DirectorySeparatorChar, "Worlds");
-			Main.CloudWorldPath = "worlds";
+			Main.CloudWorldPath = "leveled worlds";
 			Main.PlayerPath = string.Concat(Main.SavePath, Path.DirectorySeparatorChar, "Players");
-			Main.CloudPlayerPath = "players";
+			Main.CloudPlayerPath = "leveled players";
 			Main.Configuration = new Preferences(string.Concat(Main.SavePath, Path.DirectorySeparatorChar, "config.json"), false, false);
 			Main.itemName = new string[Main.maxItemTypes];
 			Main.npcName = new string[540];
@@ -2610,28 +2612,36 @@ namespace Terraria
 			}
 		}
 
-		public static double CalculateDamage(int Damage, int Defense)
-		{
-			double damage = (double)Damage - (double)Defense * 0.5;
-			if (damage < 1)
-			{
-				damage = 1;
-			}
-			return damage;
-		}
+        public static double CalculateDamage(int Damage, int Defense)
+        {
+            double num = (Math.Pow(Damage + 10, 2) - Defense) / (60f + (Defense * (2f * (1f + ((float)Defense / 900f)))));
+            if (num < 1.0)
+            {
+                num = 1.0;
+            }
+            if (num > 99999.0)
+            {
+                num = 99999.0;
+            }
+            return num;
+        }
 
-		public static double CalculatePlayerDamage(int Damage, int Defense)
+        public static double CalculatePlayerDamage(int Damage, int Defense)
 		{
-			double damage = (double)Damage - (double)Defense * 0.5;
-			if (Main.expertMode)
+            double damage = (Math.Pow(Damage + 10, 2) - Defense) / (60f + (Defense * (2f * (1f + ((float)Defense / 900f)))));
+            if (Main.expertMode)
 			{
-				damage = (double)Damage - (double)Defense * 0.75;
-			}
+                damage = (Math.Pow(Damage + 10, 2) - Defense) / (60f + (Defense * (3f * (1f + ((float)Defense / 900f)))));
+            }
 			if (damage < 1)
 			{
 				damage = 1;
-			}
-			return damage;
+            }
+            if (damage > 99999)
+            {
+                damage = 99999;
+            }
+            return damage;
 		}
 
 		public static void CancelClothesWindow(bool quiet = false)

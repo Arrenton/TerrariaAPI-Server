@@ -264,7 +264,24 @@ namespace Terraria
 					player.pantsColor = this.reader.ReadRGB();
 					player.shoeColor = this.reader.ReadRGB();
 					BitsByte bitsByte1 = this.reader.ReadByte();
-					player.difficulty = 0;
+                        player.Level = this.reader.ReadByte();
+                        player.Exp = this.reader.ReadInt32();
+                        player.StatPoints = this.reader.ReadByte();
+                        player.baseHP = this.reader.ReadByte();
+                        player.baseStr = this.reader.ReadByte();
+                        player.baseRng = this.reader.ReadByte();
+                        player.baseMag = this.reader.ReadByte();
+                        player.baseDef = this.reader.ReadByte();
+                        player.bonusStr = this.reader.ReadByte();
+                        player.bonusRng = this.reader.ReadByte();
+                        player.bonusMag = this.reader.ReadByte();
+                        player.bonusDef = this.reader.ReadByte();
+                        BitsByte bitsByte2 = this.reader.ReadByte();
+                        player.Regenerate = bitsByte2[0];
+                        player.MRegenerate = bitsByte2[1];
+                        player.Spec = this.reader.ReadByte();
+                        player.EXPRate = this.reader.ReadSingle();
+                        player.difficulty = 0;
 					if (bitsByte1[0])
 					{
 						player.difficulty += 1;
@@ -829,31 +846,42 @@ namespace Terraria
 					return;
 				}
 				case 16:
-				{
-					int num24 = this.reader.ReadByte();
-					if (num24 == Main.myPlayer && !Main.ServerSideCharacter)
-					{
-						return;
-					}
-					if (Main.netMode == 2)
-					{
-						num24 = this.whoAmI;
-					}
-					Player player5 = Main.player[num24];
-					player5.statLife = this.reader.ReadInt16();
-					player5.statLifeMax = this.reader.ReadInt16();
-					if (player5.statLifeMax < 100)
-					{
-						player5.statLifeMax = 100;
-					}
-					player5.dead = player5.statLife <= 0;
-					if (Main.netMode != 2)
-					{
-						return;
-					}
-					NetMessage.SendData(16, -1, this.whoAmI, "", num24, 0f, 0f, 0f, 0, 0, 0);
-					return;
-				}
+                    {
+                        int num24 = this.reader.ReadByte();
+                        if (num24 == Main.myPlayer && !Main.ServerSideCharacter)
+                        {
+                            return;
+                        }
+                        if (Main.netMode == 2)
+                        {
+                            num24 = this.whoAmI;
+                        }
+                        Player player5 = Main.player[num24];
+                        player5.statLife = this.reader.ReadInt16();
+                        player5.statLifeMax = this.reader.ReadInt16();
+                        player5.Exp = (int)this.reader.ReadInt32();
+                        player5.Level = (byte)this.reader.ReadByte();
+                        player5.bonusDef = (short)this.reader.ReadByte();
+                        player5.baseDef = (short)this.reader.ReadByte();
+                        player5.baseHP = (short)this.reader.ReadByte();
+                        player5.lifeRegenCount = (short)this.reader.ReadInt16();
+                        player5.lifeRegenCount2 = (byte)this.reader.ReadByte();
+                        BitsByte bb1 = 0;
+                        player5.Regenerate = bb1[0];
+                        player5.MRegenerate = bb1[1];
+                        player5.PlayerLevelCalculate();
+                        if (player5.statLifeMax < 20)
+                        {
+                            player5.statLifeMax = 20;
+                        }
+                        player5.dead = player5.statLife <= 0;
+                        if (Main.netMode != 2)
+                        {
+                            return;
+                        }
+                        NetMessage.SendData(16, -1, this.whoAmI, "", num24, 0f, 0f, 0f, 0, 0, 0);
+                        return;
+                    }
 				case 17:
 				{
 					byte num25 = this.reader.ReadByte();
@@ -3173,8 +3201,54 @@ namespace Terraria
 					itemArray[num234].value = num238;
 					itemArray[num234].buyOnce = bitsByte15[0];
 					return;
-				}
-				default:
+                    }
+                case 105: //Level up
+                    {
+                        int wholv = this.reader.ReadByte();
+                        //if (Main.netMode != 2)
+                        //    Main.player[wholv].LevelUp();
+                        if (Main.netMode == 2)
+                        {
+                            NetMessage.SendData(77, -1, this.whoAmI, "", wholv, 0f, 0f, 0f, 0);
+                            return;
+                        }
+                        return;
+                    }
+                case 106: //EXP Tag for ores
+                    {
+                        int xStart = this.reader.ReadInt32();
+                        int yStart = this.reader.ReadInt32();
+                        short width = this.reader.ReadInt16();
+                        short height = this.reader.ReadInt16();
+                        for (int i = yStart; i < yStart + height; i++)
+                        {
+                            for (int j = xStart; j < xStart + width; j++)
+                            {
+                                Tile tile = Main.tile[j, i];
+                                if (tile.active())
+                                    tile.Worldspawned = this.reader.ReadByte();
+                            }
+                        }
+                        return;
+                    }
+                case 107: //Changes to stats
+                    {
+                        Player player11 = Main.player[this.reader.ReadByte()];
+                        player11.StatPoints = this.reader.ReadByte();
+                        player11.bonusStr = this.reader.ReadByte();
+                        player11.bonusRng = this.reader.ReadByte();
+                        player11.bonusMag = this.reader.ReadByte();
+                        player11.bonusDef = this.reader.ReadByte();
+                        player11.PlayerLevelCalculate();
+                        return;
+                    }
+                case 108: //Recieve EXP from server
+                    {
+                        Player player12 = Main.player[this.reader.ReadByte()];
+                        player12.GainExperience(this.reader.ReadInt32());
+                        return;
+                    }
+                default:
 				{
 					return;
 				}
