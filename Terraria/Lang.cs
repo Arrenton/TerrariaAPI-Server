@@ -42,7 +42,7 @@ namespace Terraria
 			Lang.dt = new string[4];
 			Lang.chestType = new string[52];
 			Lang.dresserType = new string[28];
-			Lang.prefix = new string[84];
+			Lang.prefix = new string[131];
 		}
 
 		public Lang()
@@ -39926,7 +39926,54 @@ namespace Terraria
 				Lang.prefix[81] = "Legendary";
 				Lang.prefix[82] = "Unreal";
 				Lang.prefix[83] = "Mythical";
-			}
+                Lang.prefix[84] = "Dexterous";
+                Lang.prefix[85] = "Devious";
+                Lang.prefix[86] = "Cunning";
+                Lang.prefix[87] = "Instinctive";
+                Lang.prefix[88] = "Smart";
+                Lang.prefix[89] = "Brilliant";
+                Lang.prefix[90] = "Genius";
+                Lang.prefix[91] = "Omniscient";
+                Lang.prefix[92] = "Bold";
+                Lang.prefix[93] = "Brave";
+                Lang.prefix[94] = "Daring";
+                Lang.prefix[95] = "Fearless";
+                Lang.prefix[96] = "Lax";
+                Lang.prefix[97] = "Selfish";
+                Lang.prefix[98] = "Snobbish";
+                Lang.prefix[99] = "Vainglory";
+                Lang.prefix[100] = "Playful";
+                Lang.prefix[101] = "Impish";
+                Lang.prefix[102] = "Wicked";
+                Lang.prefix[103] = "Mischievous";
+                Lang.prefix[104] = "Careful";
+                Lang.prefix[105] = "Confident";
+                Lang.prefix[106] = "Smug";
+                Lang.prefix[107] = "Arrogant";
+                Lang.prefix[108] = "Tense";
+                Lang.prefix[109] = "Shy";
+                Lang.prefix[110] = "Vigorous";
+                Lang.prefix[111] = "Sentinel";
+                Lang.prefix[112] = "of the Bear";
+                Lang.prefix[113] = "of the Elephant";
+                Lang.prefix[114] = "of the Mammoth";
+                Lang.prefix[115] = "of the Colossus";
+                Lang.prefix[116] = "of the Sky";
+                Lang.prefix[117] = "of the Stars";
+                Lang.prefix[118] = "Blighted";
+                Lang.prefix[119] = "Vile";
+                Lang.prefix[120] = "Desperate";
+                Lang.prefix[121] = "Regrowing";
+                Lang.prefix[122] = "Reviving";
+                Lang.prefix[123] = "Berserking";
+                Lang.prefix[124] = "Reaping";
+                Lang.prefix[125] = "";
+                Lang.prefix[126] = "";
+                Lang.prefix[127] = "";
+                Lang.prefix[128] = "";
+                Lang.prefix[129] = "";
+                Lang.prefix[130] = "";
+            }
 			else if (Lang.lang == 2)
 			{
 				Lang.misc[0] = "Die Goblin-Armee wurde besiegt!";
@@ -40532,7 +40579,54 @@ namespace Terraria
 				Lang.prefix[81] = "Legendär";
 				Lang.prefix[82] = "Unwirklich";
 				Lang.prefix[83] = "Mythisch";
-			}
+                Lang.prefix[84] = "Dexterous";
+                Lang.prefix[85] = "Devious";
+                Lang.prefix[86] = "Cunning";
+                Lang.prefix[87] = "Instinctive";
+                Lang.prefix[88] = "Smart";
+                Lang.prefix[89] = "Brilliant";
+                Lang.prefix[90] = "Genius";
+                Lang.prefix[91] = "Omniscient";
+                Lang.prefix[92] = "Bold";
+                Lang.prefix[93] = "Brave";
+                Lang.prefix[94] = "Daring";
+                Lang.prefix[95] = "Fearless";
+                Lang.prefix[96] = "Lax";
+                Lang.prefix[97] = "Selfish";
+                Lang.prefix[98] = "Snobbish";
+                Lang.prefix[99] = "Vainglory";
+                Lang.prefix[100] = "Playful";
+                Lang.prefix[101] = "Impish";
+                Lang.prefix[102] = "Wicked";
+                Lang.prefix[103] = "Mischievous";
+                Lang.prefix[104] = "Careful";
+                Lang.prefix[105] = "Confident";
+                Lang.prefix[106] = "Smug";
+                Lang.prefix[107] = "Arrogant";
+                Lang.prefix[108] = "Tense";
+                Lang.prefix[109] = "Shy";
+                Lang.prefix[110] = "Vigorous";
+                Lang.prefix[111] = "Sentinel";
+                Lang.prefix[112] = "of the Bear";
+                Lang.prefix[113] = "of the Elephant";
+                Lang.prefix[114] = "of the Mammoth";
+                Lang.prefix[115] = "of the Colossus";
+                Lang.prefix[116] = "of the Sky";
+                Lang.prefix[117] = "of the Stars";
+                Lang.prefix[118] = "Blighted";
+                Lang.prefix[119] = "Vile";
+                Lang.prefix[120] = "Desperate";
+                Lang.prefix[121] = "Regrowing";
+                Lang.prefix[122] = "Reviving";
+                Lang.prefix[123] = "Berserking";
+                Lang.prefix[124] = "Reaping";
+                Lang.prefix[125] = "";
+                Lang.prefix[126] = "";
+                Lang.prefix[127] = "";
+                Lang.prefix[128] = "";
+                Lang.prefix[129] = "";
+                Lang.prefix[130] = "";
+            }
 			else if (Lang.lang == 3)
 			{
 				Lang.misc[0] = "L'esercito di goblin è stato sconfitto! ";
@@ -41138,7 +41232,54 @@ namespace Terraria
 				Lang.prefix[81] = "Leggendario";
 				Lang.prefix[82] = "Irreale";
 				Lang.prefix[83] = "Mitico";
-			}
+                Lang.prefix[84] = "Dexterous";
+                Lang.prefix[85] = "Devious";
+                Lang.prefix[86] = "Cunning";
+                Lang.prefix[87] = "Instinctive";
+                Lang.prefix[88] = "Smart";
+                Lang.prefix[89] = "Brilliant";
+                Lang.prefix[90] = "Genius";
+                Lang.prefix[91] = "Omniscient";
+                Lang.prefix[92] = "Bold";
+                Lang.prefix[93] = "Brave";
+                Lang.prefix[94] = "Daring";
+                Lang.prefix[95] = "Fearless";
+                Lang.prefix[96] = "Lax";
+                Lang.prefix[97] = "Selfish";
+                Lang.prefix[98] = "Snobbish";
+                Lang.prefix[99] = "Vainglory";
+                Lang.prefix[100] = "Playful";
+                Lang.prefix[101] = "Impish";
+                Lang.prefix[102] = "Wicked";
+                Lang.prefix[103] = "Mischievous";
+                Lang.prefix[104] = "Careful";
+                Lang.prefix[105] = "Confident";
+                Lang.prefix[106] = "Smug";
+                Lang.prefix[107] = "Arrogant";
+                Lang.prefix[108] = "Tense";
+                Lang.prefix[109] = "Shy";
+                Lang.prefix[110] = "Vigorous";
+                Lang.prefix[111] = "Sentinel";
+                Lang.prefix[112] = "of the Bear";
+                Lang.prefix[113] = "of the Elephant";
+                Lang.prefix[114] = "of the Mammoth";
+                Lang.prefix[115] = "of the Colossus";
+                Lang.prefix[116] = "of the Sky";
+                Lang.prefix[117] = "of the Stars";
+                Lang.prefix[118] = "Blighted";
+                Lang.prefix[119] = "Vile";
+                Lang.prefix[120] = "Desperate";
+                Lang.prefix[121] = "Regrowing";
+                Lang.prefix[122] = "Reviving";
+                Lang.prefix[123] = "Berserking";
+                Lang.prefix[124] = "Reaping";
+                Lang.prefix[125] = "";
+                Lang.prefix[126] = "";
+                Lang.prefix[127] = "";
+                Lang.prefix[128] = "";
+                Lang.prefix[129] = "";
+                Lang.prefix[130] = "";
+            }
 			else if (Lang.lang == 4)
 			{
 				Lang.misc[0] = "L'armée des gobelins a été vaincue.";
@@ -41744,7 +41885,54 @@ namespace Terraria
 				Lang.prefix[81] = "Légendaire";
 				Lang.prefix[82] = "Irréel";
 				Lang.prefix[83] = "Mythique";
-			}
+                Lang.prefix[84] = "Dexterous";
+                Lang.prefix[85] = "Devious";
+                Lang.prefix[86] = "Cunning";
+                Lang.prefix[87] = "Instinctive";
+                Lang.prefix[88] = "Smart";
+                Lang.prefix[89] = "Brilliant";
+                Lang.prefix[90] = "Genius";
+                Lang.prefix[91] = "Omniscient";
+                Lang.prefix[92] = "Bold";
+                Lang.prefix[93] = "Brave";
+                Lang.prefix[94] = "Daring";
+                Lang.prefix[95] = "Fearless";
+                Lang.prefix[96] = "Lax";
+                Lang.prefix[97] = "Selfish";
+                Lang.prefix[98] = "Snobbish";
+                Lang.prefix[99] = "Vainglory";
+                Lang.prefix[100] = "Playful";
+                Lang.prefix[101] = "Impish";
+                Lang.prefix[102] = "Wicked";
+                Lang.prefix[103] = "Mischievous";
+                Lang.prefix[104] = "Careful";
+                Lang.prefix[105] = "Confident";
+                Lang.prefix[106] = "Smug";
+                Lang.prefix[107] = "Arrogant";
+                Lang.prefix[108] = "Tense";
+                Lang.prefix[109] = "Shy";
+                Lang.prefix[110] = "Vigorous";
+                Lang.prefix[111] = "Sentinel";
+                Lang.prefix[112] = "of the Bear";
+                Lang.prefix[113] = "of the Elephant";
+                Lang.prefix[114] = "of the Mammoth";
+                Lang.prefix[115] = "of the Colossus";
+                Lang.prefix[116] = "of the Sky";
+                Lang.prefix[117] = "of the Stars";
+                Lang.prefix[118] = "Blighted";
+                Lang.prefix[119] = "Vile";
+                Lang.prefix[120] = "Desperate";
+                Lang.prefix[121] = "Regrowing";
+                Lang.prefix[122] = "Reviving";
+                Lang.prefix[123] = "Berserking";
+                Lang.prefix[124] = "Reaping";
+                Lang.prefix[125] = "";
+                Lang.prefix[126] = "";
+                Lang.prefix[127] = "";
+                Lang.prefix[128] = "";
+                Lang.prefix[129] = "";
+                Lang.prefix[130] = "";
+            }
 			else if (Lang.lang == 5)
 			{
 				Lang.misc[0] = "¡El ejército de duendes ha sido derrotado!";
@@ -42350,7 +42538,54 @@ namespace Terraria
 				Lang.prefix[81] = "Legendario";
 				Lang.prefix[82] = "Irreal";
 				Lang.prefix[83] = "Mítico";
-			}
+                Lang.prefix[84] = "Dexterous";
+                Lang.prefix[85] = "Devious";
+                Lang.prefix[86] = "Cunning";
+                Lang.prefix[87] = "Instinctive";
+                Lang.prefix[88] = "Smart";
+                Lang.prefix[89] = "Brilliant";
+                Lang.prefix[90] = "Genius";
+                Lang.prefix[91] = "Omniscient";
+                Lang.prefix[92] = "Bold";
+                Lang.prefix[93] = "Brave";
+                Lang.prefix[94] = "Daring";
+                Lang.prefix[95] = "Fearless";
+                Lang.prefix[96] = "Lax";
+                Lang.prefix[97] = "Selfish";
+                Lang.prefix[98] = "Snobbish";
+                Lang.prefix[99] = "Vainglory";
+                Lang.prefix[100] = "Playful";
+                Lang.prefix[101] = "Impish";
+                Lang.prefix[102] = "Wicked";
+                Lang.prefix[103] = "Mischievous";
+                Lang.prefix[104] = "Careful";
+                Lang.prefix[105] = "Confident";
+                Lang.prefix[106] = "Smug";
+                Lang.prefix[107] = "Arrogant";
+                Lang.prefix[108] = "Tense";
+                Lang.prefix[109] = "Shy";
+                Lang.prefix[110] = "Vigorous";
+                Lang.prefix[111] = "Sentinel";
+                Lang.prefix[112] = "of the Bear";
+                Lang.prefix[113] = "of the Elephant";
+                Lang.prefix[114] = "of the Mammoth";
+                Lang.prefix[115] = "of the Colossus";
+                Lang.prefix[116] = "of the Sky";
+                Lang.prefix[117] = "of the Stars";
+                Lang.prefix[118] = "Blighted";
+                Lang.prefix[119] = "Vile";
+                Lang.prefix[120] = "Desperate";
+                Lang.prefix[121] = "Regrowing";
+                Lang.prefix[122] = "Reviving";
+                Lang.prefix[123] = "Berserking";
+                Lang.prefix[124] = "Reaping";
+                Lang.prefix[125] = "";
+                Lang.prefix[126] = "";
+                Lang.prefix[127] = "";
+                Lang.prefix[128] = "";
+                Lang.prefix[129] = "";
+                Lang.prefix[130] = "";
+            }
 			for (int i = 0; i < 84; i++)
 			{
 				if (Lang.prefix[i] == null)

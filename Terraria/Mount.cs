@@ -1967,7 +1967,7 @@ namespace Terraria
 						Player player5 = mountedPlayer;
 						player5.thrownDamage = player5.thrownDamage + 0.15f;
 					}
-					if (mountedPlayer.statLife <= mountedPlayer.statLifeMax2 / 2)
+					if (mountedPlayer.statLife <= mountedPlayer.statLifeMax3 / 2)
 					{
 						mountedPlayer.MountFishronSpecialCounter = 60f;
 					}

@@ -280,7 +280,7 @@ namespace Terraria
                         player.Regenerate = bitsByte2[0];
                         player.MRegenerate = bitsByte2[1];
                         player.Spec = this.reader.ReadByte();
-                        player.EXPRate = this.reader.ReadSingle();
+                        player.EXPRate = this.reader.ReadByte();
                         player.difficulty = 0;
 					if (bitsByte1[0])
 					{
@@ -2620,9 +2620,9 @@ namespace Terraria
 					Player player13 = Main.player[num176];
 					Player player14 = player13;
 					player14.statLife = player14.statLife + num177;
-					if (player13.statLife > player13.statLifeMax2)
+					if (player13.statLife > player13.statLifeMax3)
 					{
-						player13.statLife = player13.statLifeMax2;
+						player13.statLife = player13.statLifeMax3;
 					}
 					player13.HealEffect(num177, false);
 					if (Main.netMode != 2)

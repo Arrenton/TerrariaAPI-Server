@@ -54236,7 +54236,7 @@ namespace Terraria
 					}
 					DropLoot(this.position, this.width, this.height, 880, num43, false, 0, false, false);
 				}
-				if (Main.rand.Next(2) == 0 && Main.player[(int)Player.FindClosest(this.position, this.width, this.height)].statLife < Main.player[(int)Player.FindClosest(this.position, this.width, this.height)].statLifeMax2)
+				if (Main.rand.Next(2) == 0 && Main.player[(int)Player.FindClosest(this.position, this.width, this.height)].statLife < Main.player[(int)Player.FindClosest(this.position, this.width, this.height)].statLifeMax3)
 				{
 					DropLoot(this.position, this.width, this.height, 58, 1, false, 0, false, false);
 				}
@@ -54290,7 +54290,7 @@ namespace Terraria
 						}
 					}
 				}
-				if (Main.rand.Next(4) == 0 && Main.player[(int)Player.FindClosest(this.position, this.width, this.height)].statLife < Main.player[(int)Player.FindClosest(this.position, this.width, this.height)].statLifeMax2)
+				if (Main.rand.Next(4) == 0 && Main.player[(int)Player.FindClosest(this.position, this.width, this.height)].statLife < Main.player[(int)Player.FindClosest(this.position, this.width, this.height)].statLifeMax3)
 				{
 					DropLoot(this.position, this.width, this.height, 58, 1, false, 0, false, false);
 				}
@@ -55337,7 +55337,7 @@ namespace Terraria
 				{
 					DropLoot(this.position, this.width, this.height, 184, 1, false, 0, false, false);
 				}
-				else if (Main.rand.Next(2) == 0 && Main.player[num73].statLife < Main.player[num73].statLifeMax2)
+				else if (Main.rand.Next(2) == 0 && Main.player[num73].statLife < Main.player[num73].statLifeMax3)
 				{
 					DropLoot(this.position, this.width, this.height, 58, 1, false, 0, false, false);
 				}
@@ -63554,7 +63554,7 @@ namespace Terraria
 			{
 				if (Main.bloodMoon)
 				{
-					if ((double)Main.player[Main.myPlayer].statLife < (double)Main.player[Main.myPlayer].statLifeMax2 * 0.66)
+					if ((double)Main.player[Main.myPlayer].statLife < (double)Main.player[Main.myPlayer].statLifeMax3 * 0.66)
 					{
 						int num6 = Main.rand.Next(3);
 						if (num6 == 0)
@@ -63607,7 +63607,7 @@ namespace Terraria
 				{
 					result = Lang.dialog(35, false);
 				}
-				else if ((double)Main.player[Main.myPlayer].statLife < (double)Main.player[Main.myPlayer].statLifeMax2 * 0.33)
+				else if ((double)Main.player[Main.myPlayer].statLife < (double)Main.player[Main.myPlayer].statLifeMax3 * 0.33)
 				{
 					int num8 = Main.rand.Next(5);
 					if (num8 == 0)
@@ -63631,7 +63631,7 @@ namespace Terraria
 						result = Lang.dialog(40, false);
 					}
 				}
-				else if ((double)Main.player[Main.myPlayer].statLife < (double)Main.player[Main.myPlayer].statLifeMax2 * 0.66)
+				else if ((double)Main.player[Main.myPlayer].statLife < (double)Main.player[Main.myPlayer].statLifeMax3 * 0.66)
 				{
 					int num9 = Main.rand.Next(7);
 					if (num9 == 0)

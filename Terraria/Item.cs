@@ -10,7 +10,7 @@ namespace Terraria
 		public const int silver = 100;
 		public const int gold = 10000;
 		public const int platinum = 1000000;
-		public const int maxPrefixes = 84;
+		public const int maxPrefixes = 131;
 		public static int potionDelay = 3600;
 		public static int restorationDelay = 3000;
 		public bool questItem;

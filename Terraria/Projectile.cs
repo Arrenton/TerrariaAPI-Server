@@ -7716,9 +7716,9 @@ namespace Terraria
 				if (Main.player[i].active && !Main.player[i].dead && ((!Main.player[this.owner].hostile && !Main.player[i].hostile) || Main.player[this.owner].team == Main.player[i].team))
 				{
 					float num5 = Math.Abs(Main.player[i].position.X + (float)(Main.player[i].width / 2) - this.position.X + (float)(this.width / 2)) + Math.Abs(Main.player[i].position.Y + (float)(Main.player[i].height / 2) - this.position.Y + (float)(this.height / 2));
-					if (num5 < 1200f && (float)(Main.player[i].statLifeMax2 - Main.player[i].statLife) > num3)
+					if (num5 < 1200f && (float)(Main.player[i].statLifeMax3 - Main.player[i].statLife) > num3)
 					{
-						num3 = (float)(Main.player[i].statLifeMax2 - Main.player[i].statLife);
+						num3 = (float)(Main.player[i].statLifeMax3 - Main.player[i].statLife);
 						num4 = i;
 					}
 				}
@@ -16156,9 +16156,9 @@ namespace Terraria
 												int num493 = (int)this.ai[1];
 												Main.player[num488].HealEffect(num493, false);
 												Main.player[num488].statLife += num493;
-												if (Main.player[num488].statLife > Main.player[num488].statLifeMax2)
+												if (Main.player[num488].statLife > Main.player[num488].statLifeMax3)
 												{
-													Main.player[num488].statLife = Main.player[num488].statLifeMax2;
+													Main.player[num488].statLife = Main.player[num488].statLifeMax3;
 												}
 												NetMessage.SendData(66, -1, -1, "", num488, (float)num493, 0f, 0f, 0, 0, 0);
 											}

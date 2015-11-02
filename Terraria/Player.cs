@@ -68,7 +68,7 @@ namespace Terraria
         public bool Regenerate = true;
         public bool MRegenerate = true;
         public bool Lvup = false;
-        public float EXPRate = 0f;
+        public byte EXPRate = 0;
         public byte lifeRegenCount2 = 0;
         public short lifedrain = 0;
         public short heartPoint = 20;
@@ -1514,7 +1514,7 @@ namespace Terraria
 		{
 			get
 			{
-				if (this.statLife < this.statLifeMax2 / 2 || this.wet && !this.lavaWet && !this.honeyWet || this.dripping)
+				if (this.statLife < this.statLifeMax3 / 2 || this.wet && !this.lavaWet && !this.honeyWet || this.dripping)
 				{
 					return true;
 				}
@@ -2883,7 +2883,7 @@ namespace Terraria
         }
         public void GainExperience(int EXP)
         {
-            EXP = (int)((float)EXP * (1f - this.EXPRate));
+            EXP = (int)((float)EXP * ((100 - this.EXPRate) / 100f));
             if (this.Level == 100)
             {
                 return;
@@ -5603,9 +5603,9 @@ namespace Terraria
 								{
 									this.HealEffect(20, true);
 								}
-								if (this.statLife > this.statLifeMax2)
+								if (this.statLife > this.statLifeMax3)
 								{
-									this.statLife = this.statLifeMax2;
+									this.statLife = this.statLifeMax3;
 								}
 								Main.item[num] = new Item();
 								if (Main.netMode == 1)
@@ -5621,9 +5621,9 @@ namespace Terraria
 								{
 									this.ManaEffect(100);
 								}
-								if (this.statMana > this.statManaMax2)
+								if (this.statMana > this.statManaMax3)
 								{
-									this.statMana = this.statManaMax2;
+									this.statMana = this.statManaMax3;
 								}
 								Main.item[num] = new Item();
 								if (Main.netMode == 1)
@@ -6386,9 +6386,9 @@ namespace Terraria
 					int num2 = damage;
 					Player player1 = this;
 					player1.statMana = player1.statMana + num2;
-					if (this.statMana > this.statManaMax2)
+					if (this.statMana > this.statManaMax3)
 					{
-						this.statMana = this.statManaMax2;
+						this.statMana = this.statManaMax3;
 					}
 					this.ManaEffect(num2);
 				}
@@ -7036,7 +7036,27 @@ namespace Terraria
 					else if (item.type != 227)
 					{
 						this.potionDelay = this.potionDelayTime;
-						this.AddBuff(21, this.potionDelay, true);
+                        if (item.type == 5)
+                            this.potionDelay = 1200;
+                        if (item.type == 28)
+                            this.potionDelay = 2400;
+                        if (item.type == 126)
+                            this.potionDelay = 2700;
+                        if (item.type == 188)
+                            this.potionDelay = 3000;
+                        if (item.type == 226)
+                            this.potionDelay = 3300;
+                        if (item.type == 261)
+                            this.potionDelay = 1800;
+                        if (item.type == 499)
+                            this.potionDelay = 3600;
+                        if (item.type == 1134)
+                            this.potionDelay = 2850;
+                        if (item.type == 2314)
+                            this.potionDelay = 3300;
+                        if (this.pStone)
+                            this.potionDelay = (int)(this.potionDelay * 0.75f);
+                        this.AddBuff(21, this.potionDelay, true);
 					}
 					else
 					{
@@ -9775,7 +9795,7 @@ namespace Terraria
 							if (this.chaosState)
 							{
 								Player player8 = this;
-								player8.statLife = player8.statLife - this.statLifeMax2 / 7;
+								player8.statLife = player8.statLife - this.statLifeMax3 / 7;
 								if (Lang.lang <= 1)
 								{
 									string str = " didn't materialize";
@@ -9808,6 +9828,7 @@ namespace Terraria
 					player10.statLifeMax2 = player10.statLifeMax2 + 20;
 					Player player11 = this;
 					player11.statLife = player11.statLife + 20;
+                    this.PlayerLevelCalculate();
 					if (Main.myPlayer == this.whoAmI)
 					{
 						this.HealEffect(20, true);
@@ -9823,6 +9844,7 @@ namespace Terraria
 					player13.statLifeMax2 = player13.statLifeMax2 + 5;
 					Player player14 = this;
 					player14.statLife = player14.statLife + 5;
+                    this.PlayerLevelCalculate();
 					if (Main.myPlayer == this.whoAmI)
 					{
 						this.HealEffect(5, true);
@@ -9838,6 +9860,7 @@ namespace Terraria
 					player16.statManaMax2 = player16.statManaMax2 + 20;
 					Player player17 = this;
 					player17.statMana = player17.statMana + 20;
+                    this.PlayerLevelCalculate();
 					if (Main.myPlayer == this.whoAmI)
 					{
 						this.ManaEffect(20);
@@ -17143,13 +17166,13 @@ namespace Terraria
 			{
 				return;
 			}
-			if (this.statLife == this.statLifeMax2 || this.potionDelay > 0)
+			if (this.statLife == this.statLifeMax3 || this.potionDelay > 0)
 			{
 				return;
 			}
-			int num = this.statLifeMax2 - this.statLife;
+			int num = this.statLifeMax3 - this.statLife;
 			Item item = null;
-			int num1 = -this.statLifeMax2;
+			int num1 = -this.statLifeMax3;
 			for (int i = 0; i < 58; i++)
 			{
 				Item item1 = this.inventory[i];
@@ -17180,7 +17203,27 @@ namespace Terraria
 				if (item.type != 227)
 				{
 					this.potionDelay = this.potionDelayTime;
-					this.AddBuff(21, this.potionDelay, true);
+                    if (item.type == 5)
+                        this.potionDelay = 1200;
+                    if (item.type == 28)
+                        this.potionDelay = 2400;
+                    if (item.type == 126)
+                        this.potionDelay = 2700;
+                    if (item.type == 188)
+                        this.potionDelay = 3000;
+                    if (item.type == 226)
+                        this.potionDelay = 3300;
+                    if (item.type == 261)
+                        this.potionDelay = 1800;
+                    if (item.type == 499)
+                        this.potionDelay = 3600;
+                    if (item.type == 1134)
+                        this.potionDelay = 2850;
+                    if (item.type == 2314)
+                        this.potionDelay = 3300;
+                    if (this.pStone)
+                        this.potionDelay = (int)(this.potionDelay * 0.75f);
+                    this.AddBuff(21, this.potionDelay, true);
 				}
 				else
 				{
@@ -17188,22 +17231,20 @@ namespace Terraria
 					this.AddBuff(21, this.potionDelay, true);
 				}
 			}
-			Player player = this;
-			player.statLife = player.statLife + item.healLife;
-			Player player1 = this;
-			player1.statMana = player1.statMana + item.healMana;
-			if (this.statLife > this.statLifeMax2)
+            this.statLife += (int)((float)this.heartPoint2 * ((float)item.healLife / 20f));
+            this.statMana += item.healMana;
+            if (this.statLife > this.statLifeMax3)
 			{
-				this.statLife = this.statLifeMax2;
+				this.statLife = this.statLifeMax3;
 			}
-			if (this.statMana > this.statManaMax2)
+			if (this.statMana > this.statManaMax3)
 			{
-				this.statMana = this.statManaMax2;
+				this.statMana = this.statManaMax3;
 			}
 			if (item.healLife > 0 && Main.myPlayer == this.whoAmI)
 			{
-				this.HealEffect(item.healLife, true);
-			}
+                this.HealEffect((int)((float)this.heartPoint2 * ((float)item.healLife / 20f)), true);
+            }
 			if (item.healMana > 0 && Main.myPlayer == this.whoAmI)
 			{
 				this.ManaEffect(item.healMana);
@@ -17224,7 +17265,7 @@ namespace Terraria
 			{
 				return;
 			}
-			if (this.statMana == this.statManaMax2)
+			if (this.statMana == this.statManaMax3)
 			{
 				return;
 			}
@@ -17237,30 +17278,48 @@ namespace Terraria
 						if (this.inventory[i].type != 227)
 						{
 							this.potionDelay = this.potionDelayTime;
-							this.AddBuff(21, this.potionDelay, true);
+                            if (this.inventory[i].type == 5)
+                                this.potionDelay = 1200;
+                            if (this.inventory[i].type == 28)
+                                this.potionDelay = 2400;
+                            if (this.inventory[i].type == 126)
+                                this.potionDelay = 2700;
+                            if (this.inventory[i].type == 188)
+                                this.potionDelay = 3000;
+                            if (this.inventory[i].type == 226)
+                                this.potionDelay = 3300;
+                            if (this.inventory[i].type == 261)
+                                this.potionDelay = 1800;
+                            if (this.inventory[i].type == 499)
+                                this.potionDelay = 3600;
+                            if (this.inventory[i].type == 1134)
+                                this.potionDelay = 2850;
+                            if (this.inventory[i].type == 2314)
+                                this.potionDelay = 3300;
+                            if (this.pStone)
+                                this.potionDelay = (int)(this.potionDelay * 0.75f);
+                            this.AddBuff(21, this.potionDelay, true);
 						}
 						else
 						{
 							this.potionDelay = this.restorationDelayTime;
 							this.AddBuff(21, this.potionDelay, true);
 						}
-					}
-					Player player = this;
-					player.statLife = player.statLife + this.inventory[i].healLife;
-					Player player1 = this;
-					player1.statMana = player1.statMana + this.inventory[i].healMana;
-					if (this.statLife > this.statLifeMax2)
+                    }
+                    this.statLife += (int)((float)this.heartPoint2 * ((float)this.inventory[i].healLife / 20f));
+                    this.statMana += this.inventory[i].healMana;
+                    if (this.statLife > this.statLifeMax3)
 					{
-						this.statLife = this.statLifeMax2;
+						this.statLife = this.statLifeMax3;
 					}
-					if (this.statMana > this.statManaMax2)
+					if (this.statMana > this.statManaMax3)
 					{
-						this.statMana = this.statManaMax2;
+						this.statMana = this.statManaMax3;
 					}
 					if (this.inventory[i].healLife > 0 && Main.myPlayer == this.whoAmI)
-					{
-						this.HealEffect(this.inventory[i].healLife, true);
-					}
+                    {
+                        this.HealEffect((int)((float)this.heartPoint2 * ((float)this.inventory[i].healLife / 20f)), true);
+                    }
 					if (this.inventory[i].healMana > 0)
 					{
 						this.AddBuff(94, Player.manaSickTime, true);
@@ -17728,7 +17787,7 @@ namespace Terraria
                 {
                     using (BinaryWriter binaryWriter = new BinaryWriter(cryptoStream))
                     {
-                        binaryWriter.Write((int)1005);
+                        binaryWriter.Write((int)1006);
                         binaryWriter.Write(player.Level);
                         binaryWriter.Write(player.Spec);
                         binaryWriter.Write(player.baseHP);
@@ -20619,7 +20678,7 @@ namespace Terraria
 			this.lavaTime = this.lavaMax;
 			if (this.statLife <= 0)
 			{
-				int num = this.statLifeMax2 / 2;
+				int num = this.statLifeMax3 / 2;
 				this.statLife = 100;
 				if (num > this.statLife)
 				{
@@ -20628,8 +20687,8 @@ namespace Terraria
 				this.breath = this.breathMax;
 				if (this.spawnMax)
 				{
-					this.statLife = this.statLifeMax2;
-					this.statMana = this.statManaMax2;
+					this.statLife = this.statLifeMax3;
+					this.statMana = this.statManaMax3;
 				}
 			}
 			this.immune = true;
@@ -22132,7 +22191,7 @@ namespace Terraria
 							fallDamage = (int)((float)fallDamage * this.mount.FallDamage);
 						}
 						this.Hurt(fallDamage, 0, false, false, Lang.deathMsg(-1, -1, -1, 0), false);
-						if (!this.dead && this.statLife <= this.statLifeMax2 / 10)
+						if (!this.dead && this.statLife <= this.statLifeMax3 / 10)
 						{
 							AchievementsHelper.HandleSpecialEvent(this, 8);
 						}
@@ -22639,9 +22698,9 @@ namespace Terraria
 			{
 				this.manaRegenCount = 0;
 			}
-			if (this.statMana > this.statManaMax2)
+			if (this.statMana > this.statManaMax3)
 			{
-				this.statMana = this.statManaMax2;
+				this.statMana = this.statManaMax3;
 			}
 			this.runAcceleration *= this.moveSpeed;
 			this.maxRunSpeed *= this.moveSpeed;
@@ -26713,13 +26772,13 @@ namespace Terraria
 			{
 				this.mount.UseDrill(this);
 			}
-			if (this.statLife > this.statLifeMax2)
+			if (this.statLife > this.statLifeMax3)
 			{
-				this.statLife = this.statLifeMax2;
+				this.statLife = this.statLifeMax3;
 			}
-			if (this.statMana > this.statManaMax2)
+			if (this.statMana > this.statManaMax3)
 			{
-				this.statMana = this.statManaMax2;
+				this.statMana = this.statManaMax3;
 			}
 			this.grappling[0] = -1;
 			this.grapCount = 0;
@@ -27926,7 +27985,7 @@ namespace Terraria
                     }
 					else if (this.buffType[j] == 62)
 					{
-						if ((double)this.statLife > (double)this.statLifeMax2 * 0.5)
+						if ((double)this.statLife > (double)this.statLifeMax3 * 0.5)
 						{
 							this.DelBuff(j);
 							j--;
@@ -30670,7 +30729,7 @@ namespace Terraria
 						this.jumpBoost = true;
 						this.doubleJumpSail = true;
 					}
-					if (this.armor[k].type == 1253 && (double)this.statLife <= (double)this.statLifeMax2 * 0.5)
+					if (this.armor[k].type == 1253 && (double)this.statLife <= (double)this.statLifeMax3 * 0.5)
 					{
 						this.AddBuff(62, 5, true);
 					}
@@ -31105,7 +31164,7 @@ namespace Terraria
 					if (this.armor[k].type == 938)
 					{
 						this.noKnockback = true;
-						if ((double)this.statLife > (double)this.statLifeMax2 * 0.25)
+						if ((double)this.statLife > (double)this.statLifeMax3 * 0.25)
 						{
 							if (i == Main.myPlayer)
 							{
@@ -32079,38 +32138,41 @@ namespace Terraria
 				this.lifeRegenTime = 0;
 			}
 			float single = 0f;
-			if (this.lifeRegenTime >= 300)
-			{
-				single = single + 1f;
-			}
-			if (this.lifeRegenTime >= 600)
-			{
-				single = single + 1f;
-			}
-			if (this.lifeRegenTime >= 900)
-			{
-				single = single + 1f;
-			}
-			if (this.lifeRegenTime >= 1200)
-			{
-				single = single + 1f;
-			}
-			if (this.lifeRegenTime >= 1500)
-			{
-				single = single + 1f;
-			}
-			if (this.lifeRegenTime >= 1800)
-			{
-				single = single + 1f;
-			}
-			if (this.lifeRegenTime >= 2400)
-			{
-				single = single + 1f;
-			}
-			if (this.lifeRegenTime >= 3000)
-			{
-				single = single + 1f;
-			}
+            if (this.Regenerate)
+            {
+                if (this.lifeRegenTime >= 300)
+                {
+                    single = single + 1f;
+                }
+                if (this.lifeRegenTime >= 600)
+                {
+                    single = single + 1f;
+                }
+                if (this.lifeRegenTime >= 900)
+                {
+                    single = single + 1f;
+                }
+                if (this.lifeRegenTime >= 1200)
+                {
+                    single = single + 1f;
+                }
+                if (this.lifeRegenTime >= 1500)
+                {
+                    single = single + 1f;
+                }
+                if (this.lifeRegenTime >= 1800)
+                {
+                    single = single + 1f;
+                }
+                if (this.lifeRegenTime >= 2400)
+                {
+                    single = single + 1f;
+                }
+                if (this.lifeRegenTime >= 3000)
+                {
+                    single = single + 1f;
+                }
+            }
 			if (flag)
 			{
 				float single1 = (float)(this.lifeRegenTime - 3000);
@@ -32151,17 +32213,22 @@ namespace Terraria
 				single = (!this.shinyStone ? single / 2f : single * 0.75f);
 			}
 			float single2 = (float)this.statLifeMax2 / 400f * 0.85f + 0.15f;
-			single = single * single2;
+            if (!this.Regenerate)
+            {
+                single = 1f;
+            }
+            single = single * single2;
 			Player player24 = this;
 			player24.lifeRegen = player24.lifeRegen + (int)Math.Round((double)single);
 			Player player25 = this;
 			player25.lifeRegenCount = player25.lifeRegenCount + this.lifeRegen;
-			if (this.palladiumRegen)
+            this.lifeRegenCount2++;
+            if (this.palladiumRegen)
 			{
 				Player player26 = this;
 				player26.lifeRegenCount = player26.lifeRegenCount + 6;
 			}
-			if (flag && this.lifeRegen > 0 && this.statLife < this.statLifeMax2)
+			if (flag && this.lifeRegen > 0 && this.statLife < this.statLifeMax3)
 			{
 				Player player27 = this;
 				player27.lifeRegenCount = player27.lifeRegenCount + 1;
@@ -32170,18 +32237,29 @@ namespace Terraria
 			{
 				Player player28 = this;
 				player28.lifeRegenCount = player28.lifeRegenCount - 120;
-				if (this.statLife < this.statLifeMax2)
+				if (this.statLife < this.statLifeMax3)
 				{
 					Player player29 = this;
 					player29.statLife = player29.statLife + 1;
 				}
-				if (this.statLife <= this.statLifeMax2)
+				if (this.statLife <= this.statLifeMax3)
 				{
 					continue;
 				}
-				this.statLife = this.statLifeMax2;
-			}
-			if (!this.burned && !this.suffocating)
+				this.statLife = this.statLifeMax3;
+            }
+            while (this.lifeRegenCount2 >= 180)
+            {
+                this.lifeRegenCount2 -= 180;
+                if (this.statLife > 1 && this.lifedrain > 0)
+                {
+                    this.statLife -= this.lifedrain;
+                    CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), new Color(255, 60, 70, 255), string.Concat(this.lifedrain), false, true);
+                    if (this.statLife < 1)
+                        this.statLife = 1;
+                }
+            }
+            if (!this.burned && !this.suffocating)
 			{
 				if (!this.tongued || !Main.expertMode)
 				{
@@ -32191,33 +32269,37 @@ namespace Terraria
 						{
 							Player player30 = this;
 							player30.lifeRegenCount = player30.lifeRegenCount + 480;
-							Player player31 = this;
-							player31.statLife = player31.statLife - 4;
-							CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegen, string.Concat(4), false, true);
+                            int REC = -4 + (int)((float)this.heartPoint2 * (4f / 20f));
+                            if (REC < 0) { REC = 0; }
+                            this.statLife -= 4 + REC;
+                            CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegen, string.Concat(4), false, true);
 						}
 						else if (this.lifeRegenCount <= -360)
 						{
 							Player player32 = this;
 							player32.lifeRegenCount = player32.lifeRegenCount + 360;
-							Player player33 = this;
-							player33.statLife = player33.statLife - 3;
-							CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegen, string.Concat(3), false, true);
+                            int REC = -3 + (int)((float)this.heartPoint2 * (3f / 20f));
+                            if (REC < 0) { REC = 0; }
+                            this.statLife -= 3 + REC;
+                            CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegen, string.Concat(3), false, true);
 						}
 						else if (this.lifeRegenCount > -240)
 						{
 							Player player34 = this;
 							player34.lifeRegenCount = player34.lifeRegenCount + 120;
-							Player player35 = this;
-							player35.statLife = player35.statLife - 1;
-							CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegen, string.Concat(1), false, true);
+                            int REC = -1 + (int)((float)this.heartPoint2 * (1f / 20f));
+                            if (REC < 0) { REC = 0; }
+                            this.statLife -= 1 + REC;
+                            CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegen, string.Concat(1), false, true);
 						}
 						else
 						{
 							Player player36 = this;
 							player36.lifeRegenCount = player36.lifeRegenCount + 240;
-							Player player37 = this;
-							player37.statLife = player37.statLife - 2;
-							CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegen, string.Concat(2), false, true);
+                            int REC = -2 + (int)((float)this.heartPoint2 * (2f / 20f));
+                            if (REC < 0) { REC = 0; }
+                            this.statLife -= 2 + REC;
+                            CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegen, string.Concat(2), false, true);
 						}
 						if (this.statLife > 0 || this.whoAmI != Main.myPlayer)
 						{
@@ -32243,9 +32325,10 @@ namespace Terraria
 			{
 				Player player38 = this;
 				player38.lifeRegenCount = player38.lifeRegenCount + 600;
-				Player player39 = this;
-				player39.statLife = player39.statLife - 5;
-				CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegen, string.Concat(5), false, true);
+                int REC = -5 + (int)((float)this.heartPoint2 * (5f / 20f));
+                if (REC < 0) { REC = 0; }
+                this.statLife -= 5 + REC;
+                CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegen, string.Concat(5), false, true);
 				if (this.statLife > 0 || this.whoAmI != Main.myPlayer)
 				{
 					continue;
@@ -32278,9 +32361,9 @@ namespace Terraria
 					player1.nebulaManaCounter = player1.nebulaManaCounter - num;
 					Player player2 = this;
 					player2.statMana = player2.statMana + 1;
-					if (this.statMana >= this.statManaMax2)
+					if (this.statMana >= this.statManaMax3)
 					{
-						this.statMana = this.statManaMax2;
+						this.statMana = this.statManaMax3;
 					}
 				}
 			}
@@ -32306,20 +32389,24 @@ namespace Terraria
 			}
 			else
 			{
-				this.manaRegenDelay = 0;
-				this.manaRegen = this.statManaMax2 / 7 + 1 + this.manaRegenBonus;
-				if (this.velocity.X == 0f && this.velocity.Y == 0f || this.grappling[0] >= 0 || this.manaRegenBuff)
-				{
-					Player player6 = this;
-					player6.manaRegen = player6.manaRegen + this.statManaMax2 / 2;
-				}
-				float single = (float)this.statMana / (float)this.statManaMax2 * 0.8f + 0.2f;
-				if (this.manaRegenBuff)
-				{
-					single = 1f;
-				}
-				this.manaRegen = (int)((double)((float)this.manaRegen * single) * 1.15);
-			}
+                this.manaRegenDelay = 0;
+                this.manaRegen = this.statManaMax2 / 7 + 1 + this.manaRegenBonus;
+                if (!this.MRegenerate)
+                {
+                    this.manaRegen = this.manaRegenBonus;
+                }
+                if ((this.velocity.X == 0f && this.velocity.Y == 0f) || this.grappling[0] >= 0 || this.manaRegenBuff)
+                {
+                    if (this.MRegenerate)
+                        this.manaRegen += this.statManaMax2 / 2;
+                }
+                float num = (float)((float)this.statMana * 0.75f) / (float)this.statManaMax3 * 0.8f + 0.2f;
+                if (this.manaRegenBuff)
+                {
+                    num = 1f;
+                }
+                this.manaRegen = (int)((double)((float)this.manaRegen * num) * 1.15);
+            }
 			Player player7 = this;
 			player7.manaRegenCount = player7.manaRegenCount + this.manaRegen;
 			while (this.manaRegenCount >= 120)
@@ -32327,20 +32414,20 @@ namespace Terraria
 				bool flag = false;
 				Player player8 = this;
 				player8.manaRegenCount = player8.manaRegenCount - 120;
-				if (this.statMana < this.statManaMax2)
+				if (this.statMana < this.statManaMax3)
 				{
 					Player player9 = this;
 					player9.statMana = player9.statMana + 1;
 					flag = true;
 				}
-				if (this.statMana < this.statManaMax2)
+				if (this.statMana < this.statManaMax3)
 				{
 					continue;
 				}
 				if (this.whoAmI == Main.myPlayer && flag)
 				{
 				}
-				this.statMana = this.statManaMax2;
+				this.statMana = this.statManaMax3;
 			}
 		}
 

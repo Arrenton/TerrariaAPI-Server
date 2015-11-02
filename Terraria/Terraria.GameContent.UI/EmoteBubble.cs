@@ -297,7 +297,7 @@ namespace Terraria.GameContent.UI
 			list.Add(75);
 			list.Add(78);
 			list.Add(90);
-			if (plr.statLife < plr.statLifeMax2 / 2)
+			if (plr.statLife < plr.statLifeMax3 / 2)
 			{
 				list.Add(84);
 			}

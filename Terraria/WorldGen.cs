@@ -31149,7 +31149,7 @@ namespace Terraria
 					{
 						num13--;
 					}
-					if (num13 == 0 && Main.player[(int)Player.FindClosest(new Vector2((float)(i * 16), (float)(j * 16)), 16, 16)].statLife < Main.player[(int)Player.FindClosest(new Vector2((float)(i * 16), (float)(j * 16)), 16, 16)].statLifeMax2)
+					if (num13 == 0 && Main.player[(int)Player.FindClosest(new Vector2((float)(i * 16), (float)(j * 16)), 16, 16)].statLife < Main.player[(int)Player.FindClosest(new Vector2((float)(i * 16), (float)(j * 16)), 16, 16)].statLifeMax3)
 					{
 						Item.NewItem(i * 16, j * 16, 16, 16, 58, 1, false, 0, false, false);
 						if (Main.rand.Next(2) == 0)
@@ -31168,7 +31168,7 @@ namespace Terraria
 							}
 						}
 					}
-					else if (num13 == 1 && Main.player[(int)Player.FindClosest(new Vector2((float)(i * 16), (float)(j * 16)), 16, 16)].statMana < Main.player[(int)Player.FindClosest(new Vector2((float)(i * 16), (float)(j * 16)), 16, 16)].statManaMax2)
+					else if (num13 == 1 && Main.player[(int)Player.FindClosest(new Vector2((float)(i * 16), (float)(j * 16)), 16, 16)].statMana < Main.player[(int)Player.FindClosest(new Vector2((float)(i * 16), (float)(j * 16)), 16, 16)].statManaMax3)
 					{
 						Item.NewItem(i * 16, j * 16, 16, 16, 184, 1, false, 0, false, false);
 					}
