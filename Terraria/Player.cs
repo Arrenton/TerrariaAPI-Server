@@ -48,6 +48,11 @@ namespace Terraria
         public short boostMag = 0;
         public short boostDef = 0;
         public short boostHP = 0;
+        public short boostRoc = 0;
+        public short boostArw = 0;
+        public short boostBul = 0;
+        public short boostThr = 0;
+        public short boostSum = 0;
         public short bonusStr = 0;
         public short bonusRng = 0;
         public short bonusMag = 0;
@@ -17385,8 +17390,20 @@ namespace Terraria
 		}
 
 		public void ResetEffects()
-		{
-			if (!this.extraAccessory || !Main.expertMode && !Main.gameMenu)
+        {
+            this.lifedrain = 0;
+            this.minionDamage2 = 1f;
+            this.boostStr = 0;
+            this.boostRng = 0;
+            this.boostMag = 0;
+            this.boostDef = 0;
+            this.boostSum = 0;
+            this.boostThr = 0;
+            this.boostArw = 0;
+            this.boostBul = 0;
+            this.boostRoc = 0;
+            this.boostHP = 0;
+            if (!this.extraAccessory || !Main.expertMode && !Main.gameMenu)
 			{
 				this.extraAccessorySlots = 0;
 			}
@@ -21693,8 +21710,14 @@ namespace Terraria
 			{
 				Player player = this;
 				player.launcherWait = player.launcherWait - 1;
-			}
-			this.maxFallSpeed = 10f;
+            }
+            tt++;
+            if (tt > 3)
+            {
+                this.PlayerLevelCalculate();
+                tt = 0;
+            }
+            this.maxFallSpeed = 10f;
 			this.gravity = Player.defaultGravity;
 			Player.jumpHeight = 15;
 			Player.jumpSpeed = 5.01f;
@@ -22584,22 +22607,23 @@ namespace Terraria
 				this.moveSpeed *= 0.75f;
             }
             //////Level Stat Bonuses
-            this.meleeDamage += (0.07f * (float)(0 + this.statStr + this.boostStr));
-            this.rangedDamage += (0.07f * (float)(0 + this.statRng + this.boostRng));
-            this.thrownDamage += (0.07f * (float)(0 + this.statRng + this.boostRng));
-            this.magicDamage += (0.07f * (float)(0 + this.statMag + this.boostMag));
-            this.minionDamage2 += (0.07f * (float)(0 + this.statMag + this.boostMag));
-            this.minionDamage = this.minionDamage2 * this.minionDamage;
-            if (this.meleeDamage < 0.25f)
-                this.meleeDamage = 0.25f;
-            if (this.rangedDamage < 0.25f)
-                this.rangedDamage = 0.25f;
-            if (this.magicDamage < 0.25f)
-                this.magicDamage = 0.25f;
-            if (this.minionDamage2 < 0.25f)
-                this.minionDamage2 = 0.25f;
+            this.meleeDamage += ((0.07f + ((this.statStr + this.boostStr) * 0.0001f)) * (float)(0 + this.statStr + this.boostStr));
+            this.rangedDamage += ((0.07f + ((this.statRng + this.boostRng) * 0.0001f)) * (float)(0 + this.statRng + this.boostRng));
+            this.magicDamage += ((0.07f + ((this.statMag + this.boostMag) * 0.0001f)) * (float)(0 + this.statMag + this.boostMag));
+            this.thrownDamage += ((0.07f + (((float)Math.Round(this.statStr * 0.8f) + this.boostThr) * 0.0001f)) * (float)(0 + Math.Round(this.statStr * 0.8f) + this.boostThr));
+            this.minionDamage += ((0.07f + (((float)Math.Round(this.statMag * 0.8f) + this.boostSum) * 0.0001f)) * (float)(0 + Math.Round(this.statMag * 0.8f) + this.boostSum));
+            if (this.meleeDamage < 0.1f)
+                this.meleeDamage = 0.1f;
+            if (this.rangedDamage < 0.1f)
+                this.rangedDamage = 0.1f;
+            if (this.magicDamage < 0.1f)
+                this.magicDamage = 0.1f;
+            if (this.thrownDamage < 0.1f)
+                this.thrownDamage = 0.1f;
+            if (this.minionDamage < 0.1f)
+                this.minionDamage = 0.1f;
             this.baseDefense = (short)this.statDefense;
-            this.statDefense = (int)(this.statDefense * (1 + ((this.statDef + this.boostDef) * 0.07f)));
+            this.statDefense = (int)(this.statDefense * (1 + ((this.statDef + this.boostDef) * (0.07f + ((this.statDef + this.boostDef) * 0.0011f)))));
             this.statLifeMax2 = (short)((float)this.statLifeMax2 * (float)((100 + this.boostHP) / 100f));
             short hp = (short)((float)this.heartPoint);// * (float)(((float)(100 + this.boostHP) / 100f)));
 
@@ -27894,19 +27918,12 @@ namespace Terraria
 							player34.nebulaLevelDamage = player34.nebulaLevelDamage - 1;
 							this.buffType[j] = this.buffType[j] - 1;
 							this.buffTime[j] = 480;
-						}
-						float single1 = 0.15f * (float)this.nebulaLevelDamage;
-						Player player35 = this;
-						player35.meleeDamage = player35.meleeDamage + single1;
-						Player player36 = this;
-						player36.rangedDamage = player36.rangedDamage + single1;
-						Player player37 = this;
-						player37.magicDamage = player37.magicDamage + single1;
-						Player player38 = this;
-						player38.minionDamage = player38.minionDamage + single1;
-						Player player39 = this;
-						player39.thrownDamage = player39.thrownDamage + single1;
-					}
+                        }
+                        short num18 = (short)(8 * this.nebulaLevelDamage);
+                        this.boostStr += num18;
+                        this.boostRng += num18;
+                        this.boostMag += num18;
+                    }
 					else if (this.buffType[j] == 62)
 					{
 						if ((double)this.statLife > (double)this.statLifeMax2 * 0.5)
