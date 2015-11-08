@@ -20,7 +20,7 @@ namespace Terraria
 
 		public static void SendData(int msgType, int remoteClient = -1, int ignoreClient = -1, string text = "",
 			int number = 0, float number2 = 0f, float number3 = 0f, float number4 = 0f, int number5 = 0, int number6 = 0,
-			int number7 = 0) 
+			int number7 = 0, bool boolean1 = false) 
 		{
 			if (Main.netMode == 0)
 			{
@@ -38,7 +38,7 @@ namespace Terraria
 			}
 
 			if (ServerApi.Hooks.InvokeNetSendData(ref msgType, ref remoteClient, ref ignoreClient, ref text, ref number,
-				ref number2, ref number3, ref number4, ref number5, ref number6, ref number7))
+				ref number2, ref number3, ref number4, ref number5, ref number6, ref number7, ref boolean1))
 			{
 				return;
 			}
@@ -57,7 +57,7 @@ namespace Terraria
             switch (msgType)
             {
                 case 1:
-                    writer.Write("Terraria" + Main.curRelease);
+                    writer.Write("Terraria" + Main.curRelease + "0001");
                     break;
                 case 2:
                     writer.Write(text);
@@ -659,6 +659,8 @@ namespace Terraria
                     writer.Write(number3);
                     writer.Write((byte)(number4 + 1f));
                     writer.Write((byte)number5);
+                    writer.Write((byte)number6);
+                    writer.Write((byte)(boolean1 ? 1 : 0));
                     break;
                 case 29:
                     writer.Write((short)number);

@@ -26,5 +26,7 @@ namespace TerrariaApi.Server
 		public int number6 { get; set; }
 
 		public int number7 { get; set; }
-	}
+
+        public bool boolean1 { get; set; }
+    }
 }

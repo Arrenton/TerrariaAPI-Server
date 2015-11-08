@@ -12,8 +12,24 @@ using TerrariaApi.Server;
 namespace Terraria
 {
 	public class NPC : Entity
-	{
-		public const int MaxMoonLordCountdown = 3600;
+    {
+        public int lifePoint = 0;
+        public int defaultHP = 0;
+        public int defaultHP2 = 0;
+        public short baseAtk = 1;
+        public short baseVit = 1;
+        public bool boss2 = false;
+        public bool boss3 = false;
+        public bool boss4 = false;
+        public byte Level = 1;
+        public int ExptoGive = 1;
+        public int Exp = 75;
+        public int[] tag = new int[256];
+        public bool[] tapped = new bool[256];
+        public bool NoDamage = false;
+        public bool projectile = false;
+        public byte Dead = 0;
+        public const int MaxMoonLordCountdown = 3600;
 		public const int maxBuffs = 5;
 		public const int breathMax = 200;
 		public static readonly int[,,,] MoonLordAttacksArray = NPC.InitializeMoonLordAttacks();
@@ -2215,879 +2231,1010 @@ namespace Terraria
 				ServerApi.Hooks.InvokeNpcNetDefaults(ref type, this);
 			}
 		}
-		public void SetDefaults(string Name)
-		{
-			bool flag = false;
-			this.SetDefaults(0, -1f);
-			if (Name == "Slimeling")
-			{
-				this.SetDefaults(81, 0.6f);
-				this.name = Name;
-				this.damage = 45;
-				this.defense = 10;
-				this.life = 90;
-				this.knockBackResist *= 1.2f;
-				this.value = 100f;
-				this.netID = -1;
-				flag = true;
-			}
-			else if (Name == "Slimer2")
-			{
-				this.SetDefaults(81, 0.9f);
-				this.displayName = "Slimer";
-				this.name = Name;
-				this.damage = 45;
-				this.defense = 20;
-				this.life = 90;
-				this.knockBackResist *= 1.2f;
-				this.value = 100f;
-				this.netID = -2;
-				flag = true;
-			}
-			else if (Name == "Green Slime")
-			{
-				this.SetDefaults(1, 0.9f);
-				this.name = Name;
-				this.damage = 6;
-				this.defense = 0;
-				this.life = 14;
-				this.knockBackResist *= 1.2f;
-				this.color = new Color(0, 220, 40, 100);
-				this.value = 3f;
-				this.netID = -3;
-				flag = true;
-			}
-			else if (Name == "Pinky")
-			{
-				this.SetDefaults(1, 0.6f);
-				this.name = Name;
-				this.damage = 5;
-				this.defense = 5;
-				this.life = 150;
-				this.knockBackResist *= 1.4f;
-				this.color = new Color(250, 30, 90, 90);
-				this.value = 10000f;
-				this.netID = -4;
-				flag = true;
-				this.rarity = 1;
-			}
-			else if (Name == "Baby Slime")
-			{
-				this.SetDefaults(1, 0.9f);
-				this.name = Name;
-				this.damage = 13;
-				this.defense = 4;
-				this.life = 30;
-				this.knockBackResist *= 0.95f;
-				this.alpha = 120;
-				this.color = new Color(0, 0, 0, 50);
-				this.value = 10f;
-				this.netID = -5;
-				flag = true;
-			}
-			else if (Name == "Black Slime")
-			{
-				this.SetDefaults(1, 1.05f);
-				this.name = Name;
-				this.damage = 15;
-				this.defense = 4;
-				this.life = 45;
-				this.color = new Color(0, 0, 0, 50);
-				this.value = 20f;
-				this.netID = -6;
-				flag = true;
-			}
-			else if (Name == "Purple Slime")
-			{
-				this.SetDefaults(1, 1.2f);
-				this.name = Name;
-				this.damage = 12;
-				this.defense = 6;
-				this.life = 40;
-				this.knockBackResist *= 0.9f;
-				this.color = new Color(200, 0, 255, 150);
-				this.value = 10f;
-				this.netID = -7;
-				flag = true;
-			}
-			else if (Name == "Red Slime")
-			{
-				this.SetDefaults(1, 1.025f);
-				this.name = Name;
-				this.damage = 12;
-				this.defense = 4;
-				this.life = 35;
-				this.color = new Color(255, 30, 0, 100);
-				this.value = 8f;
-				this.netID = -8;
-				flag = true;
-			}
-			else if (Name == "Yellow Slime")
-			{
-				this.SetDefaults(1, 1.2f);
-				this.name = Name;
-				this.damage = 15;
-				this.defense = 7;
-				this.life = 45;
-				this.color = new Color(255, 255, 0, 100);
-				this.value = 10f;
-				this.netID = -9;
-				flag = true;
-			}
-			else if (Name == "Jungle Slime")
-			{
-				this.SetDefaults(1, 1.1f);
-				this.name = Name;
-				this.damage = 18;
-				this.defense = 6;
-				this.life = 60;
-				this.color = new Color(143, 215, 93, 100);
-				this.value = 500f;
-				this.netID = -10;
-				flag = true;
-			}
-			else if (Name == "Little Eater")
-			{
-				this.SetDefaults(6, 0.85f);
-				this.name = Name;
-				this.displayName = "Eater of Souls";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -11;
-			}
-			else if (Name == "Big Eater")
-			{
-				this.SetDefaults(6, 1.15f);
-				this.name = Name;
-				this.displayName = "Eater of Souls";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -12;
-			}
-			else if (Name == "Short Bones")
-			{
-				this.SetDefaults(31, 0.9f);
-				this.name = Name;
-				this.displayName = "Angry Bones";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.netID = -13;
-			}
-			else if (Name == "Big Boned")
-			{
-				this.SetDefaults(31, 1.15f);
-				this.name = Name;
-				this.displayName = "Angry Bones";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((double)((float)this.damage * this.scale) * 1.1);
-				this.life = (int)((double)((float)this.life * this.scale) * 1.1);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots = 2f;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -14;
-			}
-			else if (Name == "Heavy Skeleton")
-			{
-				this.SetDefaults(77, 1.15f);
-				this.name = Name;
-				this.displayName = "Armored Skeleton";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((double)((float)this.damage * this.scale) * 1.1);
-				this.life = 400;
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots = 2f;
-				this.knockBackResist *= 2f - this.scale;
-				this.height = 44;
-				this.netID = -15;
-			}
-			else if (Name == "Little Stinger")
-			{
-				this.SetDefaults(42, 0.85f);
-				this.displayName = "Hornet";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -16;
-			}
-			else if (Name == "Big Stinger")
-			{
-				this.SetDefaults(42, 1.2f);
-				this.displayName = "Hornet";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -17;
-			}
-			else if (Name == "Tiny Moss Hornet")
-			{
-				this.SetDefaults(176, 0.8f);
-				this.displayName = "Moss Hornet";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -18;
-			}
-			else if (Name == "Little Moss Hornet")
-			{
-				this.SetDefaults(176, 0.9f);
-				this.displayName = "Moss Hornet";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -19;
-			}
-			else if (Name == "Big Moss Hornet")
-			{
-				this.SetDefaults(176, 1.1f);
-				this.displayName = "Moss Hornet";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -20;
-			}
-			else if (Name == "Giant Moss Hornet")
-			{
-				this.SetDefaults(176, 1.2f);
-				this.displayName = "Moss Hornet";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -21;
-			}
-			else if (Name == "Little Crimera")
-			{
-				this.SetDefaults(173, 0.85f);
-				this.displayName = "Crimera";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -22;
-			}
-			else if (Name == "Big Crimera")
-			{
-				this.SetDefaults(173, 1.15f);
-				this.displayName = "Crimera";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -23;
-			}
-			else if (Name == "Little Crimslime")
-			{
-				this.SetDefaults(183, 0.85f);
-				this.displayName = "Crimslime";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -24;
-			}
-			else if (Name == "Big Crimslime")
-			{
-				this.SetDefaults(183, 1.15f);
-				this.displayName = "Crimslime";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -25;
-			}
-			else if (Name == "Small Zombie")
-			{
-				this.SetDefaults(3, 0.9f);
-				this.name = Name;
-				this.displayName = "Zombie";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -26;
-			}
-			else if (Name == "Big Zombie")
-			{
-				this.SetDefaults(3, 1.1f);
-				this.name = Name;
-				this.displayName = "Zombie";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -27;
-			}
-			else if (Name == "Small Bald Zombie")
-			{
-				this.SetDefaults(132, 0.85f);
-				this.name = Name;
-				this.displayName = "Zombie";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -28;
-			}
-			else if (Name == "Big Bald Zombie")
-			{
-				this.SetDefaults(132, 1.15f);
-				this.name = Name;
-				this.displayName = "Zombie";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -29;
-			}
-			else if (Name == "Small Pincushion Zombie")
-			{
-				this.SetDefaults(186, 0.93f);
-				this.name = Name;
-				this.displayName = "Zombie";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -30;
-			}
-			else if (Name == "Big Pincushion Zombie")
-			{
-				this.SetDefaults(186, 1.13f);
-				this.name = Name;
-				this.displayName = "Zombie";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -31;
-			}
-			else if (Name == "Small Slimed Zombie")
-			{
-				this.SetDefaults(187, 0.89f);
-				this.name = Name;
-				this.displayName = "Zombie";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -32;
-			}
-			else if (Name == "Big Slimed Zombie")
-			{
-				this.SetDefaults(187, 1.11f);
-				this.name = Name;
-				this.displayName = "Zombie";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -33;
-			}
-			else if (Name == "Small Swamp Zombie")
-			{
-				this.SetDefaults(188, 0.87f);
-				this.name = Name;
-				this.displayName = "Zombie";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -34;
-			}
-			else if (Name == "Big Swamp Zombie")
-			{
-				this.SetDefaults(188, 1.13f);
-				this.name = Name;
-				this.displayName = "Zombie";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -35;
-			}
-			else if (Name == "Small Twiggy Zombie")
-			{
-				this.SetDefaults(189, 0.92f);
-				this.name = Name;
-				this.displayName = "Zombie";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -36;
-			}
-			else if (Name == "Big Twiggy Zombie")
-			{
-				this.SetDefaults(189, 1.08f);
-				this.name = Name;
-				this.displayName = "Zombie";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -37;
-			}
-			else if (Name == "Cataract Eye 2")
-			{
-				this.SetDefaults(190, 1.15f);
-				this.name = Name;
-				this.displayName = "Demon Eye";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -38;
-			}
-			else if (Name == "Sleepy Eye 2")
-			{
-				this.SetDefaults(191, 1.1f);
-				this.name = Name;
-				this.displayName = "Demon Eye";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -39;
-			}
-			else if (Name == "Dialated Eye 2")
-			{
-				this.SetDefaults(192, 0.9f);
-				this.name = Name;
-				this.displayName = "Demon Eye";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -40;
-			}
-			else if (Name == "Green Eye 2")
-			{
-				this.SetDefaults(193, 0.85f);
-				this.name = Name;
-				this.displayName = "Demon Eye";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -41;
-			}
-			else if (Name == "Purple Eye 2")
-			{
-				this.SetDefaults(194, 1.1f);
-				this.name = Name;
-				this.displayName = "Demon Eye";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -42;
-			}
-			else if (Name == "Demon Eye 2")
-			{
-				this.SetDefaults(2, 1.15f);
-				this.name = Name;
-				this.displayName = "Demon Eye";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -43;
-			}
-			else if (Name == "Small Female Zombie")
-			{
-				this.SetDefaults(200, 0.87f);
-				this.name = Name;
-				this.displayName = "Zombie";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -44;
-			}
-			else if (Name == "Big Female Zombie")
-			{
-				this.SetDefaults(200, 1.05f);
-				this.name = Name;
-				this.displayName = "Zombie";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -45;
-			}
-			else if (Name == "Small Skeleton")
-			{
-				this.SetDefaults(21, 0.9f);
-				this.name = Name;
-				this.displayName = "Skeleton";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -46;
-			}
-			else if (Name == "Big Skeleton")
-			{
-				this.SetDefaults(21, 1.1f);
-				this.name = Name;
-				this.displayName = "Skeleton";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -47;
-			}
-			else if (Name == "Small Headache Skeleton")
-			{
-				this.SetDefaults(201, 0.93f);
-				this.name = Name;
-				this.displayName = "Skeleton";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -48;
-			}
-			else if (Name == "Big Headache Skeleton")
-			{
-				this.SetDefaults(201, 1.07f);
-				this.name = Name;
-				this.displayName = "Skeleton";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -49;
-			}
-			else if (Name == "Small Misassembled Skeleton")
-			{
-				this.SetDefaults(202, 0.87f);
-				this.name = Name;
-				this.displayName = "Skeleton";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -50;
-			}
-			else if (Name == "Big Misassembled Skeleton")
-			{
-				this.SetDefaults(202, 1.13f);
-				this.name = Name;
-				this.displayName = "Skeleton";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -51;
-			}
-			else if (Name == "Small Pantless Skeleton")
-			{
-				this.SetDefaults(203, 0.85f);
-				this.name = Name;
-				this.displayName = "Skeleton";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -52;
-			}
-			else if (Name == "Big Pantless Skeleton")
-			{
-				this.SetDefaults(203, 1.15f);
-				this.name = Name;
-				this.displayName = "Skeleton";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -53;
-			}
-			else if (Name == "Small Rain Zombie")
-			{
-				this.SetDefaults(223, 0.9f);
-				this.name = Name;
-				this.displayName = "Zombie";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -54;
-			}
-			else if (Name == "Big Rain Zombie")
-			{
-				this.SetDefaults(223, 1.1f);
-				this.name = Name;
-				this.displayName = "Zombie";
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -55;
-			}
-			else if (Name == "Little Hornet Fatty")
-			{
-				this.SetDefaults(231, 0.85f);
-				this.displayName = "Hornet";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -56;
-			}
-			else if (Name == "Big Hornet Fatty")
-			{
-				this.SetDefaults(231, 1.25f);
-				this.displayName = "Hornet";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -57;
-			}
-			else if (Name == "Little Hornet Honey")
-			{
-				this.SetDefaults(232, 0.8f);
-				this.displayName = "Hornet";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -58;
-			}
-			else if (Name == "Big Hornet Honey")
-			{
-				this.SetDefaults(232, 1.15f);
-				this.displayName = "Hornet";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -59;
-			}
-			else if (Name == "Little Hornet Leafy")
-			{
-				this.SetDefaults(233, 0.92f);
-				this.displayName = "Hornet";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -60;
-			}
-			else if (Name == "Big Hornet Leafy")
-			{
-				this.SetDefaults(233, 1.1f);
-				this.displayName = "Hornet";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -61;
-			}
-			else if (Name == "Little Hornet Spikey")
-			{
-				this.SetDefaults(234, 0.78f);
-				this.displayName = "Hornet";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -62;
-			}
-			else if (Name == "Big Hornet Spikey")
-			{
-				this.SetDefaults(234, 1.16f);
-				this.displayName = "Hornet";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -63;
-			}
-			else if (Name == "Little Hornet Stingy")
-			{
-				this.SetDefaults(235, 0.87f);
-				this.displayName = "Hornet";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -64;
-			}
-			else if (Name == "Big Hornet Stingy")
-			{
-				this.SetDefaults(235, 1.21f);
-				this.displayName = "Hornet";
-				this.name = Name;
-				this.defense = (int)((float)this.defense * this.scale);
-				this.damage = (int)((float)this.damage * this.scale);
-				this.life = (int)((float)this.life * this.scale);
-				this.value = (float)((int)(this.value * this.scale));
-				this.npcSlots *= this.scale;
-				this.knockBackResist *= 2f - this.scale;
-				this.netID = -65;
-			}
-			else if (Name != "")
-			{
-				for (int i = 1; i < 540; i++)
-				{
-					if (Main.npcName[i] == Name)
-					{
-						this.SetDefaults(i, -1f);
-						return;
-					}
-				}
-				this.SetDefaults(0, -1f);
-				this.active = false;
-			}
-			else
-			{
-				this.active = false;
-			}
-			this.displayName = Lang.npcName(this.netID, false);
-			this.lifeMax = this.life;
-			this.defDamage = this.damage;
-			this.defDefense = this.defense;
-			if (Main.expertMode && flag)
-			{
-				this.scaleStats();
-			}
-			ServerApi.Hooks.InvokeNpcSetDefaultsString(ref Name, this);
-		}
-		public void SetDefaultsKeepPlayerInteraction(int Type)
+        public void SetDefaults(string Name)
+        {
+            bool flag = false;
+            this.SetDefaults(0, -1f);
+            if (Name == "Slimeling")
+            {
+                this.SetDefaults(81, 0.6f, true);
+                this.Level = 54;
+                this.ExptoGive = 18;
+                this.name = Name;
+                this.damage = 45;
+                this.defense = 10;
+                this.life = 90;
+                this.knockBackResist *= 1.2f;
+                this.value = 100f;
+                this.netID = -1;
+                flag = true;
+            }
+            else if (Name == "Slimer2")
+            {
+                this.SetDefaults(81, 0.9f, true);
+                this.Level = 55;
+                this.ExptoGive = 30;
+                this.displayName = "Slimer";
+                this.name = Name;
+                this.damage = 45;
+                this.defense = 20;
+                this.life = 90;
+                this.knockBackResist *= 1.2f;
+                this.value = 100f;
+                this.netID = -2;
+                flag = true;
+            }
+            else if (Name == "Green Slime")
+            {
+                this.SetDefaults(1, 0.9f, true);
+                this.Level = 2;
+                this.ExptoGive = 26;
+                this.name = Name;
+                this.damage = 6;
+                this.defense = 0;
+                this.life = 14;
+                this.knockBackResist *= 1.2f;
+                this.color = new Color(0, 220, 40, 100);
+                this.value = 3f;
+                this.netID = -3;
+                flag = true;
+            }
+            else if (Name == "Pinky")
+            {
+                this.SetDefaults(1, 0.6f, true);
+                this.Level = 30;
+                this.ExptoGive = 1100;
+                this.name = Name;
+                this.damage = 5;
+                this.defense = 5;
+                this.life = 150;
+                this.knockBackResist *= 1.4f;
+                this.color = new Color(250, 30, 90, 90);
+                this.value = 10000f;
+                this.netID = -4;
+                flag = true;
+                this.rarity = 1;
+            }
+            else if (Name == "Baby Slime")
+            {
+                this.SetDefaults(1, 0.9f, true);
+                this.Level = 8;
+                this.ExptoGive = 14;
+                this.name = Name;
+                this.damage = 13;
+                this.defense = 4;
+                this.life = 30;
+                this.knockBackResist *= 0.95f;
+                this.alpha = 120;
+                this.color = new Color(0, 0, 0, 50);
+                this.value = 10f;
+                this.netID = -5;
+                flag = true;
+            }
+            else if (Name == "Black Slime")
+            {
+                this.SetDefaults(1, 1.05f, true);
+                this.Level = 11;
+                this.ExptoGive = 43;
+                this.name = Name;
+                this.damage = 15;
+                this.defense = 4;
+                this.life = 45;
+                this.color = new Color(0, 0, 0, 50);
+                this.value = 20f;
+                this.netID = -6;
+                flag = true;
+            }
+            else if (Name == "Purple Slime")
+            {
+                this.SetDefaults(1, 1.2f, true);
+                this.Level = 5;
+                this.ExptoGive = 29;
+                this.name = Name;
+                this.damage = 12;
+                this.defense = 6;
+                this.life = 40;
+                this.knockBackResist *= 0.9f;
+                this.color = new Color(200, 0, 255, 150);
+                this.value = 10f;
+                this.netID = -7;
+                flag = true;
+            }
+            else if (Name == "Red Slime")
+            {
+                this.SetDefaults(1, 1.025f, true);
+                this.Level = 4;
+                this.ExptoGive = 28;
+                this.name = Name;
+                this.damage = 12;
+                this.defense = 4;
+                this.life = 35;
+                this.color = new Color(255, 30, 0, 100);
+                this.value = 8f;
+                this.netID = -8;
+                flag = true;
+            }
+            else if (Name == "Yellow Slime")
+            {
+                this.SetDefaults(1, 1.2f, true);
+                this.Level = 6;
+                this.ExptoGive = 27;
+                this.name = Name;
+                this.damage = 15;
+                this.defense = 7;
+                this.life = 45;
+                this.color = new Color(255, 255, 0, 100);
+                this.value = 10f;
+                this.netID = -9;
+                flag = true;
+            }
+            else if (Name == "Jungle Slime")
+            {
+                this.SetDefaults(1, 1.1f, true);
+                this.Level = 11;
+                this.ExptoGive = 33;
+                this.name = Name;
+                this.damage = 18;
+                this.defense = 6;
+                this.life = 60;
+                this.color = new Color(143, 215, 93, 100);
+                this.value = 500f;
+                this.netID = -10;
+                flag = true;
+            }
+            else if (Name == "Little Eater")
+            {
+                this.SetDefaults(6, 0.85f, true);
+                this.Level = 23;
+                this.ExptoGive = 52;
+                this.name = Name;
+                this.displayName = "Eater of Souls";
+                this.defense = 9;
+                this.damage = 19;
+                this.life = 34;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -11;
+            }
+            else if (Name == "Big Eater")
+            {
+                this.SetDefaults(6, 1.15f, true);
+                this.Level = 25;
+                this.ExptoGive = 56;
+                this.name = Name;
+                this.displayName = "Eater of Souls";
+                this.defense = 9;
+                this.damage = 25;
+                this.life = 46;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -12;
+            }
+            else if (Name == "Short Bones")
+            {
+                this.SetDefaults(31, 0.9f, true);
+                this.Level = 27;
+                this.ExptoGive = 35;
+                this.name = Name;
+                this.displayName = "Angry Bones";
+                this.defense = 9;
+                this.damage = 27;
+                this.life = 90;
+                this.value = (float)((int)(this.value * this.scale));
+                this.netID = -13;
+            }
+            else if (Name == "Big Boned")
+            {
+                this.SetDefaults(31, 1.15f, true);
+                this.Level = 29;
+                this.ExptoGive = 38;
+                this.name = Name;
+                this.displayName = "Angry Bones";
+                this.defense = 12;
+                this.damage = 38;
+                this.life = 127;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots = 2f;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -14;
+            }
+            else if (Name == "Heavy Skeleton")
+            {
+                this.SetDefaults(77, 1.15f, true);
+                this.Level = 54;
+                this.ExptoGive = 108;
+                this.name = Name;
+                this.displayName = "Armored Skeleton";
+                this.defense = 32;
+                this.damage = 51;
+                this.life = 400;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots = 2f;
+                this.knockBackResist *= 2f - this.scale;
+                this.height = 44;
+                this.netID = -15;
+            }
+            else if (Name == "Little Stinger")
+            {
+                this.SetDefaults(42, 0.85f, true);
+                this.Level = 34;
+                this.ExptoGive = 67;
+                this.displayName = "Hornet";
+                this.name = Name;
+                this.defense = 10;
+                this.damage = 22;
+                this.life = 41;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -16;
+            }
+            else if (Name == "Big Stinger")
+            {
+                this.SetDefaults(42, 1.2f, true);
+                this.Level = 36;
+                this.ExptoGive = 70;
+                this.displayName = "Hornet";
+                this.name = Name;
+                this.defense = 14;
+                this.damage = 32;
+                this.life = 58;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -17;
+            }
+            else if (Name == "Tiny Moss Hornet")
+            {
+                this.SetDefaults(176, 0.8f, true);
+                this.Level = 65;
+                this.ExptoGive = 131;
+                this.displayName = "Moss Hornet";
+                this.name = Name;
+                this.defense = 18;
+                this.damage = 56;
+                this.life = 176;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -18;
+            }
+            else if (Name == "Little Moss Hornet")
+            {
+                this.SetDefaults(176, 0.9f, true);
+                this.Level = 66;
+                this.ExptoGive = 133;
+                this.displayName = "Moss Hornet";
+                this.name = Name;
+                this.defense = 20;
+                this.damage = 63;
+                this.life = 198;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -19;
+            }
+            else if (Name == "Big Moss Hornet")
+            {
+                this.SetDefaults(176, 1.1f, true);
+                this.Level = 66;
+                this.ExptoGive = 137;
+                this.displayName = "Moss Hornet";
+                this.name = Name;
+                this.defense = 24;
+                this.damage = 77;
+                this.life = 242;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -20;
+            }
+            else if (Name == "Giant Moss Hornet")
+            {
+                this.SetDefaults(176, 1.2f, true);
+                this.Level = 67;
+                this.ExptoGive = 140;
+                this.displayName = "Moss Hornet";
+                this.name = Name;
+                this.defense = 26;
+                this.damage = 84;
+                this.life = 264;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -21;
+            }
+            else if (Name == "Little Crimera")
+            {
+                this.SetDefaults(173, 0.85f, true);
+                this.Level = 23;
+                this.ExptoGive = 52;
+                this.displayName = "Crimera";
+                this.name = Name;
+                this.defense = 7;
+                this.damage = 19;
+                this.life = 34;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -22;
+            }
+            else if (Name == "Big Crimera")
+            {
+                this.SetDefaults(173, 1.15f, true);
+                this.Level = 25;
+                this.ExptoGive = 56;
+                this.displayName = "Crimera";
+                this.name = Name;
+                this.defense = 9;
+                this.damage = 25;
+                this.life = 46;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -23;
+            }
+            else if (Name == "Little Crimslime")
+            {
+                this.SetDefaults(183, 0.85f, true);
+                this.Level = 55;
+                this.ExptoGive = 93;
+                this.displayName = "Crimslime";
+                this.name = Name;
+                this.defense = 22;
+                this.damage = 51;
+                this.life = 170;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -24;
+            }
+            else if (Name == "Big Crimslime")
+            {
+                this.SetDefaults(183, 1.15f, true);
+                this.Level = 57;
+                this.ExptoGive = 100;
+                this.displayName = "Crimslime";
+                this.name = Name;
+                this.defense = 30;
+                this.damage = 69;
+                this.life = 230;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -25;
+            }
+            else if (Name == "Small Zombie")
+            {
+                this.SetDefaults(3, 0.9f, true);
+                this.Level = 4;
+                this.ExptoGive = 39;
+                this.name = Name;
+                this.displayName = "Zombie";
+                this.defense = 5;
+                this.damage = 13;
+                this.life = 41;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -26;
+            }
+            else if (Name == "Big Zombie")
+            {
+                this.SetDefaults(3, 1.1f, true);
+                this.Level = 6;
+                this.ExptoGive = 43;
+                this.name = Name;
+                this.displayName = "Zombie";
+                this.defense = 7;
+                this.damage = 15;
+                this.life = 50;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -27;
+            }
+            else if (Name == "Small Bald Zombie")
+            {
+                this.SetDefaults(132, 0.85f, true);
+                this.Level = 4;
+                this.ExptoGive = 38;
+                this.name = Name;
+                this.displayName = "Zombie";
+                this.defense = 5;
+                this.damage = 13;
+                this.life = 41;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -28;
+            }
+            else if (Name == "Big Bald Zombie")
+            {
+                this.SetDefaults(132, 1.15f, true);
+                this.Level = 6;
+                this.ExptoGive = 42;
+                this.name = Name;
+                this.displayName = "Zombie";
+                this.defense = 7;
+                this.damage = 15;
+                this.life = 50;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -29;
+            }
+            else if (Name == "Small Pincushion Zombie")
+            {
+                this.SetDefaults(186, 0.93f, true);
+                this.Level = 5;
+                this.ExptoGive = 40;
+                this.name = Name;
+                this.displayName = "Zombie";
+                this.defense = 7;
+                this.damage = 15;
+                this.life = 47;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -30;
+            }
+            else if (Name == "Big Pincushion Zombie")
+            {
+                this.SetDefaults(186, 1.13f, true);
+                this.Level = 7;
+                this.ExptoGive = 45;
+                this.name = Name;
+                this.displayName = "Zombie";
+                this.defense = 9;
+                this.damage = 18;
+                this.life = 57;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -31;
+            }
+            else if (Name == "Small Slimed Zombie")
+            {
+                this.SetDefaults(187, 0.89f, true);
+                this.Level = 3;
+                this.ExptoGive = 37;
+                this.name = Name;
+                this.displayName = "Zombie";
+                this.defense = 5;
+                this.damage = 12;
+                this.life = 36;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -32;
+            }
+            else if (Name == "Big Slimed Zombie")
+            {
+                this.SetDefaults(187, 1.11f, true);
+                this.Level = 5;
+                this.ExptoGive = 41;
+                this.name = Name;
+                this.displayName = "Zombie";
+                this.defense = 7;
+                this.damage = 14;
+                this.life = 44;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -33;
+            }
+            else if (Name == "Small Swamp Zombie")
+            {
+                this.SetDefaults(188, 0.87f, true);
+                this.Level = 4;
+                this.ExptoGive = 39;
+                this.name = Name;
+                this.displayName = "Zombie";
+                this.defense = 7;
+                this.damage = 11;
+                this.life = 39;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -34;
+            }
+            else if (Name == "Big Swamp Zombie")
+            {
+                this.SetDefaults(188, 1.13f, true);
+                this.Level = 6;
+                this.ExptoGive = 43;
+                this.name = Name;
+                this.displayName = "Zombie";
+                this.defense = 9;
+                this.damage = 15;
+                this.life = 51;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -35;
+            }
+            else if (Name == "Small Twiggy Zombie")
+            {
+                this.SetDefaults(189, 0.92f, true);
+                this.Level = 4;
+                this.ExptoGive = 38;
+                this.name = Name;
+                this.displayName = "Zombie";
+                this.defense = 4;
+                this.damage = 15;
+                this.life = 41;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -36;
+            }
+            else if (Name == "Big Twiggy Zombie")
+            {
+                this.SetDefaults(189, 1.08f, true);
+                this.Level = 6;
+                this.ExptoGive = 42;
+                this.name = Name;
+                this.displayName = "Zombie";
+                this.defense = 4;
+                this.damage = 17;
+                this.life = 49;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -37;
+            }
+            else if (Name == "Cataract Eye 2")
+            {
+                this.SetDefaults(190, 1.15f, true);
+                this.Level = 8;
+                this.ExptoGive = 47;
+                this.name = Name;
+                this.displayName = "Demon Eye";
+                this.defense = 5;
+                this.damage = 21;
+                this.life = 75;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -38;
+            }
+            else if (Name == "Sleepy Eye 2")
+            {
+                this.SetDefaults(191, 1.1f, true);
+                this.Level = 7;
+                this.ExptoGive = 45;
+                this.name = Name;
+                this.displayName = "Demon Eye";
+                this.defense = 2;
+                this.damage = 18;
+                this.life = 66;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -39;
+            }
+            else if (Name == "Dialated Eye 2")
+            {
+                this.SetDefaults(192, 0.9f, true);
+                this.Level = 5;
+                this.ExptoGive = 44;
+                this.name = Name;
+                this.displayName = "Demon Eye";
+                this.defense = 2;
+                this.damage = 16;
+                this.life = 45;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -40;
+            }
+            else if (Name == "Green Eye 2")
+            {
+                this.SetDefaults(193, 0.85f, true);
+                this.Level = 6;
+                this.ExptoGive = 48;
+                this.name = Name;
+                this.displayName = "Demon Eye";
+                this.defense = 0;
+                this.damage = 17;
+                this.life = 51;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -41;
+            }
+            else if (Name == "Purple Eye 2")
+            {
+                this.SetDefaults(194, 1.1f, true);
+                this.Level = 7;
+                this.ExptoGive = 47;
+                this.name = Name;
+                this.displayName = "Demon Eye";
+                this.defense = 4;
+                this.damage = 15;
+                this.life = 66;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -42;
+            }
+            else if (Name == "Demon Eye 2")
+            {
+                this.SetDefaults(2, 1.15f, true);
+                this.Level = 7;
+                this.ExptoGive = 45;
+                this.name = Name;
+                this.displayName = "Demon Eye";
+                this.defense = 2;
+                this.damage = 21;
+                this.life = 69;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -43;
+            }
+            else if (Name == "Small Female Zombie")
+            {
+                this.SetDefaults(200, 0.87f, true);
+                this.Level = 4;
+                this.ExptoGive = 38;
+                this.name = Name;
+                this.displayName = "Zombie";
+                this.defense = 3;
+                this.damage = 10;
+                this.life = 33;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -44;
+            }
+            else if (Name == "Big Female Zombie")
+            {
+                this.SetDefaults(200, 1.05f, true);
+                this.Level = 6;
+                this.ExptoGive = 42;
+                this.name = Name;
+                this.displayName = "Zombie";
+                this.defense = 4;
+                this.damage = 13;
+                this.life = 40;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -45;
+            }
+            else if (Name == "Small Skeleton")
+            {
+                this.SetDefaults(21, 0.9f, true);
+                this.Level = 9;
+                this.ExptoGive = 46;
+                this.name = Name;
+                this.displayName = "Skeleton";
+                this.defense = 7;
+                this.damage = 18;
+                this.life = 54;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -46;
+            }
+            else if (Name == "Big Skeleton")
+            {
+                this.SetDefaults(21, 1.1f, true);
+                this.Level = 11;
+                this.ExptoGive = 50;
+                this.name = Name;
+                this.displayName = "Skeleton";
+                this.defense = 9;
+                this.damage = 22;
+                this.life = 66;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -47;
+            }
+            else if (Name == "Small Headache Skeleton")
+            {
+                this.SetDefaults(201, 0.93f, true);
+                this.Level = 9;
+                this.ExptoGive = 47;
+                this.name = Name;
+                this.displayName = "Skeleton";
+                this.defense = 11;
+                this.damage = 19;
+                this.life = 51;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -48;
+            }
+            else if (Name == "Big Headache Skeleton")
+            {
+                this.SetDefaults(201, 1.07f, true);
+                this.Level = 11;
+                this.ExptoGive = 51;
+                this.name = Name;
+                this.displayName = "Skeleton";
+                this.defense = 13;
+                this.damage = 21;
+                this.life = 59;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -49;
+            }
+            else if (Name == "Small Misassembled Skeleton")
+            {
+                this.SetDefaults(202, 0.87f, true);
+                this.Level = 8;
+                this.ExptoGive = 46;
+                this.name = Name;
+                this.displayName = "Skeleton";
+                this.defense = 7;
+                this.damage = 16;
+                this.life = 57;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -50;
+            }
+            else if (Name == "Big Misassembled Skeleton")
+            {
+                this.SetDefaults(202, 1.13f, true);
+                this.Level = 10;
+                this.ExptoGive = 50;
+                this.name = Name;
+                this.displayName = "Skeleton";
+                this.defense = 9;
+                this.damage = 20;
+                this.life = 73;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -51;
+            }
+            else if (Name == "Small Pantless Skeleton")
+            {
+                this.SetDefaults(203, 0.85f, true);
+                this.Level = 9;
+                this.ExptoGive = 47;
+                this.name = Name;
+                this.displayName = "Skeleton";
+                this.defense = 7;
+                this.damage = 19;
+                this.life = 51;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -52;
+            }
+            else if (Name == "Big Pantless Skeleton")
+            {
+                this.SetDefaults(203, 1.15f, true);
+                this.Level = 11;
+                this.ExptoGive = 51;
+                this.name = Name;
+                this.displayName = "Skeleton";
+                this.defense = 9;
+                this.damage = 25;
+                this.life = 69;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -53;
+            }
+            else if (Name == "Small Rain Zombie")
+            {
+                this.SetDefaults(223, 0.9f, true);
+                this.Level = 5;
+                this.ExptoGive = 41;
+                this.name = Name;
+                this.displayName = "Zombie";
+                this.defense = 7;
+                this.damage = 14;
+                this.life = 45;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -54;
+            }
+            else if (Name == "Big Rain Zombie")
+            {
+                this.SetDefaults(223, 1.1f, true);
+                this.Level = 7;
+                this.ExptoGive = 45;
+                this.name = Name;
+                this.displayName = "Zombie";
+                this.defense = 9;
+                this.damage = 18;
+                this.life = 55;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -55;
+            }
+            else if (Name == "Little Hornet Fatty")
+            {
+                this.SetDefaults(231, 0.85f, true);
+                this.Level = 33;
+                this.ExptoGive = 66;
+                this.displayName = "Hornet";
+                this.name = Name;
+                this.defense = 14;
+                this.damage = 18;
+                this.life = 43;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -56;
+            }
+            else if (Name == "Big Hornet Fatty")
+            {
+                this.SetDefaults(231, 1.25f, true);
+                this.Level = 35;
+                this.ExptoGive = 69;
+                this.displayName = "Hornet";
+                this.name = Name;
+                this.defense = 20;
+                this.damage = 28;
+                this.life = 63;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -57;
+            }
+            else if (Name == "Little Hornet Honey")
+            {
+                this.SetDefaults(232, 0.8f, true);
+                this.Level = 35;
+                this.ExptoGive = 68;
+                this.displayName = "Hornet";
+                this.name = Name;
+                this.defense = 10;
+                this.damage = 22;
+                this.life = 34;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -58;
+            }
+            else if (Name == "Big Hornet Honey")
+            {
+                this.SetDefaults(232, 1.15f, true);
+                this.Level = 37;
+                this.ExptoGive = 71;
+                this.displayName = "Hornet";
+                this.name = Name;
+                this.defense = 14;
+                this.damage = 32;
+                this.life = 48;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -59;
+            }
+            else if (Name == "Little Hornet Leafy")
+            {
+                this.SetDefaults(233, 0.92f, true);
+                this.Level = 35;
+                this.ExptoGive = 69;
+                this.displayName = "Hornet";
+                this.name = Name;
+                this.defense = 13;
+                this.damage = 28;
+                this.life = 35;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -60;
+            }
+            else if (Name == "Big Hornet Leafy")
+            {
+                this.SetDefaults(233, 1.1f, true);
+                this.Level = 37;
+                this.ExptoGive = 72;
+                this.displayName = "Hornet";
+                this.name = Name;
+                this.defense = 15;
+                this.damage = 33;
+                this.life = 42;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -61;
+            }
+            else if (Name == "Little Hornet Spikey")
+            {
+                this.SetDefaults(234, 0.78f, true);
+                this.Level = 36;
+                this.ExptoGive = 70;
+                this.displayName = "Hornet";
+                this.name = Name;
+                this.defense = 5;
+                this.damage = 25;
+                this.life = 33;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -62;
+            }
+            else if (Name == "Big Hornet Spikey")
+            {
+                this.SetDefaults(234, 1.16f, true);
+                this.Level = 38;
+                this.ExptoGive = 73;
+                this.displayName = "Hornet";
+                this.name = Name;
+                this.defense = 7;
+                this.damage = 37;
+                this.life = 49;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -63;
+            }
+            else if (Name == "Little Hornet Stingy")
+            {
+                this.SetDefaults(235, 0.87f, true);
+                this.Level = 36;
+                this.ExptoGive = 71;
+                this.displayName = "Hornet";
+                this.name = Name;
+                this.defense = 3;
+                this.damage = 30;
+                this.life = 33;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -64;
+            }
+            else if (Name == "Big Hornet Stingy")
+            {
+                this.SetDefaults(235, 1.21f, true);
+                this.Level = 38;
+                this.ExptoGive = 74;
+                this.displayName = "Hornet";
+                this.name = Name;
+                this.defense = 5;
+                this.damage = 41;
+                this.life = 46;
+                this.value = (float)((int)(this.value * this.scale));
+                this.npcSlots *= this.scale;
+                this.knockBackResist *= 2f - this.scale;
+                this.netID = -65;
+            }
+            else if (Name != "")
+            {
+                for (int i = 1; i < 540; i++)
+                {
+                    if (Main.npcName[i] == Name)
+                    {
+                        this.SetDefaults(i, -1f);
+                        return;
+                    }
+                }
+                this.SetDefaults(0, -1f);
+                this.active = false;
+            }
+            else
+            {
+                this.active = false;
+            }
+            this.displayName = Lang.npcName(this.netID, false);
+            this.lifeMax = this.life;
+            this.defDamage = this.damage;
+            this.defDefense = this.defense + 2;
+            this.defaultHP = this.lifeMax;
+            if (Main.expertMode && flag)
+            {
+                this.scaleStats();
+            }
+            this.SetStats();
+        }
+        public void SetDefaultsKeepPlayerInteraction(int Type)
 		{
 			bool[] array = new bool[this.playerInteraction.Length];
 			for (int i = 0; i < this.playerInteraction.Length; i++)
@@ -3100,9 +3247,26 @@ namespace Terraria
 				this.playerInteraction[j] = array[j];
 			}
 		}
-		public void SetDefaults(int Type, float scaleOverride = -1f)
-		{
-			this.takenDamageMultiplier = 1f;
+		public void SetDefaults(int Type, float scaleOverride = -1f, bool changed = false)
+        {
+            for (int z = 0; z < 255; z++)
+            {
+                this.tag[z] = 0;
+                this.tapped[z] = false;
+            }
+            this.baseAtk = 0;
+            this.baseVit = 0;
+            this.Dead = 0;
+            this.Exp = 0;
+            this.defaultHP = 0;
+            this.NoDamage = false;
+            this.projectile = false;
+            this.boss2 = false;
+            this.boss3 = false;
+            this.boss4 = false;
+            this.lifePoint = 0;
+            ///////////////////
+            this.takenDamageMultiplier = 1f;
 			this.extraValue = 0f;
 			for (int i = 0; i < this.playerInteraction.Length; i++)
 			{
@@ -11558,14 +11722,33 @@ namespace Terraria
 			}
 			this.life = this.lifeMax;
 			this.defDamage = this.damage;
-			this.defDefense = this.defense;
-			this.netID = this.type;
+            this.defDefense = this.defense + 2;
+            this.defaultHP = this.lifeMax;
+            this.defaultHP2 = this.lifeMax;
+            this.netID = this.type;
 			this.displayName = Lang.npcName(this.netID, false);
 			if (Main.expertMode)
 			{
 				this.scaleStats();
-			}
-			ServerApi.Hooks.InvokeNpcSetDefaultsInt(ref Type, this);
+            }
+            if (!changed)
+            {
+                this.SetDefaultStats(this.type);
+            }
+            if (Main.expertMode)
+            {
+                this.scaleLevel();
+            }
+            if (this.NoDamage)
+            {
+                this.damage = 0;
+                this.defDamage = 0;
+            }
+            if (this.projectile)
+            {
+                this.lifeMax = 1;
+            }
+            ServerApi.Hooks.InvokeNpcSetDefaultsInt(ref Type, this);
 
 		}
 		public static void setWorldMonsters()
@@ -11611,7 +11794,7 @@ namespace Terraria
 			{
 				int arg_1C_0 = this.life;
 			}
-			if ((this.type < 0 || !NPCID.Sets.NeedsExpertScaling[this.type]) && (this.life <= 5 || this.damage == 0 || this.friendly || this.townNPC))
+			if ((this.type < 0 || !NPCID.Sets.NeedsExpertScaling[this.type]) && (this.defaultHP <= 5 || this.damage == 0 || this.friendly || this.townNPC))
 			{
 				return;
 			}
@@ -11643,25 +11826,25 @@ namespace Terraria
 			}
 			this.damage = (int)((float)this.damage * Main.expertDamage);
 			this.knockBackResist *= Main.expertKnockBack;
-			int num4 = 0;
-			float num5 = 1f;
-			float num6 = 0.35f;
-			if (Main.netMode != 0)
-			{
-				for (int i = 0; i < 255; i++)
-				{
-					if (Main.player[i].active)
-					{
-						num4++;
-					}
-				}
-				for (int j = 1; j < num4; j++)
-				{
-					num5 += num6;
-					num6 += (1f - num6) / 3f;
-				}
-			}
-			if (num5 > 8f)
+            int num4 = 0;
+            float num5 = 1f;
+            float num6 = 0.35f;
+            if (Main.netMode != 0)
+            {
+                for (int i = 0; i < 255; i++)
+                {
+                    if (Main.player[i].active)
+                    {
+                        num4++;
+                    }
+                }
+                for (int j = 1; j < num4; j++)
+                {
+                    num5 += num6;
+                    num6 += (1f - num6) / 3f;
+                }
+            }
+            if (num5 > 8f)
 			{
 				num5 = (num5 * 2f + 8f) / 3f;
 			}
@@ -11871,11 +12054,4363 @@ namespace Terraria
 				this.damage = (int)((double)this.damage * 0.75);
 				break;
 			}
-			this.defDefense = this.defense;
+			this.defDefense = this.defense + 2;
 			this.defDamage = this.damage;
 			this.life = this.lifeMax;
-		}
-		public void AI()
+            this.defaultHP = this.lifeMax;
+        }
+        public int CalculateDamage(int Damage, int Level)
+        {
+            float baseStr = 85f;
+            if (Level > 80)
+            {
+                baseStr *= 1f + (float)((float)(Level - 80) / 100f);
+            }
+            this.baseAtk = (short)(5 + (short)(baseStr * ((float)(Level / 100f))));
+            float BaseDamage = 1f;
+            BaseDamage += ((0.07f + ((this.baseAtk + (Level / 4) + (int)(Math.Pow(Math.Floor((double)Level / 7), 1.5))) * 0.0003f)) * (float)(this.baseAtk + (Level / 4) + (int)(Math.Pow(Math.Floor((double)Level / 7), 1.5))));
+            int damage = (int)((float)(Damage) * (BaseDamage * (1f / (1f + (float)Damage / 125f))) + 5E-06f);
+            Main.playerCount = -1;
+            float boostatk = 0f;
+            if (!Main.expertMode && !this.townNPC && this.Level > 1)
+            {
+                for (int i = 0; i < 255; i++)
+                {
+                    if (Main.player[i].active)
+                    {
+                        Main.playerCount++;
+                    }
+                }
+                if (Main.playerCount < 0)
+                    Main.playerCount = 0;
+                if (Main.netMode == 2 || Main.netMode == 1)
+                {
+                    if (Main.playerCount >= 1)
+                    {
+                        boostatk += 0.10f;
+                    }
+                    if (Main.playerCount >= 2)
+                    {
+                        boostatk += 0.09f;
+                    }
+                    if (Main.playerCount >= 3)
+                    {
+                        boostatk += 0.09f;
+                    }
+                    if (Main.playerCount >= 4)
+                    {
+                        boostatk += 0.08f;
+                    }
+                    if (Main.playerCount >= 5)
+                    {
+                        boostatk += 0.07f;
+                    }
+                    if (Main.playerCount >= 6)
+                    {
+                        boostatk += 0.07f;
+                    }
+                    if (Main.playerCount >= 7)
+                    {
+                        boostatk += 0.07f;
+                    }
+                    if (Main.playerCount >= 8)
+                    {
+                        boostatk += 0.06f;
+                    }
+                    if (Main.playerCount >= 9)
+                    {
+                        boostatk += 0.06f;
+                    }
+                    if (Main.playerCount >= 10)
+                    {
+                        for (int i = 0; i <= (Main.playerCount - 10); i++)
+                        {
+                            boostatk += 0.05f;
+                        }
+                    }
+                    damage += (int)Math.Round(damage * (boostatk / ((this.boss || this.boss2) ? 1f : 5f)));
+                }
+            }
+            return damage;
+        }
+        public int CalculateDefense(int Defense, int Level)
+        {
+            float baseStat = 75f;
+            if (Level > 80)
+            {
+                baseStat *= 1f + (float)((float)(Level - 80) / 100f);
+            }
+            this.baseVit = (short)(4 + (short)(baseStat * ((float)(Level / 100f))));
+            int defense = (int)(Defense * (1 + ((baseVit + (Level / 6)) * (0.07f + ((baseVit + (Level / 6)) * 0.0003f)))));
+
+            Main.playerCount = -1;
+            float boostdef = 0f;
+            if (!Main.expertMode && !this.townNPC && this.Level > 1)
+            {
+                for (int i = 0; i < 255; i++)
+                {
+                    if (Main.player[i].active)
+                    {
+                        Main.playerCount++;
+                    }
+                }
+                if (Main.playerCount < 0)
+                    Main.playerCount = 0;
+                if (Main.netMode == 2 || Main.netMode == 1)
+                {
+                    if (Main.playerCount >= 1)
+                    {
+                        boostdef += 0.30f;
+                    }
+                    if (Main.playerCount >= 2)
+                    {
+                        boostdef += 0.28f;
+                    }
+                    if (Main.playerCount >= 3)
+                    {
+                        boostdef += 0.27f;
+                    }
+                    if (Main.playerCount >= 4)
+                    {
+                        boostdef += 0.26f;
+                    }
+                    if (Main.playerCount >= 5)
+                    {
+                        boostdef += 0.25f;
+                    }
+                    if (Main.playerCount >= 6)
+                    {
+                        boostdef += 0.24f;
+                    }
+                    if (Main.playerCount >= 7)
+                    {
+                        boostdef += 0.23f;
+                    }
+                    if (Main.playerCount >= 8)
+                    {
+                        boostdef += 0.22f;
+                    }
+                    if (Main.playerCount >= 9)
+                    {
+                        boostdef += 0.21f;
+                    }
+                    if (Main.playerCount >= 10)
+                    {
+                        for (int i = 0; i <= (Main.playerCount - 10); i++)
+                        {
+                            boostdef += 0.20f;
+                        }
+                    }
+                    defense += (int)Math.Round(defense * (boostdef / ((this.boss || this.boss2) ? 1f : 5f)));
+                }
+            }
+            return defense;
+        }
+        private void SetDefaultStats(int Id = 0)
+        {
+            switch (Id)
+            {
+                case 1:
+
+                    //"Blue Slime";
+                    this.Level = 2;
+                    this.ExptoGive = 24;
+
+                    break;
+
+                case 2:
+
+                    //"Demon Eye";
+                    this.Level = 6;
+                    this.ExptoGive = 36;
+
+                    break;
+
+                case 3:
+
+                    //"Zombie";
+                    this.Level = 5;
+                    this.ExptoGive = 33;
+
+                    break;
+
+                case 4:
+
+                    //"Eye of Cthulhu";
+                    this.Level = 21;
+                    this.ExptoGive = 2200;
+
+                    break;
+
+                case 5:
+
+                    //"Servant of Cthulhu";
+                    this.Level = 17;
+                    this.ExptoGive = 30;
+                    this.boss2 = true;
+
+                    break;
+
+                case 6:
+
+                    //"Eater of Souls";
+                    this.Level = 24;
+                    this.ExptoGive = 52;
+
+                    break;
+
+                case 7:
+
+                    //"Devourer Head";
+                    this.Level = 26;
+                    this.ExptoGive = 66;
+
+                    break;
+
+                case 8:
+
+                    //"Devourer Body";
+                    this.Level = 26;
+                    this.ExptoGive = 66;
+
+                    break;
+
+                case 9:
+
+                    //"Devourer Tail";
+                    this.Level = 26;
+                    this.ExptoGive = 66;
+
+                    break;
+
+                case 10:
+
+                    //"Giant Worm Head";
+                    this.Level = 12;
+                    this.ExptoGive = 56;
+
+                    break;
+
+                case 11:
+
+                    //"Giant Worm Body";
+                    this.Level = 12;
+                    this.ExptoGive = 56;
+
+                    break;
+
+                case 12:
+
+                    //"Giant Worm Tail";
+                    this.Level = 12;
+                    this.ExptoGive = 56;
+                    break;
+
+                case 13:
+
+                    //"Eater of Worlds Head";
+                    this.Level = 25;
+                    this.ExptoGive = 70;
+                    this.boss2 = true;
+
+                    break;
+
+                case 14:
+
+                    //"Eater of Worlds Body";
+                    this.Level = 25;
+                    this.ExptoGive = 70;
+                    this.boss2 = true;
+
+                    break;
+
+                case 15:
+
+                    //"Eater of Worlds Tail";
+                    this.Level = 25;
+                    this.ExptoGive = 70;
+                    this.boss2 = true;
+
+                    break;
+
+                case 16:
+
+                    //"Mother Slime";
+                    this.Level = 13;
+                    this.ExptoGive = 54;
+
+                    break;
+
+                case 17:
+
+                    //"Merchant";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 18:
+
+                    //"Nurse";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 19:
+
+                    //"Arms Dealer";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 20:
+
+                    //"Dryad";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 21:
+
+                    //"Skeleton";
+                    this.Level = 10;
+                    this.ExptoGive = 43;
+
+                    break;
+
+                case 22:
+
+                    //"Guide";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 23:
+
+                    //"Meteor Head";
+                    this.Level = 25;
+                    this.ExptoGive = 30;
+
+                    break;
+
+                case 24:
+
+                    //"Fire Imp";
+                    this.Level = 42;
+                    this.ExptoGive = 77;
+
+                    break;
+
+                case 25:
+
+                    //"Burning Sphere";
+                    this.Level = 42;
+                    this.ExptoGive = 3;
+                    this.projectile = true;
+                    break;
+
+                case 26:
+
+                    //"Goblin Peon";
+                    this.Level = 26;
+                    this.ExptoGive = 6;
+
+                    break;
+
+                case 27:
+
+                    //"Goblin Thief";
+                    this.Level = 27;
+                    this.ExptoGive = 9;
+
+                    break;
+
+                case 28:
+
+                    //"Goblin Warrior";
+                    this.Level = 30;
+                    this.ExptoGive = 11;
+
+                    break;
+
+                case 29:
+
+                    //"Goblin Sorcerer";
+                    this.Level = 29;
+                    this.ExptoGive = 8;
+
+                    break;
+
+                case 30:
+
+                    //"Chaos Ball";
+                    this.Level = 29;
+                    this.ExptoGive = 1;
+                    this.projectile = true;
+
+                    break;
+
+                case 31:
+
+                    //"Angry Bones";
+                    this.Level = 28;
+                    this.ExptoGive = 40;
+
+                    break;
+
+                case 32:
+
+                    //"Dark Caster";
+                    this.Level = 29;
+                    this.ExptoGive = 55;
+
+                    break;
+
+                case 33:
+
+                    //"Water Sphere";
+                    this.Level = 29;
+                    this.ExptoGive = 2;
+                    this.projectile = true;
+
+                    break;
+
+                case 34:
+
+                    //"Cursed Skull";
+                    this.Level = 30;
+                    this.ExptoGive = 61;
+
+                    break;
+
+                case 35:
+
+                    //"Skeletron Head";
+                    this.Level = 30;
+                    this.ExptoGive = 2000;
+
+                    break;
+
+                case 36:
+
+                    //"Skeletron Hand";
+                    this.Level = 30;
+                    this.ExptoGive = 600;
+                    this.boss2 = true;
+
+                    break;
+
+                case 37:
+
+                    //"Old Man";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 38:
+
+                    //"Demolitionist";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 39:
+
+                    //"Bone Serpent Head";
+                    this.Level = 44;
+                    this.ExptoGive = 85;
+
+                    break;
+
+                case 40:
+
+                    //"Bone Serpent Body";
+                    this.netAlways = true;
+                    this.Level = 44;
+                    this.ExptoGive = 85;
+
+                    break;
+
+                case 41:
+
+                    //"Bone Serpent Tail";
+                    this.Level = 44;
+                    this.ExptoGive = 85;
+
+                    break;
+
+                case 42:
+
+                    //"Hornet";
+                    this.Level = 35;
+                    this.ExptoGive = 64;
+
+                    break;
+
+                case 43:
+
+                    //"Man Eater";
+                    this.Level = 37;
+                    this.ExptoGive = 70;
+
+                    break;
+
+                case 44:
+
+                    //"Undead Miner";
+                    this.Level = 16;
+                    this.ExptoGive = 90;
+
+                    break;
+
+                case 45:
+
+                    //"Tim";
+                    this.Level = 30;
+                    this.ExptoGive = 1500;
+
+                    break;
+
+                case 46:
+
+                    //"Bunny";
+                    this.Level = 1;
+                    this.ExptoGive = 0;
+                    this.NoDamage = true;
+
+                    break;
+
+                case 47:
+
+                    //"Corrupt Bunny";
+                    this.Level = 16;
+                    this.ExptoGive = 50;
+
+                    break;
+
+                case 48:
+
+                    //"Harpy";
+
+                    this.Level = 21;
+                    this.ExptoGive = 54;
+
+                    break;
+
+                case 49:
+
+                    //"Cave Bat";
+                    this.Level = 9;
+                    this.ExptoGive = 39;
+
+                    break;
+
+                case 50:
+
+                    //"King Slime";
+                    this.Level = 29;
+                    this.ExptoGive = 2450;
+
+                    break;
+
+                case 51:
+
+                    //"Jungle Bat";
+                    this.Level = 14;
+                    this.ExptoGive = 29;
+
+                    break;
+
+                case 52:
+
+                    //"Doctor Bones";
+                    this.Level = 35;
+                    this.ExptoGive = 300;
+
+                    break;
+
+                case 53:
+
+                    //"The Groom";
+                    this.Level = 16;
+                    this.ExptoGive = 300;
+
+                    break;
+
+                case 54:
+
+                    //"Clothier";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 55:
+
+                    //"Goldfish";
+                    this.Level = 1;
+                    this.ExptoGive = 0;
+                    this.NoDamage = true;
+
+                    break;
+
+                case 56:
+
+                    //"Snatcher";
+                    this.Level = 18;
+                    this.ExptoGive = 40;
+
+                    break;
+
+                case 57:
+
+                    //"Corrupt Goldfish";
+                    this.Level = 16;
+                    this.ExptoGive = 50;
+
+                    break;
+
+                case 58:
+
+                    //"Piranha";
+                    this.Level = 16;
+                    this.ExptoGive = 49;
+
+                    break;
+
+                case 59:
+
+                    //"Lava Slime";
+                    this.Level = 40;
+                    this.ExptoGive = 65;
+
+                    break;
+
+                case 60:
+
+                    //"Hellbat";
+                    this.Level = 41;
+                    this.ExptoGive = 67;
+
+                    break;
+
+                case 61:
+
+                    //"Vulture";
+                    this.Level = 9;
+                    this.ExptoGive = 47;
+
+                    break;
+
+                case 62:
+
+                    //"Demon";
+                    this.Level = 43;
+                    this.ExptoGive = 69;
+
+                    break;
+
+                case 63:
+
+                    //"Blue Jellyfish";
+                    this.Level = 15;
+                    this.ExptoGive = 50;
+
+                    break;
+
+                case 64:
+
+                    //"Pink Jellyfish";
+                    this.Level = 26;
+                    this.ExptoGive = 48;
+
+                    break;
+
+                case 65:
+
+                    //"Shark";
+                    this.Level = 30;
+                    this.ExptoGive = 85;
+
+                    break;
+
+                case 66:
+
+                    //"Voodoo Demon";
+                    this.Level = 43;
+                    this.ExptoGive = 70;
+
+                    break;
+
+                case 67:
+
+                    //"Crab";
+                    this.Level = 27;
+                    this.ExptoGive = 58;
+
+                    break;
+
+                case 68:
+
+                    //"Dungeon Guardian";
+                    this.Level = 100;
+                    this.ExptoGive = 9999;
+                    this.boss3 = true;
+                    this.boss4 = true;
+
+                    break;
+
+                case 69:
+
+                    //"Antlion";
+                    this.Level = 14;
+                    this.ExptoGive = 55;
+
+                    break;
+
+                case 70:
+
+                    //"Spike Ball";
+                    this.Level = 30;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 71:
+
+                    //"Dungeon Slime";
+                    this.Level = 30;
+                    this.ExptoGive = 85;
+
+                    break;
+
+                case 72:
+
+                    //"Blazing Wheel";
+                    this.Level = 30;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 73:
+
+                    //"Goblin Scout";
+                    this.Level = 25;
+                    this.ExptoGive = 58;
+
+                    break;
+
+                case 74:
+
+                    //"Bird";
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+
+                    break;
+
+                case 75:
+
+                    //"Pixie";
+                    this.Level = 55;
+                    this.ExptoGive = 72;
+
+                    break;
+
+                case 77:
+
+                    //"Armored Skeleton";
+                    this.Level = 53;
+                    this.ExptoGive = 78;
+
+                    break;
+
+                case 78:
+
+                    //"Mummy";
+                    this.Level = 54;
+                    this.ExptoGive = 75;
+
+                    break;
+
+                case 79:
+
+                    //"Dark Mummy";
+                    this.Level = 55;
+                    this.ExptoGive = 79;
+
+                    break;
+
+                case 80:
+
+                    //"Light Mummy";
+                    this.Level = 56;
+                    this.ExptoGive = 80;
+
+                    break;
+
+                case 81:
+
+                    //"Corrupt Slime";
+                    this.Level = 55;
+                    this.ExptoGive = 54;
+
+                    break;
+
+                case 82:
+
+                    //"Wraith";
+                    this.Level = 46;
+                    this.ExptoGive = 65;
+
+                    break;
+
+                case 83:
+
+                    //"Cursed Hammer";
+                    this.Level = 63;
+                    this.ExptoGive = 85;
+
+                    break;
+
+                case 84:
+
+                    //"Enchanted Sword";
+                    this.Level = 63;
+                    this.ExptoGive = 85;
+
+                    break;
+
+                case 85:
+
+                    //"Mimic";
+                    this.Level = 65;
+                    this.ExptoGive = 500;
+
+                    break;
+
+                case 86:
+
+                    //"Unicorn";
+                    this.Level = 57;
+                    this.ExptoGive = 83;
+
+                    break;
+
+                case 87:
+
+                    //"Wyvern Head";
+                    this.Level = 70;
+                    this.ExptoGive = 175;
+
+                    break;
+
+                case 88:
+
+                    //"Wyvern Legs";
+                    this.Level = 70;
+                    this.ExptoGive = 175;
+
+                    break;
+
+                case 89:
+
+                    //"Wyvern Body";
+                    this.Level = 70;
+                    this.ExptoGive = 175;
+
+                    break;
+
+                case 90:
+
+                    //"Wyvern Body 2";
+                    this.Level = 70;
+                    this.ExptoGive = 175;
+
+                    break;
+
+                case 91:
+
+                    //"Wyvern Body 3";
+                    this.Level = 70;
+                    this.ExptoGive = 175;
+
+                    break;
+
+                case 92:
+
+                    //"Wyvern Tail";
+                    this.Level = 70;
+                    this.ExptoGive = 175;
+
+                    break;
+
+                case 93:
+
+                    //"Giant Bat";
+                    this.Level = 51;
+                    this.ExptoGive = 71;
+
+                    break;
+
+                case 94:
+
+                    //"Corruptor";
+                    this.Level = 57;
+                    this.ExptoGive = 86;
+
+                    break;
+
+                case 95:
+
+                    //"Digger Head";
+                    this.Level = 54;
+                    this.ExptoGive = 71;
+
+                    break;
+
+                case 96:
+
+                    //"Digger Body";
+                    this.Level = 54;
+                    this.ExptoGive = 71;
+
+                    break;
+
+                case 97:
+
+                    //"Digger Tail";
+                    this.Level = 54;
+                    this.ExptoGive = 71;
+
+                    break;
+
+                case 98:
+
+                    //"Seeker Head";
+                    this.Level = 59;
+                    this.ExptoGive = 80;
+
+                    break;
+
+                case 99:
+
+                    //"Seeker Body";
+                    this.Level = 59;
+                    this.ExptoGive = 80;
+
+                    break;
+
+                case 100:
+
+                    //"Seeker Tail";
+                    this.Level = 59;
+                    this.ExptoGive = 80;
+
+                    break;
+
+                case 101:
+
+                    //"Clinger";
+                    this.Level = 61;
+                    this.ExptoGive = 81;
+
+                    break;
+
+                case 102:
+
+                    //"Angler Fish";
+                    this.Level = 52;
+                    this.ExptoGive = 79;
+
+                    break;
+
+                case 103:
+
+                    //"Green Jellyfish";
+                    this.Level = 51;
+                    this.ExptoGive = 77;
+
+                    break;
+
+                case 104:
+
+                    //"Werewolf";
+                    this.Level = 50;
+                    this.ExptoGive = 65;
+
+                    break;
+
+                case 105:
+
+                    //"Bound Goblin";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 106:
+
+                    //"Bound Wizard";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 107:
+
+                    //"Goblin Tinkerer";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 108:
+
+                    //"Wizard";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 109:
+
+                    //"Clown";
+                    this.Level = 55;
+                    this.ExptoGive = 99;
+
+                    break;
+
+                case 110:
+
+                    //"Skeleton Archer";
+                    this.Level = 52;
+                    this.ExptoGive = 76;
+
+                    break;
+
+                case 111:
+
+                    //"Goblin Archer";
+                    this.Level = 28;
+                    this.ExptoGive = 7;
+
+                    break;
+
+                case 112:
+
+                    //"Vile Spit";
+                    this.Level = 57;
+                    this.ExptoGive = 4;
+                    this.projectile = true;
+
+                    break;
+
+                case 113:
+
+                    //"Wall of Flesh";
+                    this.Level = 50;
+                    this.ExptoGive = 2500;
+
+                    break;
+
+                case 114:
+
+                    //"Wall of Flesh Eye";
+                    this.Level = 50;
+                    this.ExptoGive = 2500;
+                    this.boss2 = true;
+
+                    break;
+
+                case 115:
+
+                    //"The Hungry";
+                    this.Level = 47;
+                    this.ExptoGive = 45;
+                    this.boss3 = true;
+
+                    break;
+
+                case 116:
+
+                    //"The Hungry II";
+                    this.Level = 47;
+                    this.ExptoGive = 45;
+                    this.boss3 = true;
+
+                    break;
+
+                case 117:
+
+                    //"Leech Head";
+                    this.Level = 46;
+                    this.ExptoGive = 40;
+                    this.boss3 = true;
+
+                    break;
+
+                case 118:
+
+                    //"Leech Body";
+                    this.Level = 46;
+                    this.ExptoGive = 40;
+                    this.boss3 = true;
+
+                    break;
+
+                case 119:
+
+                    //"Leech Tail";
+                    this.Level = 46;
+                    this.ExptoGive = 40;
+                    this.boss3 = true;
+
+                    break;
+
+                case 120:
+
+                    //"Chaos Elemental";
+                    this.Level = 61;
+                    this.ExptoGive = 80;
+
+                    break;
+
+                case 121:
+
+                    //"Slimer";
+                    this.Level = 56;
+                    this.ExptoGive = 45;
+
+                    break;
+
+                case 122:
+
+                    //"Gastropod";
+                    this.Level = 56;
+                    this.ExptoGive = 70;
+
+                    break;
+
+                case 123:
+
+                    //"Bound Mechanic";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 124:
+
+                    //"Mechanic";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 125:
+
+                    //"Retinazer";
+                    this.Level = 65;
+                    this.ExptoGive = 1750;
+
+                    break;
+
+                case 126:
+
+                    //"Spazmatism";
+                    this.Level = 65;
+                    this.ExptoGive = 1750;
+
+                    break;
+
+                case 127:
+
+                    //"Skeletron Prime";
+                    this.Level = 65;
+                    this.ExptoGive = 2000;
+
+                    break;
+
+                case 128:
+
+                    //"Prime Cannon";
+                    this.Level = 65;
+                    this.ExptoGive = 600;
+                    this.boss2 = true;
+
+                    break;
+
+                case 129:
+
+                    //"Prime Saw";
+                    this.Level = 65;
+                    this.ExptoGive = 600;
+                    this.boss2 = true;
+
+                    break;
+
+                case 130:
+
+                    //"Prime Vice";
+                    this.Level = 65;
+                    this.ExptoGive = 600;
+                    this.boss2 = true;
+
+                    break;
+
+                case 131:
+
+                    //"Prime Laser";
+                    this.Level = 65;
+                    this.ExptoGive = 600;
+                    this.boss2 = true;
+
+                    break;
+
+                case 132:
+
+                    //"Bald Zombie";
+                    this.Level = 5;
+                    this.ExptoGive = 43;
+
+                    break;
+
+                case 133:
+
+                    //"Wandering Eye";
+                    this.Level = 49;
+                    this.ExptoGive = 75;
+
+                    break;
+
+                case 134:
+
+                    //"The Destroyer";
+                    this.Level = 65;
+                    this.ExptoGive = 2100;
+
+                    break;
+
+                case 135:
+
+                    //"The Destroyer Body";
+                    this.Level = 65;
+                    this.ExptoGive = 2100;
+                    this.boss2 = true;
+
+                    break;
+
+                case 136:
+
+                    //"The Destroyer Tail";
+                    this.Level = 65;
+                    this.ExptoGive = 2100;
+                    this.behindTiles = true;
+                    this.boss2 = true;
+
+                    break;
+
+                case 139:
+
+                    //"Probe";
+                    this.Level = 63;
+                    this.ExptoGive = 45;
+                    this.boss3 = true;
+
+                    break;
+
+                case 137:
+
+                    //"Illuminant Bat";
+                    this.Level = 60;
+                    this.ExptoGive = 74;
+
+                    break;
+
+                case 138:
+
+                    //"Illuminant Slime";
+                    this.Level = 59;
+                    this.ExptoGive = 73;
+
+                    break;
+
+                case 140:
+
+                    //"Possessed Armor";
+                    this.Level = 47;
+                    this.ExptoGive = 67;
+
+                    break;
+
+                case 141:
+
+                    //"Toxic Sludge";
+                    this.Level = 49;
+                    this.ExptoGive = 67;
+
+                    break;
+
+                case 142:
+
+                    //"Santa Claus";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 143:
+
+                    //"Snowman Gangsta";
+                    this.Level = 70;
+                    this.ExptoGive = 16;
+
+                    break;
+
+                case 144:
+
+                    //"Mister Stabby";
+                    this.Level = 71;
+                    this.ExptoGive = 14;
+
+                    break;
+
+                case 145:
+
+                    //"Snow Balla";
+                    this.Level = 69;
+                    this.ExptoGive = 15;
+
+                    break;
+
+                case 147:
+
+                    //"Ice Slime";
+                    this.Level = 6;
+                    this.ExptoGive = 36;
+
+                    break;
+
+                case 148:
+
+                    //"Penguin";
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+
+                    break;
+
+                case 149:
+
+                    //"Penguin";
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+
+                    break;
+
+                case 150:
+
+                    //"Ice Bat";
+                    this.Level = 15;
+                    this.ExptoGive = 56;
+
+                    break;
+
+                case 151:
+
+                    //"Lava bat";
+                    this.Level = 71;
+                    this.ExptoGive = 64;
+
+                    break;
+
+                case 152:
+
+                    //"Giant Flying Fox";
+                    this.Level = 63;
+                    this.ExptoGive = 77;
+
+                    break;
+
+                case 153:
+
+                    //"Giant Tortoise";
+                    this.Level = 65;
+                    this.ExptoGive = 79;
+
+                    break;
+
+                case 154:
+
+                    //"Ice Tortoise";
+                    this.Level = 60;
+                    this.ExptoGive = 77;
+
+                    break;
+
+                case 155:
+
+                    //"Wolf";
+                    this.Level = 56;
+                    this.ExptoGive = 74;
+
+                    break;
+
+                case 156:
+
+                    //"Red Devil";
+                    this.Level = 73;
+                    this.ExptoGive = 88;
+
+                    break;
+
+                case 157:
+
+                    //"Arapaima";
+                    this.Level = 65;
+                    this.ExptoGive = 70;
+
+                    break;
+
+                case 158:
+
+                    //"Vampire";
+                    this.Level = 75;
+                    this.ExptoGive = 19;
+
+                    break;
+
+                case 159:
+
+                    //"Vampire";
+                    this.Level = 75;
+                    this.ExptoGive = 19;
+
+                    break;
+
+                case 160:
+
+                    //"Truffle";
+                    this.Level = 12;
+                    this.ExptoGive = 49;
+
+                    break;
+
+                case 161:
+
+                    //"Zombie Eskimo";
+                    this.Level = 9;
+                    this.ExptoGive = 41;
+
+                    break;
+
+                case 162:
+
+                    //"Frankenstein";
+                    this.Level = 74;
+                    this.ExptoGive = 15;
+
+                    break;
+
+                case 163:
+
+                    //"Black Recluse";
+                    this.Level = 61;
+                    this.ExptoGive = 80;
+
+                    break;
+
+                case 238:
+
+                    //"Black Recluse";
+                    this.Level = 61;
+                    this.ExptoGive = 80;
+
+                    break;
+
+                case 164:
+
+                    //"Wall Creeper";
+                    this.Level = 13;
+                    this.ExptoGive = 55;
+                    break;
+
+                case 165:
+
+                    //"Wall Creeper";
+                    this.Level = 13;
+                    this.ExptoGive = 55;
+
+                    break;
+
+                case 166:
+
+                    //"Swamp Thing";
+                    this.Level = 73;
+                    this.ExptoGive = 13;
+
+                    break;
+
+                case 167:
+
+                    //"Undead Viking";
+                    this.Level = 18;
+                    this.ExptoGive = 55;
+
+                    break;
+
+                case 168:
+
+                    //"Corrupt Penguin";
+                    this.Level = 16;
+                    this.ExptoGive = 50;
+
+                    break;
+
+                case 169:
+
+                    //"Ice Elemental";
+                    this.Level = 55;
+                    this.ExptoGive = 69;
+
+                    break;
+
+                case 170:
+
+                    //"Pigron";
+                    this.Level = 61;
+                    this.ExptoGive = 74;
+
+                    break;
+
+                case 171:
+
+                    //"Pigron";
+                    this.Level = 61;
+                    this.ExptoGive = 74;
+
+                    break;
+
+                case 172:
+
+                    //"Rune Wizard";
+                    this.Level = 65;
+                    this.ExptoGive = 1000;
+
+                    break;
+
+                case 173:
+
+                    //"Crimera";
+                    this.Level = 24;
+                    this.ExptoGive = 56;
+
+                    break;
+
+                case 174:
+
+                    //"Herpling";
+                    this.Level = 58;
+                    this.ExptoGive = 70;
+
+                    break;
+
+                case 175:
+
+                    //"Angry Trapper";
+                    this.Level = 68;
+                    this.ExptoGive = 80;
+
+                    break;
+
+                case 176:
+
+                    //"Moss Hornet";
+                    this.Level = 66;
+                    this.ExptoGive = 77;
+
+                    break;
+
+                case 177:
+
+                    //"Derpling";
+                    this.Level = 64;
+                    this.ExptoGive = 70;
+
+                    break;
+
+                case 178:
+
+                    //"Steampunker";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 179:
+
+                    //"Crimson Axe";
+                    this.Level = 63;
+                    this.ExptoGive = 80;
+
+                    break;
+
+                case 180:
+
+                    //"Pigron";
+                    this.Level = 61;
+                    this.ExptoGive = 74;
+
+                    break;
+
+                case 181:
+
+                    //"Face Monster";
+                    this.Level = 23;
+                    this.ExptoGive = 51;
+
+                    break;
+
+                case 182:
+
+                    //"Floaty Gross";
+                    this.Level = 62;
+                    this.ExptoGive = 77;
+
+                    break;
+
+                case 183:
+
+                    //"Crimslime";
+                    this.Level = 56;
+                    this.ExptoGive = 60;
+
+                    break;
+
+                case 184:
+
+                    //"Spiked Ice Slime";
+                    this.Level = 16;
+                    this.ExptoGive = 54;
+
+                    break;
+
+                case 185:
+
+                    //"Snow Flinx";
+                    this.Level = 17;
+                    this.ExptoGive = 58;
+
+                    break;
+
+                case 186:
+
+                    //"Pincushion Zombie";
+                    this.Level = 6;
+                    this.ExptoGive = 44;
+
+                    break;
+
+                case 187:
+
+                    //"Slimed Zombie";
+                    this.Level = 5;
+                    this.ExptoGive = 45;
+
+                    break;
+
+                case 188:
+
+                    //"Zombie";
+                    this.Level = 5;
+                    this.ExptoGive = 43;
+
+                    break;
+
+                case 189:
+
+                    //"Twiggy Zombie";
+                    this.Level = 5;
+                    this.ExptoGive = 44;
+
+                    break;
+
+                case 190:
+
+                    //"Cataract Eye";
+                    this.Level = 6;
+                    this.ExptoGive = 48;
+
+                    break;
+
+                case 191:
+
+                    //"Sleepy Eye";
+                    this.Level = 7;
+                    this.ExptoGive = 49;
+
+                    break;
+
+                case 192:
+
+                    //"Dialated Eye";
+                    this.Level = 6;
+                    this.ExptoGive = 47;
+
+                    break;
+
+                case 193:
+
+                    //"Green Eye";
+                    this.Level = 6;
+                    this.ExptoGive = 48;
+
+                    break;
+
+                case 194:
+
+                    //"Purple Eye";
+                    this.Level = 7;
+                    this.ExptoGive = 49;
+
+                    break;
+
+                case 195:
+
+                    //"Lost Girl";
+                    this.Level = 30;
+                    this.ExptoGive = 600;
+
+                    break;
+
+                case 196:
+
+                    //"Nymph";
+                    this.Level = 30;
+                    this.ExptoGive = 600;
+
+                    break;
+
+                case 197:
+
+                    //"Armored Viking";
+                    this.Level = 59;
+                    this.ExptoGive = 75;
+
+                    break;
+
+                case 198:
+
+                    //"Lihzahrd";
+                    this.Level = 78;
+                    this.ExptoGive = 80;
+
+                    break;
+
+                case 199:
+
+                    //"Lihzahrd";
+                    this.Level = 78;
+                    this.ExptoGive = 80;
+
+                    break;
+
+                case 200:
+
+                    //"Female Zombie";
+                    this.Level = 5;
+                    this.ExptoGive = 43;
+
+                    break;
+
+                case 201:
+
+                    //"Headache Skeleton";
+                    this.Level = 11;
+                    this.ExptoGive = 47;
+
+                    break;
+
+                case 202:
+
+                    //"Misassembled Skeleton";
+                    this.Level = 11;
+                    this.ExptoGive = 48;
+
+                    break;
+
+                case 203:
+
+                    //"Pantless Skeleton";
+                    this.Level = 10;
+                    this.ExptoGive = 46;
+
+                    break;
+
+                case 204:
+
+                    //"Spiked Jungle Slime";
+                    this.Level = 34;
+                    this.ExptoGive = 55;
+
+                    break;
+
+                case 205:
+
+                    //"Moth";
+                    this.Level = 65;
+                    this.ExptoGive = 450;
+
+                    break;
+
+                case 206:
+
+                    //"Icy Merman";
+                    this.Level = 58;
+                    this.ExptoGive = 67;
+
+                    break;
+
+                case 207:
+
+                    //"Dye Trader";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 208:
+
+                    //"Party Girl";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 209:
+
+                    //"Cyborg";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 210:
+
+                    //"Bee";
+                    this.Level = 27;
+                    this.ExptoGive = 10;
+
+                    break;
+
+                case 211:
+
+                    //"Bee";
+                    this.Level = 26;
+                    this.ExptoGive = 9;
+
+                    break;
+
+                case 212:
+
+                    //"Pirate Deckhand";
+                    this.Level = 71;
+                    this.ExptoGive = 11;
+
+                    break;
+
+                case 213:
+
+                    //"Pirate Corsair";
+                    this.Level = 74;
+                    this.ExptoGive = 15;
+
+                    break;
+
+                case 214:
+
+                    //"Pirate Deadeye";
+                    this.Level = 72;
+                    this.ExptoGive = 13;
+
+                    break;
+
+                case 215:
+
+                    //"Pirate Crossbower";
+                    this.Level = 73;
+                    this.ExptoGive = 14;
+
+                    break;
+
+                case 216:
+
+                    //"Pirate Captain";
+                    this.Level = 75;
+                    this.ExptoGive = 350;
+
+                    break;
+
+                case 217:
+
+                    //"Cochineal Beetle";
+                    this.Level = 10;
+                    this.ExptoGive = 48;
+
+                    break;
+
+                case 218:
+
+                    //"Cyan Beetle";
+                    this.Level = 10;
+                    this.ExptoGive = 48;
+
+                    break;
+
+                case 219:
+
+                    //"Lac Beetle";
+                    this.Level = 10;
+                    this.ExptoGive = 48;
+
+                    break;
+
+                case 220:
+
+                    //"Sea Snail";
+                    this.Level = 25;
+                    this.ExptoGive = 48;
+
+                    break;
+
+                case 221:
+
+                    //"Squid";
+                    this.Level = 28;
+                    this.ExptoGive = 54;
+
+                    break;
+
+                case 222:
+
+                    //"Queen Bee";
+                    this.Level = 40;
+                    this.ExptoGive = 1950;
+
+                    break;
+
+                case 223:
+
+                    //"Zombie";
+                    this.Level = 6;
+                    this.ExptoGive = 45;
+
+                    break;
+
+                case 224:
+
+                    //"Flying Fish";
+                    this.Level = 8;
+                    this.ExptoGive = 47;
+
+                    break;
+
+                case 225:
+
+                    //"Umbrella Slime";
+                    this.Level = 4;
+                    this.ExptoGive = 42;
+
+                    break;
+
+                case 226:
+
+                    //"Flying Snake";
+                    this.Level = 79;
+                    this.ExptoGive = 85;
+
+                    break;
+
+                case 227:
+
+                    //"Painter";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 228:
+
+                    //"Witch Doctor";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 229:
+
+                    //"Pirate";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+
+                    break;
+
+                case 230:
+
+                    //"Goldfish";
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+
+                    break;
+
+                case 231:
+
+                    //"Hornet Fatty";
+                    this.Level = 35;
+                    this.ExptoGive = 63;
+
+                    break;
+
+                case 232:
+
+                    //"Hornet Honey";
+                    this.Level = 35;
+                    this.ExptoGive = 64;
+
+                    break;
+
+                case 233:
+
+                    //"Hornet Leafy";
+                    this.Level = 35;
+                    this.ExptoGive = 63;
+
+                    break;
+
+                case 234:
+
+                    //"Hornet Spikey";
+                    this.Level = 35;
+                    this.ExptoGive = 65;
+
+                    break;
+
+                case 235:
+
+                    //"Hornet Stingy";
+                    this.Level = 35;
+                    this.ExptoGive = 66;
+
+                    break;
+
+                case 236:
+
+                    //"Jungle Creeper";
+                    this.Level = 66;
+                    this.ExptoGive = 79;
+
+                    break;
+
+                case 237:
+
+                    //"Jungle Creeper";
+                    this.Level = 66;
+                    this.ExptoGive = 79;
+
+                    break;
+
+                case 239:
+
+                    //"Blood Crawler";
+                    this.Level = 25;
+                    this.ExptoGive = 56;
+
+                    break;
+
+                case 240:
+
+                    //"Blood Crawler";
+                    this.Level = 25;
+                    this.ExptoGive = 56;
+
+                    break;
+
+                case 241:
+
+                    //"Blood Feeder";
+                    this.Level = 22;
+                    this.ExptoGive = 50;
+
+                    break;
+
+                case 242:
+
+                    //"Blood Jelly";
+                    this.Level = 57;
+                    this.ExptoGive = 65;
+
+                    break;
+
+                case 243:
+
+                    //"Ice Golem";
+                    this.Level = 58;
+                    this.ExptoGive = 245;
+
+                    break;
+
+                case 244:
+
+                    //"Rainbow Slime";
+                    this.Level = 60;
+                    this.ExptoGive = 450;
+
+                    break;
+
+                case 245:
+
+                    //"Golem";
+                    this.Level = 80;
+                    this.ExptoGive = 2050;
+
+                    break;
+
+                case 246:
+
+                    //"Golem Head";
+                    this.Level = 80;
+                    this.ExptoGive = 700;
+                    this.boss2 = true;
+
+                    break;
+
+                case 247:
+
+                    //"Golem Fist";
+                    this.Level = 80;
+                    this.ExptoGive = 700;
+                    this.boss2 = true;
+
+                    break;
+
+                case 248:
+
+                    //"Golem Fist";
+                    this.Level = 80;
+                    this.ExptoGive = 700;
+                    this.boss2 = true;
+
+                    break;
+
+                case 249:
+
+                    //"Golem Head";
+                    this.Level = 80;
+                    this.ExptoGive = 700;
+                    this.boss2 = true;
+
+                    break;
+
+                case 250:
+
+                    //"Angry Nimbus";
+                    this.Level = 52;
+                    this.ExptoGive = 300;
+
+                    break;
+
+                case 251:
+
+                    //"Eyezor";
+                    this.Level = 76;
+                    this.ExptoGive = 20;
+
+                    break;
+
+                case 252:
+
+                    //"Parrot";
+                    this.Level = 74;
+                    this.ExptoGive = 13;
+
+                    break;
+
+                case 253:
+
+                    //"Reaper";
+                    this.Level = 75;
+                    this.ExptoGive = 16;
+
+                    break;
+
+                case 254:
+
+                    //"Zombie";
+                    this.Level = 15;
+                    this.ExptoGive = 35;
+
+                    break;
+
+                case 255:
+
+                    //"Zombie";
+                    this.Level = 15;
+                    this.ExptoGive = 37;
+
+                    break;
+
+                case 256:
+
+                    //"Fungo Fish";
+                    this.Level = 54;
+                    this.ExptoGive = 69;
+
+                    break;
+
+                case 257:
+
+                    //"Anomura Fungus";
+                    this.Level = 14;
+                    this.ExptoGive = 53;
+
+                    break;
+
+                case 258:
+
+                    //"Mushi Ladybug";
+                    this.Level = 23;
+                    this.ExptoGive = 77;
+
+                    break;
+
+                case 259:
+
+                    //"Fungi Bulb";
+                    this.Level = 13;
+                    this.ExptoGive = 54;
+
+                    break;
+
+                case 260:
+
+                    //"Giant Fungi Bulb";
+                    this.Level = 55;
+                    this.ExptoGive = 72;
+
+                    break;
+
+                case 261:
+
+                    //"Fungi Spore";
+                    this.Level = 55;
+                    this.ExptoGive = 4;
+                    this.projectile = true;
+
+                    break;
+
+                case 262:
+
+                    //"Plantera";
+                    this.Level = 75;
+                    this.ExptoGive = 2250;
+
+                    break;
+
+                case 263:
+
+                    //"Plantera's Hook";
+                    this.Level = 75;
+                    this.ExptoGive = 400;
+                    this.boss2 = true;
+
+                    break;
+
+                case 264:
+
+                    //"Plantera's Tentacle";
+                    this.Level = 75;
+                    this.ExptoGive = 300;
+                    this.boss2 = true;
+
+                    break;
+
+                case 265:
+
+                    //"Spore";
+                    this.Level = 75;
+                    this.ExptoGive = 5;
+                    this.projectile = true;
+                    this.boss2 = true;
+
+                    break;
+
+                case 266:
+
+                    //"Brain of Cthulhu";
+                    this.Level = 26;
+                    this.ExptoGive = 1700;
+
+                    break;
+
+                case 267:
+
+                    //"Creeper";
+                    this.Level = 24;
+                    this.ExptoGive = 30;
+                    this.boss2 = true;
+
+                    break;
+
+                case 268:
+
+                    //"Ichor Sticker";
+                    this.Level = 59;
+                    this.ExptoGive = 77;
+
+                    break;
+
+                case 269:
+
+                    //"Rusty Armored Bones";
+                    this.Level = 68;
+                    this.ExptoGive = 60;
+
+                    break;
+
+                case 270:
+
+                    //"Rusty Armored Bones";
+                    this.Level = 69;
+                    this.ExptoGive = 61;
+
+                    break;
+
+                case 271:
+
+                    //"Rusty Armored Bones";
+                    this.Level = 67;
+                    this.ExptoGive = 63;
+
+                    break;
+
+                case 272:
+
+                    //"Rusty Armored Bones";
+                    this.Level = 69;
+                    this.ExptoGive = 62;
+
+                    break;
+
+                case 273:
+
+                    //"Blue Armored Bones";
+                    this.Level = 69;
+                    this.ExptoGive = 61;
+
+                    break;
+
+                case 274:
+
+                    //"Blue Armored Bones";
+                    this.Level = 70;
+                    this.ExptoGive = 60;
+
+                    break;
+
+                case 275:
+
+                    //"Blue Armored Bones";
+                    this.Level = 67;
+                    this.ExptoGive = 60;
+
+                    break;
+
+                case 276:
+
+                    //"Blue Armored Bones";
+                    this.Level = 68;
+                    this.ExptoGive = 64;
+
+                    break;
+
+                case 277:
+
+                    //"Hell Armored Bones";
+                    this.Level = 70;
+                    this.ExptoGive = 65;
+
+                    break;
+
+                case 278:
+
+                    //"Hell Armored Bones";
+                    this.Level = 71;
+                    this.ExptoGive = 64;
+
+                    break;
+
+                case 279:
+
+                    //"Hell Armored Bones";
+                    this.Level = 70;
+                    this.ExptoGive = 66;
+
+                    break;
+
+                case 280:
+
+                    //"Hell Armored Bones";
+                    this.Level = 72;
+                    this.ExptoGive = 63;
+
+                    break;
+
+                case 281:
+
+                    //"Ragged Caster";
+                    this.Level = 70;
+                    this.ExptoGive = 67;
+
+                    break;
+
+                case 282:
+
+                    //"Ragged Caster";
+                    this.Level = 70;
+                    this.ExptoGive = 66;
+
+                    break;
+
+                case 283:
+
+                    //"Necromancer";
+                    this.Level = 71;
+                    this.ExptoGive = 66;
+
+                    break;
+
+                case 284:
+
+                    //"Necromancer";
+                    this.Level = 71;
+                    this.ExptoGive = 67;
+
+                    break;
+
+                case 285:
+
+                    //"Diabolist";
+                    this.Level = 72;
+                    this.ExptoGive = 67;
+
+                    break;
+
+                case 286:
+
+                    //"Diabolist";
+                    this.Level = 72;
+                    this.ExptoGive = 68;
+
+                    break;
+
+                case 287:
+
+                    //"Bone Lee";
+                    this.Level = 72;
+                    this.ExptoGive = 250;
+
+                    break;
+
+                case 288:
+
+                    //"Dungeon Spirit";
+                    this.Level = 70;
+                    this.ExptoGive = 70;
+
+                    break;
+
+                case 289:
+
+                    //"Giant Cursed Skull";
+                    this.Level = 71;
+                    this.ExptoGive = 73;
+
+                    break;
+
+                case 290:
+
+                    //"Paladin";
+                    this.Level = 73;
+                    this.ExptoGive = 600;
+
+                    break;
+
+                case 291:
+
+                    //"Skeleton Sniper";
+                    this.Level = 69;
+                    this.ExptoGive = 60;
+
+                    break;
+
+                case 292:
+
+                    //"Tactical Skeleton";
+                    this.Level = 68;
+                    this.ExptoGive = 63;
+
+                    break;
+
+                case 293:
+
+                    //"Skeleton Commando";
+                    this.Level = 71;
+                    this.ExptoGive = 65;
+
+                    break;
+
+                case 294:
+
+                    //"Angry Bones";
+                    this.Level = 27;
+                    this.ExptoGive = 49;
+
+                    break;
+
+                case 295:
+
+                    //"Angry Bones";
+                    this.Level = 27;
+                    this.ExptoGive = 50;
+
+                    break;
+
+                case 296:
+
+                    //"Angry Bones";
+                    this.Level = 27;
+                    this.ExptoGive = 51;
+
+                    break;
+                case 297:
+
+                    //"Bird";
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+
+                    break;
+                case 298:
+
+                    //"Bird";
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+
+                    break;
+
+                case 299:
+
+                    //"Squirrel";
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+
+                    break;
+
+                case 300:
+
+                    //"Mouse";
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+
+                    break;
+
+                case 301:
+
+                    //"Raven";
+                    this.Level = 7;
+                    this.ExptoGive = 49;
+                    break;
+
+                case 302:
+
+                    //"Slime";
+                    this.Level = 3;
+                    this.ExptoGive = 40;
+
+                    break;
+
+                case 304:
+
+                    //"Hoppin' Jack";
+                    this.Level = 56;
+                    this.ExptoGive = 66;
+
+                    break;
+
+                //"Scarecrow";
+                case 305:
+
+                    this.Level = 80;
+                    this.ExptoGive = 12;
+                    break;
+
+                case 306:
+
+                    this.Level = 80;
+                    this.ExptoGive = 11;
+                    break;
+
+                case 307:
+
+                    this.Level = 80;
+                    this.ExptoGive = 13;
+                    break;
+
+                case 308:
+
+                    this.Level = 80;
+                    this.ExptoGive = 9;
+                    break;
+
+                case 309:
+
+                    this.Level = 80;
+                    this.ExptoGive = 10;
+                    break;
+
+                case 310:
+
+                    this.Level = 80;
+                    this.ExptoGive = 12;
+                    break;
+
+                case 311:
+
+                    this.Level = 80;
+                    this.ExptoGive = 11;
+                    break;
+
+                case 312:
+
+                    this.Level = 80;
+                    this.ExptoGive = 13;
+                    break;
+
+                case 313:
+
+                    this.Level = 80;
+                    this.ExptoGive = 9;
+                    break;
+
+                case 314:
+
+                    this.Level = 80;
+                    this.ExptoGive = 14;
+                    break;
+
+                case 315:
+
+                    //"Headless Horseman";
+                    this.Level = 82;
+                    this.ExptoGive = 100;
+
+                    break;
+
+                case 316:
+
+                    //"Ghost";
+                    this.Level = 50;
+                    this.ExptoGive = 60;
+
+                    break;
+
+                case 317:
+
+                    //"Demon Eye";
+                    this.Level = 6;
+                    this.ExptoGive = 47;
+
+                    break;
+
+                case 318:
+
+                    //"Demon Eye";
+                    this.Level = 7;
+                    this.ExptoGive = 48;
+
+                    break;
+
+                case 319:
+
+                    //"Zombie";
+                    this.Level = 5;
+                    this.ExptoGive = 43;
+
+                    break;
+
+                case 320:
+
+                    //"Zombie";
+                    this.Level = 5;
+                    this.ExptoGive = 44;
+
+                    break;
+
+                case 321:
+
+                    //"Zombie";
+                    this.Level = 5;
+                    this.ExptoGive = 46;
+
+                    break;
+
+                case 322:
+
+                    //"Skeleton";
+                    this.Level = 10;
+                    this.ExptoGive = 49;
+
+                    break;
+
+                case 323:
+
+                    //"Skeleton";
+                    this.Level = 10;
+                    this.ExptoGive = 50;
+
+                    break;
+
+                case 324:
+
+                    //"Skeleton";
+                    this.Level = 11;
+                    this.ExptoGive = 50;
+
+                    break;
+
+                case 325:
+
+                    //"Mourning Wood";
+                    this.Level = 83;
+                    this.ExptoGive = 255;
+
+                    break;
+
+                case 326:
+
+                    //"Splinterling";
+                    this.Level = 81;
+                    this.ExptoGive = 14;
+
+                    break;
+
+                case 327:
+
+                    //"Pumpking";
+                    this.Level = 83;
+                    this.ExptoGive = 650;
+                    this.boss3 = true;
+
+                    break;
+
+                case 328:
+
+                    //"Pumpking";
+                    this.Level = 83;
+                    this.ExptoGive = 650;
+                    this.boss3 = true;
+
+                    break;
+
+                case 329:
+
+                    //"Hellhound";
+                    this.Level = 81;
+                    this.ExptoGive = 18;
+
+                    break;
+
+                case 330:
+
+                    //"Poltergeist";
+                    this.Level = 81;
+                    this.ExptoGive = 19;
+
+                    break;
+
+                case 331:
+
+                    //"Zombie";
+                    this.Level = 5;
+                    this.ExptoGive = 43;
+
+                    break;
+
+                case 332:
+
+                    //"Zombie";
+                    this.Level = 5;
+                    this.ExptoGive = 44;
+                    break;
+
+                case 333:
+
+                    //"Slime";
+                    this.Level = 2;
+                    this.ExptoGive = 36;
+                    break;
+
+                case 334:
+
+                    //"Slime";
+                    this.Level = 2;
+                    this.ExptoGive = 34;
+                    break;
+
+                case 335:
+
+                    //"Slime";
+                    this.Level = 3;
+                    this.ExptoGive = 35;
+                    break;
+
+                case 336:
+
+                    //"Slime";
+                    this.Level = 2;
+                    this.ExptoGive = 37;
+
+                    break;
+
+                //"Zombie Elf";
+                case 338:
+
+                    this.Level = 80;
+                    this.ExptoGive = 12;
+
+                    break;
+
+                case 339:
+
+                    this.Level = 80;
+                    this.ExptoGive = 13;
+
+                    break;
+
+                case 340:
+
+                    this.Level = 80;
+                    this.ExptoGive = 14;
+
+                    break;
+
+                case 341:
+
+                    //"Present Mimic";
+                    this.Level = 83;
+                    this.ExptoGive = 100;
+
+                    break;
+
+                case 342:
+
+                    //"Gingerbread Man";
+                    this.Level = 80;
+                    this.ExptoGive = 19;
+
+                    break;
+
+                case 343:
+
+                    //"Yeti";
+                    this.Level = 82;
+                    this.ExptoGive = 28;
+
+                    break;
+
+                case 344:
+
+                    //"Everscream";
+                    this.Level = 82;
+                    this.ExptoGive = 180;
+
+                    break;
+
+                case 345:
+
+                    //"Ice Queen";
+                    this.Level = 83;
+                    this.ExptoGive = 900;
+                    this.boss3 = true;
+
+                    break;
+
+                case 346:
+
+                    //"Santa-NK1";
+                    this.Level = 82;
+                    this.ExptoGive = 255;
+
+                    break;
+
+                case 347:
+
+                    //"Elf Copter";
+                    this.Level = 81;
+                    this.ExptoGive = 20;
+
+                    break;
+
+                case 348:
+
+                    //"Nutcracker";
+                    this.Level = 81;
+                    this.ExptoGive = 22;
+
+                    break;
+
+                case 349:
+
+                    //"Nutcracker";
+                    this.Level = 81;
+                    this.ExptoGive = 21;
+
+                    break;
+
+                case 350:
+
+                    //"Elf Archer";
+                    this.Level = 80;
+                    this.ExptoGive = 14;
+
+                    break;
+
+                case 351:
+
+                    //"Krampus";
+                    this.Level = 82;
+                    this.ExptoGive = 27;
+
+                    break;
+
+                case 352:
+                    //"Flocko";
+                    this.Level = 82;
+                    this.ExptoGive = 20;
+                    break;
+
+                case 353:
+                    //Stylist
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+                    this.NoDamage = true;
+                    break;
+
+                case 354:
+
+                    //Webbed Stylist
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+                    this.NoDamage = true;
+                    break;
+
+                case 355:
+
+                    //Firefly
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+                    break;
+
+                case 356:
+
+                    //Butterfly
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+                    break;
+
+                case 357:
+
+                    //Worm
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+                    break;
+
+                case 358:
+
+                    //Lightning Bug
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+                    break;
+
+                case 359:
+
+                    //Snail
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+                    break;
+
+                case 360:
+
+                    //Glowing Snail
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+                    break;
+
+                case 361:
+
+                    //Frog
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+                    break;
+
+                case 362:
+
+                    //Duck
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+                    break;
+
+                case 363:
+
+                    //Duck
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+                    break;
+
+                case 364:
+
+                    //Duck
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+                    break;
+
+                case 365:
+
+                    //Duck
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+                    break;
+
+                case 366:
+
+                    //Scorpion
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+                    break;
+
+                case 367:
+
+                    //Scorpion
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+                    break;
+
+                case 368:
+
+                    //Travelling Merchant
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+                    this.NoDamage = true;
+                    break;
+
+                case 369:
+
+                    //Angler
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+                    this.NoDamage = true;
+                    break;
+
+                case 370:
+
+                    //Duke Fishron
+                    this.Level = 85;
+                    this.ExptoGive = 2500;
+
+                    break;
+
+                case 371:
+
+                    //Detonating Bubble
+                    this.Level = 85;
+                    this.ExptoGive = 10;
+                    this.boss3 = true;
+                    this.projectile = true;
+                    break;
+
+                case 372:
+
+                    //Sharkron
+                    this.Level = 84;
+                    this.ExptoGive = 44;
+                    this.boss3 = true;
+                    break;
+
+                case 373:
+
+                    //Sharkron2
+                    this.Level = 84;
+                    this.ExptoGive = 44;
+                    this.boss3 = true;
+                    break;
+
+                case 374:
+
+                    //Truffle Worm
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+                    break;
+
+                case 375:
+
+                    //Truffle Worm Digger
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+                    break;
+
+                case 376:
+
+                    //Sleeping Angler
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+                    this.NoDamage = true;
+                    break;
+
+                case 377:
+
+                    //Grasshopper
+                    this.Level = 1;
+                    this.ExptoGive = 1;
+                    this.NoDamage = true;
+                    break;
+
+                case 378:
+                    //Chattering Teeth Bomb
+                    this.Level = 67;
+                    this.ExptoGive = 72;
+                    break;
+
+                case 379:
+                    //Lunatic Cultist Archer
+                    this.Level = 88;
+                    this.ExptoGive = 82;
+                    break;
+
+                case 380:
+                    //Lunatic Cultist Archer
+                    this.Level = 88;
+                    this.ExptoGive = 82;
+                    break;
+                case 381:
+                    //Ray Gunner
+                    this.Level = 84;
+                    this.ExptoGive = 80;
+                    break;
+
+                case 382:
+                    //Ray Gunner
+                    this.Level = 84;
+                    this.ExptoGive = 5;
+                    break;
+
+                case 383:
+                    //Martian Officer
+                    this.Level = 86;
+                    this.ExptoGive = 11;
+                    break;
+
+                case 384:
+                    //Bubble Shield
+                    this.Level = 86;
+                    this.ExptoGive = 0;
+                    break;
+
+                case 385:
+                    //Martian Grunty
+                    this.Level = 83;
+                    this.ExptoGive = 4;
+                    break;
+
+                case 386:
+                    //Martian Engineer
+                    this.Level = 85;
+                    this.ExptoGive = 7;
+                    break;
+
+                case 387:
+                    //Tesla Turret
+                    this.Level = 86;
+                    this.ExptoGive = 4;
+                    break;
+
+                case 388:
+                    //Martian Drone
+                    this.Level = 86;
+                    this.ExptoGive = 8;
+                    break;
+
+                case 389:
+                    //Gigazapper
+                    this.Level = 87;
+                    this.ExptoGive = 7;
+                    break;
+
+                case 390:
+                    //Scutlix Gunner
+                    this.Level = 86;
+                    this.ExptoGive = 7;
+                    break;
+
+                case 391:
+                    //Scutlix
+                    this.Level = 87;
+                    this.ExptoGive = 8;
+                    break;
+
+                case 392:
+                    //Martian Saucer
+                    this.Level = 88;
+                    this.ExptoGive = 0;
+                    break;
+
+                case 393:
+                    //Saucer Turret
+                    this.Level = 88;
+                    this.ExptoGive = 100;
+                    break;
+
+                case 394:
+                    //Saucer Cannon
+                    this.Level = 88;
+                    this.ExptoGive = 100;
+                    break;
+
+                case 395:
+                    //Saucer Core
+                    this.Level = 88;
+                    this.ExptoGive = 950;
+                    break;
+
+                case 396:
+                    //Moon Lord Head
+                    this.Level = 100;
+                    this.ExptoGive = 0;
+                    break;
+
+                case 397:
+                    //Moon Lord Hand
+                    this.Level = 100;
+                    this.ExptoGive = 0;
+                    break;
+
+                case 398:
+                    //Moon Lord Core
+                    this.Level = 100;
+                    this.ExptoGive = 4000;
+                    break;
+
+                case 399:
+                    //Martian Probe
+                    this.Level = 85;
+                    this.ExptoGive = 500;
+                    break;
+
+                case 400:
+                    //True Eye of Cthulhu
+                    this.Level = 99;
+                    break;
+
+                case 401:
+                    //Moon Leech Clot
+                    this.Level = 98;
+                    this.ExptoGive = 0;
+                    break;
+
+                case 402:
+                    //Milkyway Weaver
+                    this.Level = 95;
+                    this.ExptoGive = 47;
+                    break;
+
+                case 403:
+                    //Milkyway Weaver
+                    this.Level = 95;
+                    this.ExptoGive = 47;
+                    break;
+
+                case 404:
+                    //Milkyway Weaver
+                    this.Level = 95;
+                    this.ExptoGive = 47;
+                    break;
+
+                case 405:
+                    //Star Cell
+                    this.Level = 93;
+                    this.ExptoGive = 0;
+                    break;
+
+                case 406:
+                    //Star Cell
+                    this.Level = 92;
+                    this.ExptoGive = 22;
+                    break;
+
+                case 407:
+                    //Flow Invader
+                    this.Level = 94;
+                    this.ExptoGive = 38;
+                    break;
+
+                case 408:
+                    //Flow Invader Tiny
+                    this.Level = 93;
+                    this.ExptoGive = 28;
+                    break;
+
+                case 409:
+                    //Twinkle Popper
+                    this.Level = 94;
+                    this.ExptoGive = 35;
+                    break;
+
+                case 410:
+                    //Twinkle
+                    this.Level = 93;
+                    this.ExptoGive = 17;
+                    break;
+
+                case 411:
+                    //Stargazer
+                    this.Level = 92;
+                    this.ExptoGive = 33;
+                    break;
+
+                case 412:
+                    //Crawltipede
+                    this.Level = 96;
+                    this.ExptoGive = 48;
+                    break;
+
+                case 413:
+                    //Crawltipede
+                    this.Level = 96;
+                    this.ExptoGive = 48;
+                    break;
+
+                case 414:
+                    //Crawltipede
+                    this.Level = 96;
+                    this.ExptoGive = 48;
+                    break;
+
+                case 415:
+                    //Drakomire
+                    this.Level = 95;
+                    this.ExptoGive = 41;
+                    break;
+
+                case 416:
+                    //Drakomire Rider
+                    this.Level = 96;
+                    this.ExptoGive = 42;
+                    break;
+
+                case 417:
+                    //Sroller
+                    this.Level = 93;
+                    this.ExptoGive = 38;
+                    break;
+
+                case 418:
+                    //Corite
+                    this.Level = 94;
+                    this.ExptoGive = 39;
+                    break;
+
+                case 419:
+                    //Selenian
+                    this.Level = 95;
+                    this.ExptoGive = 40;
+                    break;
+
+                case 420:
+                    //Nebula Floater
+                    this.Level = 94;
+                    this.ExptoGive = 37;
+                    break;
+
+                case 421:
+                    //Brain Suckler
+                    this.Level = 93;
+                    this.ExptoGive = 33;
+                    break;
+
+                case 422:
+                    //Vortex Pillar
+                    this.Level = 98;
+                    this.ExptoGive = 1250;
+                    this.NoDamage = true;
+                    break;
+
+                case 423:
+                    //Evolution Beast
+                    this.Level = 95;
+                    this.ExptoGive = 36;
+                    break;
+
+                case 424:
+                    //Predictor
+                    this.Level = 94;
+                    this.ExptoGive = 38;
+                    break;
+
+                case 425:
+                    //Storm Diver
+                    this.Level = 94;
+                    this.ExptoGive = 37;
+                    break;
+
+                case 426:
+                    //Alien Queen
+                    this.Level = 95;
+                    this.ExptoGive = 41;
+                    break;
+
+                case 427:
+                    //Alien Hornet
+                    this.Level = 93;
+                    this.ExptoGive = 34;
+                    break;
+
+                case 428:
+                    //Alien Larva
+                    this.Level = 90;
+                    this.ExptoGive = 29;
+                    break;
+
+                case 429:
+                    //Vortexian
+                    this.Level = 92;
+                    this.ExptoGive = 37;
+                    break;
+
+                case 430:
+                    //Zombie
+                    this.Level = 5;
+                    this.ExptoGive = 39;
+                    break;
+
+                case 431:
+                    //Zombie Eskimo
+                    this.Level = 9;
+                    this.ExptoGive = 45;
+                    break;
+
+                case 432:
+                    //Pincushion Zombie
+                    this.Level = 6;
+                    this.ExptoGive = 47;
+                    break;
+
+                case 433:
+                    //Slimed Zombie
+                    this.Level = 5;
+                    this.ExptoGive = 47;
+                    break;
+
+                case 434:
+                    //Swamp Zombie
+                    this.Level = 5;
+                    this.ExptoGive = 46;
+                    break;
+
+                case 435:
+                    //Twiggy Zombie
+                    this.Level = 5;
+                    this.ExptoGive = 46;
+                    break;
+
+                case 436:
+                    //Female Zombie
+                    this.Level = 5;
+                    this.ExptoGive = 47;
+                    break;
+
+                case 437:
+                    //Mysterious Tablet
+                    this.Level = 1;
+                    this.ExptoGive = 0;
+                    break;
+
+                case 438:
+                    //Lunatic Devote
+                    this.Level = 87;
+                    this.ExptoGive = 61;
+                    break;
+
+                case 439:
+                    //Lunatic Cultist
+                    this.Level = 90;
+                    this.ExptoGive = 1750;
+                    break;
+
+                case 440:
+                    //Ancient Cultist (Clone)
+                    this.Level = 90;
+                    this.ExptoGive = 100;
+                    break;
+
+                case 441:
+                    //Tax Collector
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+                    break;
+
+                case 442:
+                    //Gold Bird
+                    this.Level = 1;
+                    this.ExptoGive = 150;
+                    break;
+
+                case 443:
+                    //Gold Bunny
+                    this.Level = 1;
+                    this.ExptoGive = 150;
+                    break;
+
+                case 444:
+                    //Gold Butterfly
+                    this.Level = 1;
+                    this.ExptoGive = 150;
+                    break;
+
+                case 445:
+                    //Gold Frog
+                    this.Level = 1;
+                    this.ExptoGive = 150;
+                    break;
+
+                case 446:
+                    //Gold Grasshopper
+                    this.Level = 1;
+                    this.ExptoGive = 150;
+                    break;
+
+                case 447:
+                    //Gold Mouse
+                    this.Level = 1;
+                    this.ExptoGive = 150;
+                    break;
+
+                case 448:
+                    //Gold Worm
+                    this.Level = 1;
+                    this.ExptoGive = 150;
+                    break;
+
+                case 449:
+                    //"Skeleton";
+                    this.Level = 10;
+                    this.ExptoGive = 49;
+                    break;
+
+                case 450:
+                    //"Headache Skeleton";
+                    this.Level = 11;
+                    this.ExptoGive = 53;
+                    break;
+                case 451:
+                    //"Misassembled Skeleton";
+                    this.Level = 11;
+                    this.ExptoGive = 54;
+                    break;
+
+                case 452:
+                    //"Pantless Skeleton";
+                    this.Level = 10;
+                    this.ExptoGive = 50;
+                    break;
+
+                case 453:
+                    //"Skeleton Merchant";
+                    this.Level = 40;
+                    this.ExptoGive = 0;
+                    break;
+
+                case 454:
+                    //"Phantasm Dragon (Head)";
+                    this.Level = 91;
+                    this.ExptoGive = 130;
+                    break;
+
+                case 455:
+                    //"Phantasm Dragon (Body1)";
+                    this.Level = 91;
+                    this.ExptoGive = 130;
+                    break;
+
+                case 456:
+                    //"Phantasm Dragon (Body2)";
+                    this.Level = 91;
+                    this.ExptoGive = 130;
+                    break;
+
+                case 457:
+                    //"Phantasm Dragon (Body3)";
+                    this.Level = 91;
+                    this.ExptoGive = 130;
+                    break;
+
+                case 458:
+                    //"Phantasm Dragon (Body4)";
+                    this.Level = 91;
+                    this.ExptoGive = 130;
+                    break;
+
+                case 459:
+                    //"Phantasm Dragon (Tail)";
+                    this.Level = 91;
+                    this.ExptoGive = 130;
+                    break;
+
+                case 460:
+                    //"Butcher";
+                    this.Level = 76;
+                    this.ExptoGive = 20;
+                    break;
+
+                case 461:
+                    //"Creature from the Deep";
+                    this.Level = 74;
+                    this.ExptoGive = 20;
+                    break;
+
+                case 462:
+                    //"Fritz";
+                    this.Level = 71;
+                    this.ExptoGive = 16;
+                    break;
+
+                case 463:
+                    //"Nailhead";
+                    this.Level = 77;
+                    this.ExptoGive = 66;
+                    break;
+
+                case 464:
+                    //"Crimtane Bunny";
+                    this.Level = 16;
+                    this.ExptoGive = 50;
+                    break;
+
+                case 465:
+                    //"Crimtane Goldfish";
+                    this.Level = 16;
+                    this.ExptoGive = 50;
+                    break;
+
+                case 466:
+                    //"Psycho";
+                    this.Level = 74;
+                    this.ExptoGive = 41;
+                    break;
+
+                case 467:
+                    //"Deadly Sphere";
+                    this.Level = 73;
+                    this.ExptoGive = 19;
+                    break;
+
+                case 468:
+                    //"Dr. Man Fly";
+                    this.Level = 76;
+                    this.ExptoGive = 36;
+                    break;
+
+                case 469:
+                    //"The Possessed";
+                    this.Level = 75;
+                    this.ExptoGive = 24;
+                    break;
+
+                case 470:
+                    //"Vicious Penguin";
+                    this.Level = 16;
+                    this.ExptoGive = 50;
+                    break;
+
+                case 471:
+                    //"Goblin Summoner";
+                    this.Level = 62;
+                    this.ExptoGive = 666;
+                    break;
+
+                case 472:
+                    //"Shadowflame Apparition";
+                    this.Level = 62;
+                    this.ExptoGive = 66;
+                    break;
+
+                case 473:
+                    //"Corrupt Mimic";
+                    this.Level = 75;
+                    this.ExptoGive = 175;
+                    break;
+
+                case 474:
+                    //"Crimson Mimic";
+                    this.Level = 75;
+                    this.ExptoGive = 175;
+                    break;
+
+                case 475:
+                    //"Hallowed Mimic";
+                    this.Level = 75;
+                    this.ExptoGive = 175;
+                    break;
+
+                case 476:
+                    //"Jungle Mimic";
+                    this.Level = 75;
+                    this.ExptoGive = 175;
+                    break;
+
+                case 477:
+                    //"Mothron";
+                    this.Level = 77;
+                    this.ExptoGive = 400;
+                    break;
+
+                case 478:
+                    //"Mothron Egg";
+                    this.Level = 74;
+                    this.ExptoGive = 27;
+                    break;
+
+                case 479:
+                    //"Baby Mothron";
+                    this.Level = 75;
+                    this.ExptoGive = 28;
+                    break;
+
+                case 480:
+                    //"Medusa";
+                    this.Level = 20;
+                    this.ExptoGive = 58;
+                    break;
+
+                case 481:
+                    //"Hoplite";
+                    this.Level = 19;
+                    this.ExptoGive = 55;
+                    break;
+
+                case 482:
+                    //"Granite Golem";
+                    this.Level = 20;
+                    this.ExptoGive = 59;
+                    break;
+
+                case 483:
+                    //"Granite Elemental";
+                    this.Level = 19;
+                    this.ExptoGive = 54;
+                    break;
+
+                case 484:
+                    //"Enchanted Nightcrawler";
+                    this.Level = 1;
+                    this.ExptoGive = 0;
+                    this.NoDamage = true;
+                    break;
+
+                case 485:
+                    //"Grubby";
+                    this.Level = 1;
+                    this.ExptoGive = 0;
+                    this.NoDamage = true;
+                    break;
+
+                case 486:
+                    //"Sluggy";
+                    this.Level = 1;
+                    this.ExptoGive = 0;
+                    this.NoDamage = true;
+                    break;
+
+                case 487:
+                    //"Buggy";
+                    this.Level = 1;
+                    this.ExptoGive = 0;
+                    this.NoDamage = true;
+                    break;
+
+                case 488:
+                    //"Target Dummy";
+                    this.Level = 1;
+                    this.ExptoGive = 0;
+                    this.NoDamage = true;
+                    break;
+
+                case 489:
+                    //"Blood Zombie";
+                    this.Level = 8;
+                    this.ExptoGive = 33;
+                    break;
+
+                case 490:
+                    //"Drippler";
+                    this.Level = 8;
+                    this.ExptoGive = 35;
+                    break;
+
+                case 491:
+                    //"Flying Dutchman";
+                    this.Level = 76;
+                    this.ExptoGive = 500;
+                    break;
+
+                case 492:
+                    //"Dutchman Cannon";
+                    this.Level = 76;
+                    this.ExptoGive = 300;
+                    break;
+
+                case 493:
+                    //"Stardust Pillar";
+                    this.Level = 98;
+                    this.ExptoGive = 1250;
+                    this.NoDamage = true;
+                    break;
+
+                case 494:
+                    //"Crawdad";
+                    this.Level = 14;
+                    this.ExptoGive = 44;
+                    break;
+
+                case 495:
+                    //"Crawdad";
+                    this.Level = 14;
+                    this.ExptoGive = 44;
+                    break;
+
+                case 496:
+                    //"Giant Shelly";
+                    this.Level = 15;
+                    this.ExptoGive = 46;
+                    break;
+
+                case 497:
+                    //"Giant Shelly";
+                    this.Level = 15;
+                    this.ExptoGive = 46;
+                    break;
+
+                case 498:
+                    //"Salamander";
+                    this.Level = 14;
+                    this.ExptoGive = 43;
+                    break;
+
+                case 499:
+                    //"Salamander";
+                    this.Level = 14;
+                    this.ExptoGive = 43;
+                    break;
+
+                case 500:
+                    //"Salamander";
+                    this.Level = 14;
+                    this.ExptoGive = 43;
+                    break;
+
+                case 501:
+                    //"Salamander";
+                    this.Level = 14;
+                    this.ExptoGive = 43;
+                    break;
+
+                case 502:
+                    //"Salamander";
+                    this.Level = 14;
+                    this.ExptoGive = 43;
+                    break;
+
+                case 503:
+                    //"Salamander";
+                    this.Level = 14;
+                    this.ExptoGive = 43;
+                    break;
+
+                case 504:
+                    //"Salamander";
+                    this.Level = 14;
+                    this.ExptoGive = 43;
+                    break;
+
+                case 505:
+                    //"Salamander";
+                    this.Level = 14;
+                    this.ExptoGive = 43;
+                    break;
+
+                case 506:
+                    //"Salamander";
+                    this.Level = 14;
+                    this.ExptoGive = 43;
+                    break;
+
+                case 507:
+                    //"Nebula Pillar";
+                    this.Level = 98;
+                    this.ExptoGive = 1250;
+                    this.NoDamage = true;
+                    break;
+
+                case 508:
+                    //"Antlion Charger";
+                    this.Level = 11;
+                    this.ExptoGive = 40;
+                    break;
+
+                case 509:
+                    //"Antlion Swarmer";
+                    this.Level = 12;
+                    this.ExptoGive = 41;
+                    break;
+
+                case 510:
+                    //"Dune Splicer (Head)";
+                    this.Level = 52;
+                    this.ExptoGive = 65;
+                    break;
+
+                case 511:
+                    //"Dune Splicer (Body)";
+                    this.Level = 52;
+                    this.ExptoGive = 65;
+                    break;
+
+                case 512:
+                    //"Dune Splicer (Tail)";
+                    this.Level = 52;
+                    this.ExptoGive = 65;
+                    break;
+
+                case 513:
+                    //"Tomb Crawler (Head)";
+                    this.Level = 13;
+                    this.ExptoGive = 47;
+                    break;
+
+                case 514:
+                    //"Tomb Crawler (Body)";
+                    this.Level = 13;
+                    this.ExptoGive = 47;
+                    break;
+
+                case 515:
+                    //"Tomb Crawler (Tail)";
+                    this.Level = 13;
+                    this.ExptoGive = 47;
+                    break;
+
+                case 516:
+                    //"Solar Flare";
+                    this.Level = 97;
+                    this.ExptoGive = 5;
+                    this.projectile = true;
+                    break;
+
+                case 517:
+                    //"Solar Pillar";
+                    this.Level = 98;
+                    this.ExptoGive = 1250;
+                    this.NoDamage = true;
+                    break;
+
+                case 518:
+                    //"Drakanian";
+                    this.Level = 96;
+                    this.ExptoGive = 44;
+                    break;
+
+                case 519:
+                    //"Solar Fragment";
+                    this.Level = 98;
+                    this.ExptoGive = 0;
+                    break;
+
+                case 520:
+                    //"Martian Walker";
+                    this.Level = 87;
+                    this.ExptoGive = 17;
+                    break;
+
+                case 521:
+                    //"Ancient Vision";
+                    this.Level = 91;
+                    this.ExptoGive = 250;
+                    break;
+
+                case 522:
+                    //"Ancient Light";
+                    this.Level = 90;
+                    this.ExptoGive = 5;
+                    this.projectile = true;
+                    break;
+
+                case 523:
+                    //"Ancient Doom";
+                    this.Level = 90;
+                    this.ExptoGive = 69;
+                    break;
+
+                case 524:
+                    //"Ghoul";
+                    this.Level = 52;
+                    this.ExptoGive = 57;
+                    break;
+
+                case 525:
+                    //"Vile Ghoul";
+                    this.Level = 57;
+                    this.ExptoGive = 59;
+                    break;
+
+                case 526:
+                    //"Tainted Ghoul";
+                    this.Level = 58;
+                    this.ExptoGive = 59;
+                    break;
+
+                case 527:
+                    //"Dreamer Ghoul";
+                    this.Level = 59;
+                    this.ExptoGive = 60;
+                    break;
+
+                case 528:
+                    //"Lamia";
+                    this.Level = 54;
+                    this.ExptoGive = 57;
+                    break;
+
+                case 529:
+                    //"Lamia";
+                    this.Level = 60;
+                    this.ExptoGive = 63;
+                    break;
+
+                case 530:
+                    //"Sand Poacher";
+                    this.Level = 53;
+                    this.ExptoGive = 60;
+                    break;
+
+                case 531:
+                    //"Sand Poacher";
+                    this.Level = 53;
+                    this.ExptoGive = 60;
+                    break;
+
+                case 532:
+                    //"Basilisk";
+                    this.Level = 55;
+                    this.ExptoGive = 61;
+                    break;
+
+                case 533:
+                    //"Desert Spirit";
+                    this.Level = 62;
+                    this.ExptoGive = 64;
+                    break;
+
+                case 534:
+                    //"Tortured Soul";
+                    this.Level = 72;
+                    this.ExptoGive = 77;
+                    break;
+
+                case 535:
+                    //"Spiked Slime";
+                    this.Level = 28;
+                    this.ExptoGive = 29;
+                    break;
+
+                case 536:
+                    //"The Bride";
+                    this.Level = 14;
+                    this.ExptoGive = 200;
+                    break;
+
+                case 537:
+                    //"Sand Slime";
+                    this.Level = 7;
+                    this.ExptoGive = 36;
+                    break;
+
+                case 538:
+                    //"Red Squirrel";
+                    this.Level = 1;
+                    this.ExptoGive = 0;
+                    this.NoDamage = true;
+                    break;
+
+                case 539:
+                    //"Gold Squirrel";
+                    this.Level = 1;
+                    this.ExptoGive = 150;
+                    this.NoDamage = true;
+                    break;
+
+                default:
+                    this.Level = 1;
+                    this.ExptoGive = 0;
+                    break;
+            }
+            this.SetStats();
+        }
+        private void scaleLevel()
+        {
+            if (!Main.expertMode)
+            {
+                return;
+            }
+            if ((this.type < 0 || !NPCID.Sets.NeedsExpertScaling[this.type]) && (this.defaultHP <= 5 || this.damage == 0 || this.friendly || this.townNPC))
+            {
+                return;
+            }
+            if (this.type != 5 && (this.type < 13 || this.type > 15) && this.type != 267 && (this.type < 113 || this.type > 119) && Main.hardMode && !this.boss && this.defaultHP2 < 1000)
+            {
+                int neglevel = this.Level;
+                byte max = 40;
+                if (NPC.downedPlantBoss)
+                {
+                    max = 50;
+                }
+                if (neglevel > max)
+                    neglevel = max;
+                this.Level += (byte)(max - neglevel);
+            }
+            this.SetStats();
+        }
+        private void SetStats()
+        {
+            float baseStat = 85f;
+            float baseStr = 85f;
+            if (this.Level > 80)
+            {
+                baseStat *= 1f + (float)((float)(this.Level - 80) / 100f);
+            }
+            if (this.Level > 80)
+            {
+                baseStr *= 1f + (float)((float)(this.Level - 80) / 100f);
+            }
+            this.baseAtk = (short)(5 + (short)(baseStr * ((float)(this.Level / 100f))));
+            this.baseVit = (short)(4 + (short)(baseStat * ((float)(this.Level / 100f))));
+            lifePoint = 18;
+            for (byte lv = 0; lv < this.Level; lv++)
+            {
+                if (lv <= 9)
+                {
+                    lifePoint += 1;
+                }
+                else if (lv > 9 && lv <= 18)
+                {
+                    lifePoint += 2;
+                }
+                else if (lv > 18 && lv <= 20)
+                {
+                    lifePoint += 3;
+                }
+                else if (lv > 20 && lv <= 30)
+                {
+                    lifePoint += 2;
+                }
+                else if (lv > 30 && lv <= 60)
+                {
+                    lifePoint += 1;
+                }
+                else if (lv > 60 && lv <= 74)
+                {
+                    lifePoint += 2;
+                }
+                else if (lv > 74 && lv <= 78)
+                {
+                    lifePoint += 3;
+                }
+                else if (lv > 78 && lv <= 85)
+                {
+                    lifePoint += 4;
+                }
+                else if (lv > 85 && lv <= 95)
+                {
+                    lifePoint += 5;
+                }
+                else if (lv > 95 && lv <= 100)
+                {
+                    lifePoint += 4;
+                }
+                else if (lv > 100 && lv <= 125)
+                {
+                    lifePoint += 3;
+                }
+            }
+            int lf = (int)(this.defaultHP * (1f + (this.Level / 750f)));
+            this.lifeMax = (int)(lifePoint * ((float)lf / 20f));
+            float BaseDamage = 1f;
+            BaseDamage += ((0.07f + ((this.baseAtk + (this.Level / 4) + (int)(Math.Pow(Math.Floor((double)this.Level / 7), 1.5))) * 0.0003f)) * (float)(this.baseAtk + (this.Level / 4) + (int)(Math.Pow(Math.Floor((double)this.Level / 7), 1.5))));
+            this.damage = (int)((float)(this.defDamage) * (BaseDamage * (1f / (1f + (float)this.defDamage / 125f))) + 5E-06f);
+            this.defense = (int)(this.defDefense * (1 + ((baseVit + (this.Level / 6)) * (0.07f + ((baseVit + (this.Level / 6)) * 0.0002f)))));
+            if (this.lifeMax < 1)
+                this.lifeMax = 1;
+            Main.playerCount = -1;
+            float boosthp = 0f;
+            float boostdef = 0f;
+            float boostatk = 0f;
+            if (!Main.expertMode && !this.townNPC && this.Level > 1)
+            {
+            for (int i = 0; i < 255; i++)
+            {
+                if (Main.player[i].active)
+                {
+                    Main.playerCount++;
+                }
+            }
+            if (Main.playerCount < 0)
+                Main.playerCount = 0;
+                if (Main.netMode == 2 || Main.netMode == 1)
+                {
+                    if (Main.playerCount >= 1)
+                    {
+                        boosthp += 0.90f;
+                        boostdef += 0.30f;
+                        boostatk += 0.10f;
+                    }
+                    if (Main.playerCount >= 2)
+                    {
+                        boosthp += 0.85f;
+                        boostdef += 0.28f;
+                        boostatk += 0.09f;
+                    }
+                    if (Main.playerCount >= 3)
+                    {
+                        boosthp += 0.81f;
+                        boostdef += 0.27f;
+                        boostatk += 0.09f;
+                    }
+                    if (Main.playerCount >= 4)
+                    {
+                        boosthp += 0.78f;
+                        boostdef += 0.26f;
+                        boostatk += 0.08f;
+                    }
+                    if (Main.playerCount >= 5)
+                    {
+                        boosthp += 0.75f;
+                        boostdef += 0.25f;
+                        boostatk += 0.07f;
+                    }
+                    if (Main.playerCount >= 6)
+                    {
+                        boosthp += 0.72f;
+                        boostdef += 0.24f;
+                        boostatk += 0.07f;
+                    }
+                    if (Main.playerCount >= 7)
+                    {
+                        boosthp += 0.70f;
+                        boostdef += 0.23f;
+                        boostatk += 0.07f;
+                    }
+                    if (Main.playerCount >= 8)
+                    {
+                        boosthp += 0.68f;
+                        boostdef += 0.22f;
+                        boostatk += 0.06f;
+                    }
+                    if (Main.playerCount >= 9)
+                    {
+                        boosthp += 0.66f;
+                        boostdef += 0.21f;
+                        boostatk += 0.06f;
+                    }
+                    if (Main.playerCount >= 10)
+                    {
+                        for (int i = 0; i <= (Main.playerCount - 10); i++)
+                        {
+                            boosthp += 0.65f;
+                            boostdef += 0.20f;
+                            boostatk += 0.05f;
+                        }
+                    }
+                    this.lifeMax += (int)Math.Round(this.lifeMax * (boosthp / ((this.boss || this.boss2) ? 1f : 5f)));
+                    this.defense += (int)Math.Round(this.defense * (boostdef / ((this.boss || this.boss2) ? 1f : 5f)));
+                    this.damage += (int)Math.Round(this.damage * (boostatk / ((this.boss || this.boss2) ? 1f : 5f)));
+                    if (this.lifeMax < 1)
+                        this.lifeMax = 1;
+                }
+            }
+            float XP = ((float)this.ExptoGive / 160f);
+            if (XP > 0.75f)
+                XP = 0.75f;
+            if (this.boss)
+            {
+                XP = 0;
+            }
+            this.Exp = (int)(Math.Round(((float)this.ExptoGive * (0.045f + ((float)this.Level * 0.040f) * ((float)this.Level * 0.03f))) * (1.2f - XP)));
+            byte xp = this.Level;
+            if (xp > 10)
+                xp = 10;
+            this.Exp += xp;
+            if (this.projectile)
+            {
+                this.Exp = (int)(1f + Math.Round((float)this.ExptoGive * (0.045f + ((float)this.Level * 0.033f) * ((float)this.Level * 0.03f))));
+                this.lifeMax = 1;
+            }
+            this.life = this.lifeMax;
+            if (this.NoDamage)
+            {
+                this.Exp = (int)(1f + Math.Round((float)this.ExptoGive * (0.045f + ((float)this.Level * 0.033f) * ((float)this.Level * 0.03f))));
+                this.damage = 0;
+                this.defDamage = 0;
+            }
+            if (this.boss4)
+            {
+                this.lifeMax = this.defaultHP;
+            }
+        }
+        public void AI()
 		{
 			if (this.aiStyle == 0)
 			{
@@ -19141,8 +23676,9 @@ namespace Terraria
 						num378 += 0.15f;
 						this.defense += 8;
 					}
-				}
-				if (this.type == 142 && Main.netMode != 1 && !Main.xMas)
+                }
+                this.defense = this.CalculateDefense(this.defense, this.Level);
+                if (this.type == 142 && Main.netMode != 1 && !Main.xMas)
 				{
 					this.StrikeNPCNoInteraction(9999, 0f, 0, false, false, false);
 					if (Main.netMode == 2)
@@ -51310,8 +55846,56 @@ namespace Terraria
 					this.dontTakeDamage = true;
 					this.netUpdate = true;
 					return;
-				}
-				NPC.noSpawnCycle = true;
+                }
+                int baseExp = this.Exp;
+                for (int i = 0; i < 255; i++)
+                {
+                    if (Main.netMode == 2)
+                    {
+                        this.Exp = baseExp;
+                        if (this.boss || this.boss2)
+                        {
+                            double b1 = 1d;
+                            b1 = 1d + (float)(this.Level - Main.player[i].Level) / 10d;
+                            if (b1 > 1.75d)
+                                b1 = 1.75d;
+                            if (b1 < 0.1d)
+                                b1 = 0.1d;
+                            this.Exp = (int)(Math.Round((double)this.Exp * b1));
+                        }
+                        else
+                        {
+                            double b1 = 1d;
+                            b1 = 1d + (double)(this.Level - Main.player[i].Level) / 30d;
+                            if (b1 > 1.75d)
+                                b1 = 1.75d;
+                            if (b1 < 0.1d)
+                                b1 = 0.1d;
+                            this.Exp = (int)(Math.Round((double)this.Exp * b1));
+                        }
+                        if (this.Exp < 1)
+                        {
+                            this.Exp = 1;
+                        }
+                        if (this.Dead == 0 && this.tapped[i] && this.ExptoGive > 0)
+                        {
+                            if (this.tag[i] >= this.defaultHP * 0.25f)
+                            {
+                                NetMessage.SendData(108, -1, -1, "", i, (float)this.Exp, 0f, 0f, 0);
+                                if (this.boss)
+                                    NetMessage.SendData(25, -1, -1, Main.player[i].name + " helped slay " + this.displayName + ", dealt " + this.tag[i] + " damage (" + String.Format("{0:f2}", (double)(this.tag[i] / (double)this.lifeMax) * 100d) + "%) and gained " + ((double)this.Exp * (1d - (double)Main.player[i].EXPRate)) + " EXP.", 255, 25f, 127f, 255f, 0);
+                            }
+                            else if (this.tag[i] > 0 && this.tapped[i] && this.ExptoGive > 0)
+                            {
+                                if (this.boss)
+                                    NetMessage.SendData(25, -1, -1, Main.player[i].name + " helped slay " + this.displayName + ", dealt " + this.tag[i] + " damage (" + String.Format("{0:f2}", (double)(this.tag[i] / (double)this.lifeMax) * 100d) + "%) and gained " + ((double)this.Exp * (1d - (double)Main.player[i].EXPRate)) + " EXP.", 255, 25f, 127f, 255f, 0);
+                                NetMessage.SendData(108, -1, -1, "", i, (float)((int)Math.Ceiling((double)this.Exp * (((double)this.tag[i] / (double)this.defaultHP)))), 0f, 0f, 0);
+                            }
+                        }
+                    }
+                    this.tag[i] = 0;
+                }
+                NPC.noSpawnCycle = true;
 				if (this.townNPC && this.type != 37 && this.type != 453)
 				{
 					string name = this.name;
@@ -60104,22 +64688,22 @@ namespace Terraria
 			}
 			if (armorPenetration > this.defense && this.defense >= 0)
 			{
-				return this.defense / 2;
+				return this.defense;
 			}
-			return armorPenetration / 2;
+			return armorPenetration;
 		}
-		public double StrikeNPCNoInteraction(int Damage, float knockBack, int hitDirection, bool crit = false, bool noEffect = false, bool fromNet = false)
+		public double StrikeNPCNoInteraction(int Damage, float knockBack, int hitDirection, bool crit = false, bool noEffect = false, bool fromNet = false, int PlayerStrike = 256, bool Tap = false)
 		{
 			if (Main.netMode == 0)
 			{
 				NPC.ignorePlayerInteractions++;
 			}
-			return this.StrikeNPC(Damage, knockBack, hitDirection, crit, noEffect, fromNet);
+			return this.StrikeNPC(Damage, knockBack, hitDirection, crit, noEffect, fromNet, null, PlayerStrike, Tap);
 		}
-		public double StrikeNPC(int Damage, float knockBack, int hitDirection, bool crit = false, bool noEffect = false, bool fromNet = false, Player player = null)
+		public double StrikeNPC(int Damage, float knockBack, int hitDirection, bool crit = false, bool noEffect = false, bool fromNet = false, Player player = null, int PlayerStrike = 256, bool Tap = false)
 		{
 
-			bool handled = ServerApi.Hooks.InvokeNpcStrike(this, ref Damage, ref knockBack, ref hitDirection, ref crit, ref noEffect, ref fromNet, player);
+            bool handled = ServerApi.Hooks.InvokeNpcStrike(this, ref Damage, ref knockBack, ref hitDirection, ref crit, ref noEffect, ref fromNet, player);
 			if (handled)
 				return 0.0;
 
@@ -60132,8 +64716,15 @@ namespace Terraria
 			if (!this.active || this.life <= 0)
 			{
 				return 0.0;
-			}
-			double num = (double)Damage;
+            }
+            if (PlayerStrike <= 255 && Main.netMode == 2)
+            {
+                if (Tap)
+                {
+                    this.tapped[PlayerStrike] = true;
+                }
+            }
+            double num = (double)Damage;
 			int num2 = this.defense;
 			if (this.ichor)
 			{
@@ -60258,11 +64849,27 @@ namespace Terraria
 						Main.npc[this.realLife].life -= (int)num;
 						this.life = Main.npc[this.realLife].life;
 						this.lifeMax = Main.npc[this.realLife].lifeMax;
-					}
+                        if (Main.npc[this.realLife].life < 0)
+                        {
+                            Main.npc[this.realLife].life = 0;
+                        }
+                        if (PlayerStrike < 255 && this.tapped[PlayerStrike])
+                        {
+                            Main.npc[this.realLife].tag[PlayerStrike] += (int)num;
+                        }
+                    }
 					else
 					{
 						this.life -= (int)num;
-					}
+                        if (this.life < 0)
+                        {
+                            this.life = 0;
+                        }
+                        if (PlayerStrike < 255 && this.tapped[PlayerStrike])
+                        {
+                            this.tag[PlayerStrike] += (int)num;
+                        }
+                    }
 				}
 				if (knockBack > 0f && this.knockBackResist > 0f)
 				{

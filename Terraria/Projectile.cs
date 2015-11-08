@@ -8455,13 +8455,19 @@ namespace Terraria
 										num10 += Main.npc[k].checkArmorPenetration(Main.player[this.owner].armorPenetration);
 									}
 									int num26;
-									if (flag4)
+                                    int own = this.owner;
+                                    if (this.type == 108 || this.type == 98 || this.type == 184 || this.type == 187 || this.type == 185 || this.type == 186)
+                                        own = 256;
+                                    bool tap = true;
+                                    if (this.type == 92 || (this.type >= 167 && this.type <= 170) || (this.type >= 191 && this.type <= 195) || this.type == 221 || this.type == 266 || this.type == 308 || this.type == 309 || this.type == 317 || this.type == 373 || this.type == 374 || this.type == 376 || this.type == 375 || this.type == 377 || this.type == 378 || this.type == 379 || this.type == 384 || this.type == 386 || this.type == 387 || this.type == 388 || this.type == 389 || this.type == 390 || this.type == 391 || this.type == 392 || this.type == 393 || this.type == 394 || this.type == 395 || this.type == 407)
+                                        tap = false;
+                                    if (flag4)
 									{
-										num26 = (int)Main.npc[k].StrikeNPC(num10, this.knockBack, this.direction, flag5, false, false, Main.player[this.owner]);
+										num26 = (int)Main.npc[k].StrikeNPC(num10, this.knockBack, this.direction, flag5, false, false, Main.player[this.owner], own, tap);
 									}
 									else
 									{
-										num26 = (int)Main.npc[k].StrikeNPCNoInteraction(num10, this.knockBack, this.direction, flag5, false, false);
+										num26 = (int)Main.npc[k].StrikeNPCNoInteraction(num10, this.knockBack, this.direction, flag5, false, false, own, tap);
 									}
 									if (flag4 && Main.player[this.owner].accDreamCatcher)
 									{
@@ -8557,11 +8563,11 @@ namespace Terraria
 									{
 										if (flag5)
 										{
-											NetMessage.SendData(28, -1, -1, "", k, (float)num10, this.knockBack, (float)this.direction, 1, 0, 0);
+											NetMessage.SendData(28, -1, -1, "", k, (float)num10, this.knockBack, (float)this.direction, 1, own, 0, tap);
 										}
 										else
 										{
-											NetMessage.SendData(28, -1, -1, "", k, (float)num10, this.knockBack, (float)this.direction, 0, 0, 0);
+											NetMessage.SendData(28, -1, -1, "", k, (float)num10, this.knockBack, (float)this.direction, 0, own, 0, tap);
 										}
 									}
 									if (this.type >= 390 && this.type <= 392)

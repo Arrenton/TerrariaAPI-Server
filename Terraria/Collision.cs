@@ -1226,16 +1226,16 @@ namespace Terraria
 								if (position.X + (float)(Width / 2) < vector2.X + 8f)
 								{
 									num4 = -1;
-								}
-								num1 = 10;
-								if (num2 == 69)
-								{
-									num1 = 17;
-								}
+                                }
+                                num1 = 35;
+                                if (num2 == 69)
+                                {
+                                    num1 = 63;
+                                }
 								else if (num2 == 80)
-								{
-									num1 = 6;
-								}
+                                {
+                                    num1 = 19;
+                                }
 								if (num2 == 32 || num2 == 69 || num2 == 352)
 								{
 									WorldGen.KillTile(i, j, false, false, false);
@@ -1258,17 +1258,17 @@ namespace Terraria
 								}
 								if (!fireImmune && (num2 == 37 || num2 == 58 || num2 == 76))
 								{
-									num1 = 20;
-								}
-								if (num2 == 48)
-								{
-									num1 = 40;
-								}
-								if (num2 == 232)
-								{
-									num1 = 60;
-								}
-								return new Vector2((float)num5, (float)num1);
+                                    num1 = 50;
+                                }
+                                if (num2 == 48)
+                                {
+                                    num1 = 100;
+                                }
+                                if (num2 == 232)
+                                {
+                                    num1 = 400;
+                                }
+                                return new Vector2((float)num5, (float)num1);
 							}
 						}
 						else if (position.X + (float)Width - 2f >= vector2.X && position.X + 2f <= vector2.X + 16f && position.Y + (float)Height - 2f >= vector2.Y && position.Y + 2f <= vector2.Y + (float)num3)
@@ -1277,9 +1277,9 @@ namespace Terraria
 							if (position.X + (float)(Width / 2) < vector2.X + 8f)
 							{
 								num6 = -1;
-							}
-							num1 = 15;
-							return new Vector2((float)num6, (float)num1);
+                            }
+                            num1 = 50;
+                            return new Vector2((float)num6, (float)num1);
 						}
 					}
 				}

@@ -1715,7 +1715,7 @@ namespace Terraria
 			Main.damageMultiplier = 1f;
 			Main.ServerSideCharacter = false;
 			Main.ContentLoaded = false;
-			Main.maxMsg = 106;
+			Main.maxMsg = 110;
 			Main.GlobalTime = 0f;
 			Main.GlobalTimerPaused = false;
 			Main._tileFrameSeed = (ulong)Guid.NewGuid().GetHashCode();
@@ -2631,15 +2631,15 @@ namespace Terraria
             double damage = (Math.Pow(Damage + 10, 2) - Defense) / (60f + (Defense * (2f * (1f + ((float)Defense / 900f)))));
             if (Main.expertMode)
 			{
-                damage = (Math.Pow(Damage + 10, 2) - Defense) / (60f + (Defense * (3f * (1f + ((float)Defense / 900f)))));
+                damage = (Math.Pow(Damage + 10, 2) - Defense) / (60f + (Defense * (2.5f * (1f + ((float)Defense / 900f)))));
             }
-			if (damage < 1)
+			if (damage < 1.0)
 			{
-				damage = 1;
+				damage = 1.0;
             }
-            if (damage > 99999)
+            if (damage > 99999.0)
             {
-                damage = 99999;
+                damage = 99999.0;
             }
             return damage;
 		}

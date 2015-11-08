@@ -106,5 +106,9 @@ public enum PacketTypes
 	UpdateShieldStrengths = 101,
 	NebulaLevelUp = 102,
 	MoonLordCountdown = 103,
-	NpcShopItem = 104
+	NpcShopItem = 104,
+    LevelUP = 105,
+    Nothing = 106,
+    UpdateStats = 107,
+    SendEXP = 108
 }

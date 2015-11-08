@@ -138,7 +138,7 @@ namespace Terraria
 					{
 						return;
 					}
-					if (this.reader.ReadString() != string.Concat("Terraria", Main.curRelease))
+					if (this.reader.ReadString() != string.Concat("Terraria", Main.curRelease + "0001"))
 					{
 						NetMessage.SendData(2, this.whoAmI, -1, Lang.mp[4], 0, 0f, 0f, 0f, 0, 0, 0);
 						return;
@@ -1585,7 +1585,9 @@ namespace Terraria
 					float single5 = this.reader.ReadSingle();
 					int num73 = this.reader.ReadByte() - 1;
 					byte num74 = this.reader.ReadByte();
-					if (Main.netMode == 2)
+                        byte Strike = this.reader.ReadByte();
+                        bool Tap = Convert.ToBoolean(this.reader.ReadByte());
+                        if (Main.netMode == 2)
 					{
 						Main.npc[num71].PlayerInteraction(this.whoAmI);
 					}
@@ -1597,13 +1599,13 @@ namespace Terraria
 					}
 					else
 					{
-						Main.npc[num71].StrikeNPC(num72, single5, num73, num74 == 1, false, true, Main.player[this.whoAmI]);
+						Main.npc[num71].StrikeNPC(num72, single5, num73, num74 == 1, false, true, Main.player[this.whoAmI], Strike, Tap);
 					}
 					if (Main.netMode != 2)
 					{
 						return;
 					}
-					NetMessage.SendData(28, -1, this.whoAmI, "", num71, (float)num72, single5, (float)num73, (int)num74, 0, 0);
+					NetMessage.SendData(28, -1, this.whoAmI, "", num71, (float)num72, single5, (float)num73, (int)num74, Strike, 0, Tap);
 					if (Main.npc[num71].life > 0)
 					{
 						Main.npc[num71].netUpdate = true;
@@ -3209,7 +3211,7 @@ namespace Terraria
                         //    Main.player[wholv].LevelUp();
                         if (Main.netMode == 2)
                         {
-                            NetMessage.SendData(77, -1, this.whoAmI, "", wholv, 0f, 0f, 0f, 0);
+                            NetMessage.SendData(105, -1, this.whoAmI, "", wholv, 0f, 0f, 0f, 0);
                             return;
                         }
                         return;
