@@ -2810,6 +2810,8 @@ namespace Terraria
                     this.XP += 3726;
                 if (i == 98)
                     this.XP += 31780;
+                if (i == 99)
+                    this.XP += 70476;
             }
             this.XP += this.Exp;
             this.CheckExp();
@@ -2886,6 +2888,10 @@ namespace Terraria
         }
         public void GainExperience(int EXP)
         {
+            if (Main.CriticalMode)
+            {
+                EXP = (int)(EXP * 1.25);
+            }
             EXP = (int)((float)EXP * ((100 - this.EXPRate) / 100f));
             if (this.Level == 100)
             {
@@ -2925,6 +2931,8 @@ namespace Terraria
                 this.MaxExp += 3726;
             if (this.Level == 98)
                 this.MaxExp += 31780;
+            if (this.Level == 99)
+                this.MaxExp += 70476;
             if (this.Level == 80)
                 this.MaxExp = 0;
         }
@@ -3027,9 +3035,10 @@ namespace Terraria
 						{
 							this.lifeRegenTime = 0;
 							this.breath = 0;
-							Player player3 = this;
-							player3.statLife = player3.statLife - 2;
-							if (this.statLife <= 0)
+                            int REC = -1 + (int)((float)this.heartPoint2 / 10f);
+                            if (REC < 0) { REC = 0; }
+                            this.statLife -= 1 + REC;
+                            if (this.statLife <= 0)
 							{
 								this.statLife = 0;
 								this.KillMe(10, 0, false, Lang.deathMsg(-1, -1, -1, 1));
@@ -6330,8 +6339,12 @@ namespace Terraria
 			if (Crit)
 			{
 				damage = damage * 2;
-			}
-			if (num >= 1)
+            }
+            if (Main.CriticalMode)
+            {
+                num *= 1.30;
+            }
+            if (num >= 1)
 			{
 				if (this.invis)
 				{
@@ -6383,19 +6396,18 @@ namespace Terraria
 					{
 						num = 1;
 					}
-				}
-				if (this.magicCuffs)
-				{
-					int num2 = damage;
-					Player player1 = this;
-					player1.statMana = player1.statMana + num2;
-					if (this.statMana > this.statManaMax3)
-					{
-						this.statMana = this.statManaMax3;
-					}
-					this.ManaEffect(num2);
-				}
-				if (this.paladinBuff && this.whoAmI != Main.myPlayer)
+                }
+                if (this.magicCuffs)
+                {
+                    int num6 = (int)((num / (double)this.statLifeMax3) * 250.0);
+                    this.statMana += num6;
+                    if (this.statMana > this.statManaMax3)
+                    {
+                        this.statMana = this.statManaMax3;
+                    }
+                    this.ManaEffect(num6);
+                }
+                if (this.paladinBuff && this.whoAmI != Main.myPlayer)
 				{
 					int num3 = (int)(num * 0.25);
 					num = (double)((int)(num * 0.75));
@@ -8036,6 +8048,7 @@ namespace Terraria
                             newwpn.melee = item.melee;
                             newwpn.ranged = item.ranged;
                             newwpn.magic = item.magic;
+                            newwpn.thrown = item.thrown;
                             newwpn.summon = item.summon;
                             newwpn.ammo = item.ammo;
                             newwpn.useAmmo = item.useAmmo;
@@ -21871,32 +21884,30 @@ namespace Terraria
 				if (this.ghostDmg < 0f)
 				{
 					this.ghostDmg = 0f;
-				}
-				if (!Main.expertMode)
-				{
-					if (this.lifeSteal < 80f)
-					{
-						Player player3 = this;
-						player3.lifeSteal = player3.lifeSteal + 0.6f;
-					}
-					if (this.lifeSteal > 80f)
-					{
-						this.lifeSteal = 80f;
-					}
-				}
-				else
-				{
-					if (this.lifeSteal < 70f)
-					{
-						Player player4 = this;
-						player4.lifeSteal = player4.lifeSteal + 0.5f;
-					}
-					if (this.lifeSteal > 70f)
-					{
-						this.lifeSteal = 70f;
-					}
-				}
-				if (!this.mount.Active)
+                }
+                if (Main.expertMode)
+                {
+                    if (this.lifeSteal < ((float)this.heartPoint2 * (70f / 20f)))
+                    {
+                        this.lifeSteal += (0.5f * (float)(this.heartPoint2 / 20f));
+                    }
+                    if (this.lifeSteal > ((float)this.heartPoint2 * (70f / 20f)))
+                    {
+                        this.lifeSteal = ((float)this.heartPoint2 * (70f / 20f));
+                    }
+                }
+                else
+                {
+                    if (this.lifeSteal < ((float)this.heartPoint2 * (80f / 20f)))
+                    {
+                        this.lifeSteal += (0.6f * (float)(this.heartPoint2 / 20f));
+                    }
+                    if (this.lifeSteal > ((float)this.heartPoint2 * (80f / 20f)))
+                    {
+                        this.lifeSteal = ((float)this.heartPoint2 * (80f / 20f));
+                    }
+                }
+                if (!this.mount.Active)
 				{
 					this.position.Y = this.position.Y + (float)this.height;
 					this.height = 42;
@@ -22718,8 +22729,12 @@ namespace Terraria
                 this.thrownDamage = 0.1f;
             if (this.minionDamage < 0.1f)
                 this.minionDamage = 0.1f;
-            this.baseDefense = (short)this.statDefense;
-            this.statDefense = (int)(this.statDefense * (1 + ((this.statDef + this.boostDef) * (0.07f + ((this.statDef + this.boostDef) * 0.0011f)))));
+            if (Main.CriticalMode)
+            {
+                this.statLifeMax2 /= 2;
+            }
+            this.baseDefense = (short)(this.statDefense + 4);
+            this.statDefense = (int)((this.statDefense + 4) * (1 + ((this.statDef + this.boostDef) * (0.07f + ((this.statDef + this.boostDef) * 0.0011f)))));
             this.statLifeMax2 = (short)((float)this.statLifeMax2 * (float)((100 + this.boostHP) / 100f));
             short hp = (short)((float)this.heartPoint);// * (float)(((float)(100 + this.boostHP) / 100f)));
 

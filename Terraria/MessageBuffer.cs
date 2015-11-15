@@ -545,6 +545,7 @@ namespace Terraria
 					}
 					Main.invasionType = this.reader.ReadSByte();
 					Main.LobbyId = this.reader.ReadUInt64();
+                        Main.CriticalMode = this.reader.ReadBoolean();
 					if (Netplay.Connection.State != 3)
 						return;
 					Netplay.Connection.State = 4;
@@ -875,6 +876,7 @@ namespace Terraria
                             player5.statLifeMax = 20;
                         }
                         player5.dead = player5.statLife <= 0;
+                        player5.PlayerLevelCalculate();
                         if (Main.netMode != 2)
                         {
                             return;
@@ -3218,18 +3220,22 @@ namespace Terraria
                     }
                 case 106: //EXP Tag for ores
                     {
-                        int xStart = this.reader.ReadInt32();
-                        int yStart = this.reader.ReadInt32();
-                        short width = this.reader.ReadInt16();
-                        short height = this.reader.ReadInt16();
-                        for (int i = yStart; i < yStart + height; i++)
+                        int who = this.reader.ReadInt16();
+                        int X = (int)this.reader.ReadSingle();
+                        int Y = (int)this.reader.ReadSingle();
+                        Tile tile = Main.tile[X, Y];
+                        Tile tile2 = Main.tile2[X, Y];
+                        try
                         {
-                            for (int j = xStart; j < xStart + width; j++)
-                            {
-                                Tile tile = Main.tile[j, i];
-                                if (tile.active())
-                                    tile.Worldspawned = this.reader.ReadByte();
-                            }
+                            Console.WriteLine("Active: " + (tile.active() ? "Yes" : "No") + " | Worldspawned: " + tile2.Worldspawned + " | Type: " + tile.type + " | NoWorldSave: " + (Main.NoWorldEXP ? "Yes" : "No") + " | Critical: " + (Main.CriticalMode ? "Yes" : "No"));
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
+                        if ((tile.active() && tile2.Worldspawned) && ((tile.type == 6) || (tile.type == 7) || (tile.type == 8) || (tile.type == 9) || (tile.type == 22) || (tile.type == 37) || (tile.type == 56) || (tile.type == 58) || (tile.type == 67) || (tile.type == 66) || (tile.type == 63) || (tile.type == 65) || (tile.type == 64) || (tile.type == 68) || (tile.type == 107) || (tile.type == 108) || (tile.type == 111) || (tile.type == 167) || (tile.type == 166) || (tile.type == 169) || (tile.type == 168) || (tile.type == 204) || (tile.type == 221) || (tile.type == 222) || (tile.type == 223) || (tile.type == 211)))
+                        {
+                            NetMessage.SendData(108, -1, -1, "", who, Main.OreEXP(tile.type), 0f, 0f, 0);
                         }
                         return;
                     }

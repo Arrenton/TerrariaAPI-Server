@@ -288,6 +288,7 @@ namespace Terraria
                         writer.Write(bb7);
                         writer.Write((sbyte)Main.invasionType);
                         writer.Write(Main.LobbyId);
+                        writer.Write(Main.CriticalMode);
                         break;
                     }
                 case 8:
@@ -1168,18 +1169,9 @@ namespace Terraria
                     writer.Write((byte)number);
                     break;
                 case 106:
-                    writer.Write(number);
-                    writer.Write((int)number2);
-                    writer.Write((short)number3);
-                    writer.Write((short)number4);
-                    for (int i = (int)number2; i < (int)number2 + (int)number4; i++)
-                    {
-                        for (int j = number; j < number + (int)number3; j++)
-                        {
-                            if (Main.tile[j, i].active())
-                                writer.Write(Main.tile[j, i].Worldspawned);
-                        }
-                    }
+                    writer.Write((short)number);
+                    writer.Write(number2);
+                    writer.Write(number3);
                     break;
                 case 107:
                     writer.Write((byte)number);

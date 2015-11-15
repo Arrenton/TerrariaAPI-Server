@@ -90,13 +90,14 @@ namespace Terraria.IO
 			WorldFile.CachedCultistDelay = new int?(CultistRitual.delay);
 		}
 
-		public static WorldFileData CreateMetadata(string name, bool isExpertMode)
+		public static WorldFileData CreateMetadata(string name, bool isExpertMode, bool isCriticalMode)
 		{
 			WorldFileData worldFileDatum = new WorldFileData(Main.GetWorldPathFromName(name))
 			{
 				Name = name,
 				IsExpertMode = isExpertMode,
-				CreationTime = DateTime.Now,
+                IsCriticalMode = isCriticalMode,
+                CreationTime = DateTime.Now,
 				Metadata = FileMetadata.FromCurrentSettings(FileType.World)
 			};
 			return worldFileDatum;
@@ -220,11 +221,30 @@ namespace Terraria.IO
 							binaryReader.ReadByte();
 							binaryReader.ReadInt32();
 							worldFileDatum.IsHardMode = binaryReader.ReadBoolean();
-							return worldFileDatum;
-						}
+                            binaryReader.Close();
+                        }
 					}
-				}
-			}
+                }
+                string text = file.Substring(0, file.Length - 4);
+                file = string.Concat(new object[]
+                {
+                text,
+                ".lvl"
+                });
+                if (FileUtilities.Exists(file))
+                {
+                    memoryStream = new FileStream(file, FileMode.Open);
+                    using (memoryStream)
+                    {
+                        using (BinaryReader binaryReader = new BinaryReader(memoryStream))
+                        {
+                            worldFileDatum.IsCriticalMode = binaryReader.ReadBoolean();
+                            binaryReader.Close();
+                        }
+                    }
+                }
+                return worldFileDatum;
+            }
 			catch (Exception ex)
 			{
 				Console.WriteLine("Exception during world metadata load.");
@@ -815,7 +835,70 @@ namespace Terraria.IO
 			TileEntity.TileEntitiesNextID = num;
 		}
 
-		public static void loadWorld()
+        public static void loadEXP(string path)
+        {
+            string text = path.Substring(0, path.Length - 4);
+            string text2 = string.Concat(new object[]
+            {
+                text,
+                ".lvl"
+            });
+            if (!FileUtilities.Exists(text2))
+            {
+                return;
+            }
+            byte[] buffer = FileUtilities.ReadAllBytes(text2);
+            using (MemoryStream memoryStream = new MemoryStream(buffer))
+            {
+                using (BinaryReader binaryReader = new BinaryReader(memoryStream))
+                {
+                    try
+                    {
+                        BitsByte bb = 0;
+                        Main.CriticalMode = binaryReader.ReadBoolean();
+                        int ID = binaryReader.ReadInt32();
+                        if (ID != Main.worldID)
+                        {
+                            Main.NoWorldEXP = true;
+                        }
+                        else
+                        {
+                            Main.NoWorldEXP = false;
+                        }
+                        int Version = binaryReader.ReadInt32();
+                        for (int i = 0; i < Main.maxTilesX; i++)
+                        {
+                            for (int j = 0; j < Main.maxTilesY; j += 8)
+                            {
+                                bb = binaryReader.ReadByte();
+                                Main.tile2[i, j].Worldspawned = bb[0];
+                                if ((j + 1) <= Main.maxTilesY)
+                                    Main.tile2[i, j + 1].Worldspawned = bb[1];
+                                if ((j + 2) <= Main.maxTilesY)
+                                    Main.tile2[i, j + 2].Worldspawned = bb[2];
+                                if ((j + 3) <= Main.maxTilesY)
+                                    Main.tile2[i, j + 3].Worldspawned = bb[3];
+                                if ((j + 4) <= Main.maxTilesY)
+                                    Main.tile2[i, j + 4].Worldspawned = bb[4];
+                                if ((j + 5) <= Main.maxTilesY)
+                                    Main.tile2[i, j + 5].Worldspawned = bb[5];
+                                if ((j + 6) <= Main.maxTilesY)
+                                    Main.tile2[i, j + 6].Worldspawned = bb[6];
+                                if ((j + 7) <= Main.maxTilesY)
+                                    Main.tile2[i, j + 7].Worldspawned = bb[7];
+                                //System.Windows.Forms.MessageBox.Show("BB 1:" + (bb[0] ? "True" : "False") + "\nBB 2:" + (bb[1] ? "True" : "False") + "\nBB 3:" + (bb[2] ? "True" : "False") + "\nBB 4:" + (bb[3] ? "True" : "False") + "\nBB 5:" + (bb[4] ? "True" : "False") + "\nBB 6:" + (bb[5] ? "True" : "False") + "\nBB 7:" + (bb[6] ? "True" : "False") + "\nBB 8:" + (bb[7] ? "True" : "False"));
+                            }
+                        }
+                        binaryReader.Close();
+                        memoryStream.Close();
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+        }
+        public static void loadWorld()
 		{
 			int num;
 			Main.CheckXMas();
@@ -938,8 +1021,9 @@ namespace Terraria.IO
 						return;
 					}
 				}
-			}
-			if (WorldFile.OnWorldLoad != null)
+            }
+            WorldFile.loadEXP(Main.worldPathName);
+            if (WorldFile.OnWorldLoad != null)
 			{
 				WorldFile.OnWorldLoad();
 			}
@@ -1947,7 +2031,59 @@ namespace Terraria.IO
 			WorldFile.saveWorld(false);
 		}
 
-		public static void saveWorld(bool resetTime = false)
+        public static void saveEXP(bool useCloudSaving, string path)
+        {
+            string text = path.Substring(0, path.Length - 4);
+            string str = string.Concat(new object[]
+            {
+                text,
+                ".lvl"
+            });
+            //string str = path + ".lvl";
+
+            byte[] array = null;
+            int num = 0;
+            using (MemoryStream memoryStream = new MemoryStream(2000000))
+            {
+                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
+                {
+                    BitsByte bb = 0;
+                    binaryWriter.Write(Main.CriticalMode);
+                    binaryWriter.Write(Main.worldID);
+                    binaryWriter.Write(50);
+                    for (int i = 0; i < Main.maxTilesX; i++)
+                    {
+                        for (int j = 0; j < Main.maxTilesY; j += 8)
+                        {
+                            bb[0] = Main.tile2[i, j].Worldspawned;
+                            if ((j + 1) <= Main.maxTilesY)
+                                bb[1] = Main.tile2[i, j + 1].Worldspawned;
+                            if ((j + 2) <= Main.maxTilesY)
+                                bb[2] = Main.tile2[i, j + 2].Worldspawned;
+                            if ((j + 3) <= Main.maxTilesY)
+                                bb[3] = Main.tile2[i, j + 3].Worldspawned;
+                            if ((j + 4) <= Main.maxTilesY)
+                                bb[4] = Main.tile2[i, j + 4].Worldspawned;
+                            if ((j + 5) <= Main.maxTilesY)
+                                bb[5] = Main.tile2[i, j + 5].Worldspawned;
+                            if ((j + 6) <= Main.maxTilesY)
+                                bb[6] = Main.tile2[i, j + 6].Worldspawned;
+                            if ((j + 7) <= Main.maxTilesY)
+                                bb[7] = Main.tile2[i, j + 7].Worldspawned;
+                            binaryWriter.Write(bb);
+                        }
+                    }
+                }
+                array = memoryStream.ToArray();
+                num = array.Length;
+            }
+            if (array == null)
+            {
+                return;
+            }
+            FileUtilities.Write(str, array, num);
+        }
+        public static void saveWorld(bool resetTime = false)
 		{
 			if (ServerApi.Hooks.InvokeWorldSave(resetTime))
 			{
@@ -2055,8 +2191,10 @@ namespace Terraria.IO
 							if (str != null)
 							{
 								FileUtilities.WriteAllBytes(str, numArray);
-							}
-							WorldGen.saveLock = false;
+                            }
+                            if (!Main.NoWorldEXP)
+                                saveEXP(false, Main.worldPathName);
+                            WorldGen.saveLock = false;
 							Main.serverGenLock = false;
 							return;
 						}

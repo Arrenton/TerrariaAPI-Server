@@ -23,7 +23,7 @@ namespace Terraria
 
 		public const int Liquid_Honey = 2;
 
-		public virtual ushort type { get; set; }
+        public virtual ushort type { get; set; }
 
 		public virtual byte wall { get; set; }
 
@@ -41,9 +41,10 @@ namespace Terraria
 
 		public virtual short frameY { get; set; }
 
-        public byte Worldspawned = 0;
+        public bool Worldspawned = false;
 
-        public virtual int collisionType
+
+    public virtual int collisionType
 		{
 			get
 			{
@@ -93,7 +94,8 @@ namespace Terraria
 				this.bTileHeader3 = 0;
 				this.frameX = 0;
 				this.frameY = 0;
-				return;
+                this.Worldspawned = false;
+                return;
 			}
 			this.type = copy.type;
 			this.wall = copy.wall;
@@ -104,7 +106,8 @@ namespace Terraria
 			this.bTileHeader3 = copy.bTileHeader3;
 			this.frameX = copy.frameX;
 			this.frameY = copy.frameY;
-		}
+            this.Worldspawned = copy.Worldspawned;
+        }
 
 		public Color actColor(Color oldColor)
 		{
@@ -199,7 +202,8 @@ namespace Terraria
 			this.bTileHeader3 = 0;
 			this.frameX = 0;
 			this.frameY = 0;
-		}
+            this.Worldspawned = false;
+        }
 
 		internal void ClearMetadata()
 		{
@@ -249,7 +253,8 @@ namespace Terraria
 			this.bTileHeader3 = from.bTileHeader3;
 			this.frameX = from.frameX;
 			this.frameY = from.frameY;
-		}
+            this.Worldspawned = from.Worldspawned;
+        }
 
 		public byte frameNumber()
 		{
@@ -419,7 +424,8 @@ namespace Terraria
 			this.frameX = 0;
 			this.frameY = 0;
 			this.type = type;
-		}
+            this.Worldspawned = false;
+        }
 
 		public bool rightSlope()
 		{

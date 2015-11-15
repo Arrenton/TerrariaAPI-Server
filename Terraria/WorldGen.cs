@@ -2083,7 +2083,8 @@ namespace Terraria
 								Main.tile[num2, num3].active(false);
 							}
 							Main.tile[num2, num3].type = 37;
-						}
+                            Main.tile2[num2, num3].Worldspawned = true;
+                        }
 					}
 				}
 			}
@@ -2152,7 +2153,8 @@ namespace Terraria
 								WorldGen.KillTile(num17, num18, false, false, false);
 							}
 							Main.tile[num17, num18].type = 37;
-							WorldGen.SquareTileFrame(num17, num18, true);
+                            Main.tile2[num17, num18].Worldspawned = true;
+                            WorldGen.SquareTileFrame(num17, num18, true);
 						}
 					}
 				}
@@ -2174,7 +2176,8 @@ namespace Terraria
 								WorldGen.KillTile(num22, num23, false, false, false);
 							}
 							Main.tile[num22, num23].type = 37;
-							WorldGen.SquareTileFrame(num22, num23, true);
+                            Main.tile2[num22, num23].Worldspawned = true;
+                            WorldGen.SquareTileFrame(num22, num23, true);
 						}
 					}
 				}
@@ -2580,7 +2583,8 @@ namespace Terraria
 					for (int k = 0; k < WorldGen.lastMaxTilesY; k++)
 					{
 						Main.tile[j, k] = null;
-					}
+                        Main.tile2[j, k] = null;
+                    }
 				}
 			}
 			WorldGen.lastMaxTilesX = Main.maxTilesX;
@@ -2610,8 +2614,16 @@ namespace Terraria
 						else
 						{
 							Main.tile[l, m].ClearEverything();
-						}
-					}
+                        }
+                        if (Main.tile2[l, m] == null)
+                        {
+                            Main.tile2[l, m] = new Tile();
+                        }
+                        else
+                        {
+                            Main.tile2[l, m].ClearEverything();
+                        }
+                    }
 				}
 			}
 			for (int num4 = 0; num4 < 400; num4++)
@@ -12650,7 +12662,7 @@ namespace Terraria
 			ushort arg_11_0 = Main.tile[i, j].type;
 			WorldGen.KillTile(i, j, false, false, true);
 			NetMessage.SendTileSquare(-1, i, j, 1);
-			Projectile.NewProjectile((float)(i * 16 + 8), (float)(j * 16 + 8), 0f, 0f, 164, 250, 10f, Main.myPlayer, 0f, 0f);
+			Projectile.NewProjectile((float)(i * 16 + 8), (float)(j * 16 + 8), 0f, 0f, 164, 1000, 10f, Main.myPlayer, 0f, 0f);
 		}
 
 		public static bool EmptyTileCheck(int startX, int endX, int startY, int endY, int ignoreID = -1)
@@ -25334,7 +25346,7 @@ namespace Terraria
 			}
 			if (type == 138 && !WorldGen.gen && Main.netMode != 1)
 			{
-				Projectile.NewProjectile((float)(k * 16) + 15.5f, (float)(num4 * 16 + 16), 0f, 0f, 99, 70, 10f, Main.myPlayer, 0f, 0f);
+				Projectile.NewProjectile((float)(k * 16) + 15.5f, (float)(num4 * 16 + 16), 0f, 0f, 99, 160, 10f, Main.myPlayer, 0f, 0f);
 			}
 			WorldGen.destroyObject = false;
 			for (int num14 = k - 1; num14 < k + 3; num14++)
@@ -25407,7 +25419,11 @@ namespace Terraria
 						if ((double)(Math.Abs((float)k - value.X) + Math.Abs((float)l - value.Y)) < strength * 0.5 * (1.0 + (double)WorldGen.genRand.Next(-10, 11) * 0.015) && Main.tile[k, l].active() && (Main.tile[k, l].type == 0 || Main.tile[k, l].type == 1 || Main.tile[k, l].type == 23 || Main.tile[k, l].type == 25 || Main.tile[k, l].type == 40 || Main.tile[k, l].type == 53 || Main.tile[k, l].type == 57 || Main.tile[k, l].type == 59 || Main.tile[k, l].type == 60 || Main.tile[k, l].type == 70 || Main.tile[k, l].type == 109 || Main.tile[k, l].type == 112 || Main.tile[k, l].type == 116 || Main.tile[k, l].type == 117 || Main.tile[k, l].type == 147 || Main.tile[k, l].type == 161 || Main.tile[k, l].type == 163 || Main.tile[k, l].type == 164 || Main.tileMoss[(int)Main.tile[k, l].type] || Main.tile[k, l].type == 199 || Main.tile[k, l].type == 200 || Main.tile[k, l].type == 203 || Main.tile[k, l].type == 234))
 						{
 							Main.tile[k, l].type = type;
-							WorldGen.SquareTileFrame(k, l, true);
+                            if ((type == 6) || (type == 7) || (type == 8) || (type == 9) || (type == 22) || (type == 37) || (type == 56) || (type == 58) || (type == 67) || (type == 66) || (type == 63) || (type == 65) || (type == 64) || (type == 68) || (type == 107) || (type == 108) || (type == 111) || (type == 167) || (type == 166) || (type == 169) || (type == 168) || (type == 204) || (type == 221) || (type == 222) || (type == 223) || (type == 211))
+                            {
+                                Main.tile2[k, l].Worldspawned = true;
+                            }
+                            WorldGen.SquareTileFrame(k, l, true);
 							if (Main.netMode == 2)
 							{
 								NetMessage.SendTileSquare(-1, k, l, 1);
@@ -33287,7 +33303,7 @@ namespace Terraria
 			}
 			Vector2 vector = new Vector2((float)(x * 16 + 8), (float)(y * 16 + 4));
 			int type = 167 + num;
-			int damage = 150;
+			int damage = 500;
 			int num2 = 7;
 			Projectile.NewProjectile(vector.X, vector.Y + 2f, 0f, -8f, type, damage, (float)num2, Main.myPlayer, 0f, 0f);
 			Main.tile[x, y].active(false);
@@ -37551,7 +37567,8 @@ namespace Terraria
 						if (WorldGen.InWorld(num6, num7, 2) && Main.tile[num6, num7].active() && Main.tile[num6, num7].type == 59 && (!Main.tile[num6, num7 - 1].active() || (Main.tile[num6, num7 - 1].type != 5 && Main.tile[num6, num7 - 1].type != 236 && Main.tile[num6, num7 - 1].type != 238)) && WorldGen.Chlorophyte(num6, num7))
 						{
 							Main.tile[num6, num7].type = TileID.Chlorophyte;
-							WorldGen.SquareTileFrame(num6, num7, true);
+                            Main.tile2[num6, num7].Worldspawned = true;
+                            WorldGen.SquareTileFrame(num6, num7, true);
 							if (Main.netMode == 2)
 							{
 								NetMessage.SendTileSquare(-1, num6, num7, 1);
@@ -37590,7 +37607,8 @@ namespace Terraria
 							&& WorldGen.Chlorophyte(num8, num9))
 						{
 							Main.tile[num8, num9].type = TileID.Chlorophyte;
-							WorldGen.SquareTileFrame(num8, num9, true);
+                            Main.tile2[num8, num9].Worldspawned = true;
+                            WorldGen.SquareTileFrame(num8, num9, true);
 							if (Main.netMode == 2)
 							{
 								NetMessage.SendTileSquare(-1, num8, num9, 1);
@@ -42349,7 +42367,8 @@ namespace Terraria
 								if (overRide || !Main.tile[k, l].active())
 								{
 									Tile tile = Main.tile[k, l];
-									bool flag3 = Main.tileStone[type] && tile.type != 1;
+                                    Tile tile2 = Main.tile2[k, l];
+                                    bool flag3 = Main.tileStone[type] && tile.type != 1;
 									if (!TileID.Sets.CanBeClearedDuringGeneration[(int)tile.type])
 									{
 										flag3 = true;
@@ -42431,7 +42450,11 @@ namespace Terraria
 									if (!flag3)
 									{
 										tile.type = (ushort)type;
-										goto IL_5C5;
+                                        if ((type == 6) || (type == 7) || (type == 8) || (type == 9) || (type == 22) || (type == 37) || (type == 56) || (type == 58) || (type == 67) || (type == 66) || (type == 63) || (type == 65) || (type == 64) || (type == 68) || (type == 107) || (type == 108) || (type == 111) || (type == 167) || (type == 166) || (type == 169) || (type == 168) || (type == 204) || (type == 221) || (type == 222) || (type == 223) || (type == 211))
+                                        {
+                                            tile2.Worldspawned = true;
+                                        }
+                                        goto IL_5C5;
 									}
 									goto IL_5C5;
 									IL_575:
@@ -49537,7 +49560,7 @@ namespace Terraria
 										}
 										if (flag5)
 										{
-											int damage = 10;
+											int damage = 20;
 											int type;
 											if (num == 112)
 											{
@@ -49603,7 +49626,7 @@ namespace Terraria
 									}
 									if (flag6)
 									{
-										int damage2 = 10;
+										int damage2 = 20;
 										int num57;
 										if (num == 112)
 										{

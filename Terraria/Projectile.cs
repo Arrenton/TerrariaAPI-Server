@@ -7696,7 +7696,9 @@ namespace Terraria
 				return;
 			}
 			float num2 = (float)dmg * num;
-			if ((int)num2 <= 0)
+            if (num2 > (float)Main.player[this.owner].statLifeMax3 * 0.08f)
+                num2 = (float)Main.player[this.owner].statLifeMax3 * 0.08f;
+            if ((int)num2 <= 0)
 			{
 				return;
 			}
@@ -7726,20 +7728,22 @@ namespace Terraria
 			Projectile.NewProjectile(Position.X, Position.Y, 0f, 0f, 298, 0, 0f, this.owner, (float)num4, num2);
 		}
 		public void vampireHeal(int dmg, Vector2 Position)
-		{
-			float num = (float)dmg * 0.075f;
-			if ((int)num == 0)
-			{
-				return;
-			}
-			if (Main.player[Main.myPlayer].lifeSteal <= 0f)
-			{
-				return;
-			}
-			Main.player[Main.myPlayer].lifeSteal -= num;
-			int num2 = this.owner;
-			Projectile.NewProjectile(Position.X, Position.Y, 0f, 0f, 305, 0, 0f, this.owner, (float)num2, num);
-		}
+        {
+            float num = (float)dmg * 0.075f;
+            if (num > (float)Main.player[this.owner].statLifeMax3 * 0.08f)
+                num = (float)Main.player[this.owner].statLifeMax3 * 0.08f;
+            if ((int)num == 0)
+            {
+                return;
+            }
+            if (Main.player[Main.myPlayer].lifeSteal <= 0f)
+            {
+                return;
+            }
+            Main.player[Main.myPlayer].lifeSteal -= num;
+            int num2 = this.owner;
+            Projectile.NewProjectile(Position.X, Position.Y, 0f, 0f, 305, 0, 0f, this.owner, (float)num2, num);
+        }
 		public void StatusPlayer(int i)
 		{
 			if (this.type == 472)
@@ -8456,10 +8460,10 @@ namespace Terraria
 									}
 									int num26;
                                     int own = this.owner;
-                                    if (this.type == 108 || this.type == 98 || this.type == 184 || this.type == 187 || this.type == 185 || this.type == 186)
+                                    if ((this.type == 108 || this.type == 98 || this.type == 184 || this.type == 187 || this.type == 185 || this.type == 186) || (this.npcProj || this.trap))
                                         own = 256;
                                     bool tap = true;
-                                    if (this.type == 92 || (this.type >= 167 && this.type <= 170) || (this.type >= 191 && this.type <= 195) || this.type == 221 || this.type == 266 || this.type == 308 || this.type == 309 || this.type == 317 || this.type == 373 || this.type == 374 || this.type == 376 || this.type == 375 || this.type == 377 || this.type == 378 || this.type == 379 || this.type == 384 || this.type == 386 || this.type == 387 || this.type == 388 || this.type == 389 || this.type == 390 || this.type == 391 || this.type == 392 || this.type == 393 || this.type == 394 || this.type == 395 || this.type == 407)
+                                    if ((this.type == 92 || (this.type >= 167 && this.type <= 170) || (this.type >= 191 && this.type <= 195) || this.type == 221 || this.type == 266 || this.type == 308 || this.type == 309 || this.type == 317 || this.type == 373 || this.type == 374 || this.type == 376 || this.type == 375 || this.type == 377 || this.type == 378 || this.type == 379 || this.type == 384 || this.type == 386 || this.type == 387 || this.type == 388 || this.type == 389 || this.type == 390 || this.type == 391 || this.type == 392 || this.type == 393 || this.type == 394 || this.type == 395 || this.type == 407) || (this.npcProj || this.trap))
                                         tap = false;
                                     if (flag4)
 									{

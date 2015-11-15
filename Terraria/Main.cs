@@ -30,6 +30,8 @@ namespace Terraria
 	public class Main
 	{
         public static int playerCount = 0;
+
+        public static bool NoWorldEXP = false;
         // End new variables
         public const int offLimitBorderTiles = 40;
 
@@ -1186,9 +1188,10 @@ namespace Terraria
 
 		public static bool tilesLoaded;
 
-		//public static WorldMap Map;
+        //public static WorldMap Map;
+        public static Tile[,] tile2 = new Tile[Main.maxTilesX, Main.maxTilesY];
 
-		public static TileProvider tile;
+        public static TileProvider tile;
 
 		public static Star[] star;
 
@@ -1657,8 +1660,22 @@ namespace Terraria
 				Main.ActiveWorldFileData.IsExpertMode = value;
 			}
 		}
-
-		public static Vector2 MouseScreen
+        public static bool CriticalMode
+        {
+            get
+            {
+                return Main.ActiveWorldFileData != null && (Main.ActiveWorldFileData.IsExpertMode && Main.ActiveWorldFileData.IsCriticalMode);
+            }
+            set
+            {
+                if (Main.ActiveWorldFileData == null)
+                {
+                    return;
+                }
+                Main.ActiveWorldFileData.IsCriticalMode = value;
+            }
+        }
+        public static Vector2 MouseScreen
 		{
 			get
 			{
@@ -2148,7 +2165,7 @@ namespace Terraria
 			Main.backgroundHeight = new int[207];
 			Main.tilesLoaded = false;
 			//Main.Map = new WorldMap(Main.maxTilesX, Main.maxTilesY);
-            //Main.tile = new Tile[Main.maxTilesX, Main.maxTilesY];
+            Main.tile2 = new Tile[Main.maxTilesX, Main.maxTilesY];
             Main.tile = new TileProvider();
 			Main.star = new Star[130];
 			Main.item = new Item[401];
@@ -2614,7 +2631,7 @@ namespace Terraria
 
         public static double CalculateDamage(int Damage, int Defense)
         {
-            double num = (Math.Pow(Damage + 10, 2) - Defense) / (60f + (Defense * (2f * (1f + ((float)Defense / 900f)))));
+            double num = (Math.Pow(Damage + 10, 2) - Defense) / (45f + (Defense * (2f * (1f + ((float)Defense / 900f)))));
             if (num < 1.0)
             {
                 num = 1.0;
@@ -2628,10 +2645,10 @@ namespace Terraria
 
         public static double CalculatePlayerDamage(int Damage, int Defense)
 		{
-            double damage = (Math.Pow(Damage + 10, 2) - Defense) / (60f + (Defense * (2f * (1f + ((float)Defense / 900f)))));
+            double damage = (Math.Pow(Damage + 10, 2) - Defense) / (45f + (Defense * (2f * (1f + ((float)Defense / 900f)))));
             if (Main.expertMode)
 			{
-                damage = (Math.Pow(Damage + 10, 2) - Defense) / (60f + (Defense * (2.5f * (1f + ((float)Defense / 900f)))));
+                damage = (Math.Pow(Damage + 10, 2) - Defense) / (45f + (Defense * (2.5f * (1f + ((float)Defense / 900f)))));
             }
 			if (damage < 1.0)
 			{
@@ -5166,7 +5183,7 @@ namespace Terraria
 							Main.WorldList[j].Name,
 							Main.WorldList[j].IsHardMode ? "hard" : "norm",
 							Main.WorldList[j].HasCrimson ? "crim" : "corr",
-							Main.WorldList[j].IsExpertMode ? "exp" : "norm",
+							Main.WorldList[j].IsExpertMode ? (Main.WorldList[j].IsCriticalMode ? "crit" : "exp") : "norm",
 							String.Format("Last used: {0}",
 								File.GetLastWriteTime(Main.WorldList[j].Path).ToString("g")));
 					}
@@ -5289,7 +5306,8 @@ namespace Terraria
 							Console.WriteLine("");
 							Console.WriteLine(string.Concat("1", '\t', "Normal"));
 							Console.WriteLine(string.Concat("2", '\t', "Expert"));
-							Console.WriteLine("");
+                            Console.WriteLine(string.Concat("3", '\t', "Critical"));
+                            Console.WriteLine("");
 							Console.Write("Choose difficulty: ");
 							str = Console.ReadLine();
 							try
@@ -5298,14 +5316,22 @@ namespace Terraria
 								if (num2 == 1)
 								{
 									Main.expertMode = false;
-									flag1 = false;
+                                    Main.CriticalMode = false;
+                                    flag1 = false;
 								}
 								else if (num2 == 2)
 								{
 									Main.expertMode = true;
-									flag1 = false;
-								}
-							}
+                                    Main.CriticalMode = false;
+                                    flag1 = false;
+                                }
+                                else if (num2 == 3)
+                                {
+                                    Main.expertMode = true;
+                                    Main.CriticalMode = true;
+                                    flag1 = false;
+                                }
+                            }
 							catch (Exception ex)
 							{
 #if DEBUG
@@ -5356,7 +5382,7 @@ namespace Terraria
 							}
 						}
 						Main.worldName = Main.newWorldName;
-						Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, Main.expertMode);
+						Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, Main.expertMode, Main.CriticalMode);
 						Main.menuMode = 10;
 						Main.serverGenLock = true;
 						GenerationProgress generationProgress = new GenerationProgress();
@@ -5843,7 +5869,10 @@ namespace Terraria
 			{
 				File.Delete(Main.WorldList[i].Path);
 				File.Delete(Main.WorldList[i].Path + ".bak");
-				Main.LoadWorlds();
+                string text = Main.WorldList[i].Path.Substring(0, Main.WorldList[i].Path.Length - 4);
+                string str = string.Concat(new object[] { text, ".lvl" });
+                File.Delete(str);
+                Main.LoadWorlds();
 			}
 			catch (Exception ex)
 			{
@@ -11168,7 +11197,96 @@ namespace Terraria
 		{
 		}
 
-		protected void Update()
+        public static int OreEXP(int Type)
+        {
+            int EXP = 0;
+            switch (Type)
+            {
+                case 6:
+                    EXP = 6;
+                    break;
+                case 7:
+                    EXP = 3;
+                    break;
+                case 8:
+                    EXP = 12;
+                    break;
+                case 9:
+                    EXP = 9;
+                    break;
+                case 22:
+                    EXP = 80;
+                    break;
+                case 37:
+                    EXP = 15;
+                    break;
+                case 56:
+                    EXP = 18;
+                    break;
+                case 58:
+                    EXP = 45;
+                    break;
+                case 67:
+                    EXP = 10;
+                    break;
+                case 66:
+                    EXP = 20;
+                    break;
+                case 63:
+                    EXP = 30;
+                    break;
+                case 65:
+                    EXP = 45;
+                    break;
+                case 64:
+                    EXP = 60;
+                    break;
+                case 68:
+                    EXP = 75;
+                    break;
+                case 107:
+                    EXP = 61;
+                    break;
+                case 108:
+                    EXP = 82;
+                    break;
+                case 111:
+                    EXP = 116;
+                    break;
+                case 167:
+                    EXP = 6;
+                    break;
+                case 166:
+                    EXP = 3;
+                    break;
+                case 169:
+                    EXP = 12;
+                    break;
+                case 168:
+                    EXP = 9;
+                    break;
+                case 204:
+                    EXP = 80;
+                    break;
+                case 221:
+                    EXP = 61;
+                    break;
+                case 222:
+                    EXP = 82;
+                    break;
+                case 223:
+                    EXP = 116;
+                    break;
+                case 211:
+                    EXP = 60;
+                    break;
+                default:
+                    EXP = 0;
+                    break;
+            }
+            return EXP;
+        }
+        protected void Update()
 		{
 			if (Main._hasPendingNetmodeChange)
 			{

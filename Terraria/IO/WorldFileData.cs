@@ -15,8 +15,9 @@ namespace Terraria.IO
 		public string _worldSizeName;
 
 		public bool IsExpertMode;
+        public bool IsCriticalMode;
 
-		public bool HasCorruption = true;
+        public bool HasCorruption = true;
 
 		public bool IsHardMode;
 

@@ -756,7 +756,7 @@ namespace Terraria
 										{
 											WorldGen.KillTile(i, j, false, false, true);
 											NetMessage.SendTileSquare(-1, i, j, 1);
-											Projectile.NewProjectile((float)(i * 16 + 8), (float)(j * 16 + 8), 0f, 0f, 108, 500, 10f, Main.myPlayer, 0f, 0f);
+											Projectile.NewProjectile((float)(i * 16 + 8), (float)(j * 16 + 8), 0f, 0f, 108, 1000, 10f, Main.myPlayer, 0f, 0f);
 											return;
 										}
 										if (num3 == 210)
@@ -1034,7 +1034,8 @@ namespace Terraria
 											{
 												Main.npc[num57].@value = 0f;
 												Main.npc[num57].npcSlots = 0f;
-												return;
+                                                Main.npc[num57].ExptoGive = 0;
+                                                return;
 											}
 										}
 										else if (num3 == 349)
@@ -1090,7 +1091,7 @@ namespace Terraria
 													num67 = 1;
 												}
 												single = (float)(12 * num67);
-												num66 = 20;
+												num66 = 70;
 												num65 = 98;
 												zero = new Vector2((float)(i * 16 + 8), (float)(j * 16 + 7))
 												{
@@ -1111,7 +1112,7 @@ namespace Terraria
 													num68 = 1;
 												}
 												single = (float)(12 * num68);
-												num66 = 40;
+												num66 = 300;
 												num65 = 184;
 												zero = new Vector2((float)(i * 16 + 8), (float)(j * 16 + 7))
 												{
@@ -1132,7 +1133,7 @@ namespace Terraria
 													num69 = 1;
 												}
 												single = (float)(5 * num69);
-												num66 = 40;
+												num66 = 245;
 												num65 = 187;
 												zero = new Vector2((float)(i * 16 + 8), (float)(j * 16 + 7))
 												{
@@ -1199,7 +1200,7 @@ namespace Terraria
 												}
 												single = (float)Main.rand.Next(-20, 21) * 0.05f;
 												single1 = 4f + (float)Main.rand.Next(0, 21) * 0.05f;
-												num66 = 40;
+												num66 = 260;
 												zero = new Vector2((float)(i * 16 + 8), (float)(j * 16 + 16))
 												{
 													Y = zero.Y + 6f
@@ -1215,7 +1216,7 @@ namespace Terraria
 												}
 												single = 0f;
 												single1 = 8f;
-												num66 = 60;
+												num66 = 360;
 												num65 = 186;
 												zero = new Vector2((float)(i * 16 + 8), (float)(j * 16 + 16))
 												{
