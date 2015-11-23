@@ -138,7 +138,7 @@ namespace Terraria
 					{
 						return;
 					}
-					if (this.reader.ReadString() != string.Concat("Terraria", Main.curRelease + "0001"))
+					if (this.reader.ReadString() != string.Concat("Terraria", Main.curRelease + "0002"))
 					{
 						NetMessage.SendData(2, this.whoAmI, -1, Lang.mp[4], 0, 0f, 0f, 0f, 0, 0, 0);
 						return;
@@ -281,6 +281,17 @@ namespace Terraria
                         player.MRegenerate = bitsByte2[1];
                         player.Spec = this.reader.ReadByte();
                         player.EXPRate = this.reader.ReadByte();
+                        player.Ability.Clear();
+                        player.LearnedAbilities.Clear();
+                        for (int i = 0; i < Leveled.Abilities.AbilityList.Count; i++)
+                        {
+                            byte AB = this.reader.ReadByte();
+                            byte LAB = this.reader.ReadByte();
+                            if (AB > 0)
+                                player.Ability.Add(AB);
+                            if (LAB > 0)
+                                player.LearnedAbilities.Add(LAB);
+                        }
                         player.difficulty = 0;
 					if (bitsByte1[0])
 					{
@@ -3225,14 +3236,6 @@ namespace Terraria
                         int Y = (int)this.reader.ReadSingle();
                         Tile tile = Main.tile[X, Y];
                         Tile tile2 = Main.tile2[X, Y];
-                        try
-                        {
-                            Console.WriteLine("Active: " + (tile.active() ? "Yes" : "No") + " | Worldspawned: " + tile2.Worldspawned + " | Type: " + tile.type + " | NoWorldSave: " + (Main.NoWorldEXP ? "Yes" : "No") + " | Critical: " + (Main.CriticalMode ? "Yes" : "No"));
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex);
-                        }
                         if ((tile.active() && tile2.Worldspawned) && ((tile.type == 6) || (tile.type == 7) || (tile.type == 8) || (tile.type == 9) || (tile.type == 22) || (tile.type == 37) || (tile.type == 56) || (tile.type == 58) || (tile.type == 67) || (tile.type == 66) || (tile.type == 63) || (tile.type == 65) || (tile.type == 64) || (tile.type == 68) || (tile.type == 107) || (tile.type == 108) || (tile.type == 111) || (tile.type == 167) || (tile.type == 166) || (tile.type == 169) || (tile.type == 168) || (tile.type == 204) || (tile.type == 221) || (tile.type == 222) || (tile.type == 223) || (tile.type == 211)))
                         {
                             NetMessage.SendData(108, -1, -1, "", who, Main.OreEXP(tile.type), 0f, 0f, 0);
@@ -3252,8 +3255,38 @@ namespace Terraria
                     }
                 case 108: //Recieve EXP from server
                     {
-                        Player player12 = Main.player[this.reader.ReadByte()];
-                        player12.GainExperience(this.reader.ReadInt32());
+                        int id = this.reader.ReadByte();
+                        int XP = this.reader.ReadInt32();
+                        NetMessage.SendData(108, -1, -1, "", id, XP);
+                        return;
+                    }
+                case 109: //Update Abilities
+                    {
+                        int id = this.reader.ReadByte();
+                        if (id == Main.myPlayer && !Main.ServerSideCharacter)
+                        {
+                            return;
+                        }
+                        if (Main.netMode == 2)
+                        {
+                            id = this.whoAmI;
+                        }
+                        Player player = Main.player[id];
+                        player.Ability.Clear();
+                        player.LearnedAbilities.Clear();
+                        for (int i = 0; i < Leveled.Abilities.AbilityList.Count; i++)
+                        {
+                            byte AB = this.reader.ReadByte();
+                            byte LAB = this.reader.ReadByte();
+                            if (AB > 0)
+                                player.Ability.Add(AB);
+                            if (LAB > 0)
+                                player.LearnedAbilities.Add(LAB);
+                        }
+                        if (Main.netMode == 2)
+                        {
+                            NetMessage.SendData(109, -1, -1, "", id, 0, 0f, 0f, 0);
+                        }
                         return;
                     }
                 default:

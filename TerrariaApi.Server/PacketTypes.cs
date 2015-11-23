@@ -110,5 +110,6 @@ public enum PacketTypes
     LevelUP = 105,
     Nothing = 106,
     UpdateStats = 107,
-    SendEXP = 108
+    SendEXP = 108,
+    UpdateAbilities = 109
 }

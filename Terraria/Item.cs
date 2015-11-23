@@ -46171,11 +46171,15 @@ namespace Terraria
 					{
 						num3 -= (float)Item.manaGrabRange;
 					}
-					if (Main.player[i].lifeMagnet && (this.type == 58 || this.type == 1734 || this.type == 1867))
+					else if (Main.player[i].lifeMagnet && (this.type == 58 || this.type == 1734 || this.type == 1867))
 					{
 						num3 -= (float)Item.lifeGrabRange;
-					}
-					if (num3 < (float)NPC.sWidth && num3 < num2)
+                    }
+                    else if (Main.player[i].CheckAbility(40))
+                    {
+                        num3 -= 75;
+                    }
+                    if (num3 < (float)NPC.sWidth && num3 < num2)
 					{
 						num2 = num3;
 						this.owner = i;

@@ -382,6 +382,8 @@ namespace Terraria.ID
 
 		public const int SuspiciousTentacle = 190;
 
-		public const int Count = 191;
+        public const int Endured = 191;
+
+        public const int Count = 192;
 	}
 }

@@ -96,7 +96,7 @@ namespace Terraria
 		public bool dontCountMe;
 		public int[] buffType = new int[5];
 		public int[] buffTime = new int[5];
-		public bool[] buffImmune = new bool[191];
+		public bool[] buffImmune = new bool[Main.maxBuffTypes];
 		public bool midas;
 		public bool ichor;
 		public bool onFire;
@@ -3226,7 +3226,7 @@ namespace Terraria
             this.displayName = Lang.npcName(this.netID, false);
             this.lifeMax = this.life;
             this.defDamage = this.damage;
-            this.defDefense = this.defense + 4;
+            this.defDefense = this.defense + 7;
             this.defaultHP = this.lifeMax;
             if (Main.expertMode && flag)
             {
@@ -3303,7 +3303,7 @@ namespace Terraria
 				this.buffTime[k] = 0;
 				this.buffType[k] = 0;
 			}
-			for (int l = 0; l < 191; l++)
+			for (int l = 0; l < Main.maxBuffTypes; l++)
 			{
 				this.buffImmune[l] = false;
 			}
@@ -11673,7 +11673,7 @@ namespace Terraria
 			}
 			if (flag)
 			{
-				for (int num2 = 0; num2 < 191; num2++)
+				for (int num2 = 0; num2 < Main.maxBuffTypes; num2++)
 				{
 					this.buffImmune[num2] = true;
 				}
@@ -11722,7 +11722,7 @@ namespace Terraria
 			}
 			this.life = this.lifeMax;
 			this.defDamage = this.damage;
-            this.defDefense = this.defense + 4;
+            this.defDefense = this.defense + 7;
             this.defaultHP = this.lifeMax;
             this.defaultHP2 = this.lifeMax;
             this.netID = this.type;
@@ -16227,7 +16227,7 @@ namespace Terraria
         }
         private void SetStats()
         {
-            float baseStat = 85f;
+            float baseStat = 75f;
             float baseStr = 85f;
             if (this.Level > 80)
             {
@@ -16292,7 +16292,7 @@ namespace Terraria
             float BaseDamage = 1f;
             BaseDamage += ((0.07f + ((this.baseAtk + (this.Level / 4) + (int)(Math.Pow(Math.Floor((double)this.Level / 7), 1.5))) * 0.0003f)) * (float)(this.baseAtk + (this.Level / 4) + (int)(Math.Pow(Math.Floor((double)this.Level / 7), 1.5))));
             this.damage = (int)((float)(this.defDamage) * (BaseDamage * (1f / (1f + (float)this.defDamage / 125f))) + 5E-06f);
-            this.defense = (int)(this.defDefense * (1 + ((baseVit + (this.Level / 6)) * (0.07f + ((baseVit + (this.Level / 6)) * 0.0002f)))));
+            this.defense = (int)(this.defDefense * (1 + ((this.baseVit + (this.Level / 6)) * (0.07f + ((this.baseVit + (this.Level / 6)) * 0.0002f)))));
             if (this.lifeMax < 1)
                 this.lifeMax = 1;
             Main.playerCount = -1;
@@ -55933,7 +55933,8 @@ namespace Terraria
 					return;
                 }
                 int baseExp = this.Exp;
-                for (int i = 0; i < 255; i++)
+                int[] teamxp = new int[5];
+                    for (int i = 0; i < 255; i++)
                 {
                     if (Main.netMode == 2)
                     {
@@ -55964,8 +55965,13 @@ namespace Terraria
                         }
                         if (this.Dead == 0 && this.tapped[i] && this.ExptoGive > 0)
                         {
-                            if (this.tag[i] >= this.defaultHP * 0.25f)
+                            if (this.tag[i] >= this.defaultHP * 0.5f)
                             {
+                                if (Main.player[i].team != 0)
+                                {
+                                    if (teamxp[Main.player[i].team] < this.Exp)
+                                        teamxp[Main.player[i].team] = this.Exp;
+                                }
                                 NetMessage.SendData(108, -1, -1, "", i, (float)this.Exp, 0f, 0f, 0);
                                 if (this.boss)
                                     NetMessage.SendData(25, -1, -1, Main.player[i].name + " helped slay " + this.displayName + ", dealt " + this.tag[i] + " damage (" + String.Format("{0:f2}", (double)(this.tag[i] / (double)this.lifeMax) * 100d) + "%) and gained " + ((double)this.Exp * (1d - (double)Main.player[i].EXPRate)) + " EXP.", 255, 25f, 127f, 255f, 0);
@@ -55974,7 +55980,39 @@ namespace Terraria
                             {
                                 if (this.boss)
                                     NetMessage.SendData(25, -1, -1, Main.player[i].name + " helped slay " + this.displayName + ", dealt " + this.tag[i] + " damage (" + String.Format("{0:f2}", (double)(this.tag[i] / (double)this.lifeMax) * 100d) + "%) and gained " + ((double)this.Exp * (1d - (double)Main.player[i].EXPRate)) + " EXP.", 255, 25f, 127f, 255f, 0);
-                                NetMessage.SendData(108, -1, -1, "", i, (float)((int)Math.Ceiling((double)this.Exp * (((double)this.tag[i] / (double)this.defaultHP)))), 0f, 0f, 0);
+                                NetMessage.SendData(108, -1, -1, "", i, (float)((int)Math.Ceiling((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5))))), 0f, 0f, 0);
+                                if (Main.player[i].team != 0)
+                                {
+                                    if (teamxp[Main.player[i].team] < (int)Math.Ceiling((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5)))))
+                                        teamxp[Main.player[i].team] = (int)Math.Ceiling((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5))));
+                                }
+                            }
+                            if (teamxp[Main.player[i].team] > 0)
+                            {
+                                for (int i2 = 0; i2 < 255; i2++)
+                                {
+                                    for (int i3 = 1; i3 < 5; i3++)
+                                    {
+                                        int XP = 0;
+                                        if (Main.player[i2].team == Main.player[i].team)
+                                        {
+                                            if (i2 != i && (Main.player[i2].CheckAbility(38)) && Main.player[i2].team == i3)
+                                            {
+                                                XP += (int)((float)teamxp[i3] * 0.1f);
+                                                if (XP < 1) { XP = 1; }
+                                            }
+                                            if (i2 != i && (Main.player[i2].CheckAbility(39)) && Main.player[i2].team == i3)
+                                            {
+                                                XP += (int)((float)teamxp[i3] * 0.25f);
+                                                if (XP < 1) { XP = 1; }
+                                            }
+                                            if (i2 != i && XP > 0 && Main.player[i2].team == i3)
+                                            {
+                                                NetMessage.SendData(108, -1, -1, "", i2, (float)XP, 0f, 0f, 0);
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

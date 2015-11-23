@@ -45,7 +45,7 @@ namespace Terraria
 
 		public const int maxWallTypes = 225;
 
-		public const int maxBuffTypes = 191;
+		public const int maxBuffTypes = 192;
 
 		public const int maxGlowMasks = 214;
 
@@ -1858,17 +1858,17 @@ namespace Terraria
 			Main.harpNote = 0f;
 			Main.projHostile = new bool[651];
 			Main.projHook = new bool[651];
-			Main.pvpBuff = new bool[191];
-			Main.persistentBuff = new bool[191];
-			Main.vanityPet = new bool[191];
-			Main.lightPet = new bool[191];
-			Main.meleeBuff = new bool[191];
-			Main.debuff = new bool[191];
-			Main.buffName = new string[191];
-			Main.buffTip = new string[191];
-			Main.buffNoSave = new bool[191];
-			Main.buffNoTimeDisplay = new bool[191];
-			Main.buffDoubleApply = new bool[191];
+			Main.pvpBuff = new bool[Main.maxBuffTypes];
+			Main.persistentBuff = new bool[Main.maxBuffTypes];
+			Main.vanityPet = new bool[Main.maxBuffTypes];
+			Main.lightPet = new bool[Main.maxBuffTypes];
+			Main.meleeBuff = new bool[Main.maxBuffTypes];
+			Main.debuff = new bool[Main.maxBuffTypes];
+			Main.buffName = new string[Main.maxBuffTypes];
+			Main.buffTip = new string[Main.maxBuffTypes];
+			Main.buffNoSave = new bool[Main.maxBuffTypes];
+			Main.buffNoTimeDisplay = new bool[Main.maxBuffTypes];
+			Main.buffDoubleApply = new bool[Main.maxBuffTypes];
 			Main.maxMP = 10;
 			Main.recentWorld = new string[Main.maxMP];
 			Main.recentIP = new string[Main.maxMP];
@@ -1933,7 +1933,7 @@ namespace Terraria
 			Main.armorHide = false;
 			Main.craftingAlpha = 1f;
 			Main.armorAlpha = 1f;
-			Main.buffAlpha = new float[191];
+			Main.buffAlpha = new float[Main.maxBuffTypes];
 			Main.trashItem = new Item();
 			Main.hardMode = false;
 			Main.sceneWaterPos = Vector2.Zero;
@@ -2631,7 +2631,7 @@ namespace Terraria
 
         public static double CalculateDamage(int Damage, int Defense)
         {
-            double num = (Math.Pow(Damage + 10, 2) - Defense) / (45f + (Defense * (2f * (1f + ((float)Defense / 900f)))));
+            double num = (Math.Pow(Damage + 10, 2) - Defense) / (35f + (Defense * (2f * (1f + ((float)Defense / 900f)))));
             if (num < 1.0)
             {
                 num = 1.0;
@@ -2645,10 +2645,10 @@ namespace Terraria
 
         public static double CalculatePlayerDamage(int Damage, int Defense)
 		{
-            double damage = (Math.Pow(Damage + 10, 2) - Defense) / (45f + (Defense * (2f * (1f + ((float)Defense / 900f)))));
+            double damage = (Math.Pow(Damage + 10, 2) - Defense) / (35f + (Defense * (2f * (1f + ((float)Defense / 900f)))));
             if (Main.expertMode)
 			{
-                damage = (Math.Pow(Damage + 10, 2) - Defense) / (45f + (Defense * (2.5f * (1f + ((float)Defense / 900f)))));
+                damage = (Math.Pow(Damage + 10, 2) - Defense) / (35f + (Defense * (2.5f * (1f + ((float)Defense / 900f)))));
             }
 			if (damage < 1.0)
 			{
@@ -6334,7 +6334,8 @@ namespace Terraria
 			WorldGen.RandomizeBackgrounds();
 			WorldGen.RandomizeCaveBackgrounds();
 			WorldGen.RandomizeMoonState();
-			Main.bgAlpha[0] = 1f;
+            Leveled.Abilities.CreateAbilities();
+            Main.bgAlpha[0] = 1f;
 			Main.bgAlpha2[0] = 1f;
 			this.invBottom = 258;
 			for (int i = 0; i < 651; i++)
@@ -6525,7 +6526,8 @@ namespace Terraria
 			Main.slimeRainNPC[1] = true;
 			Main.debuff[158] = true;
 			Main.debuff[160] = true;
-			Main.debuff[20] = true;
+            Main.debuff[Terraria.ID.BuffID.Endured] = true;
+            Main.debuff[20] = true;
 			Main.debuff[21] = true;
 			Main.debuff[22] = true;
 			Main.debuff[23] = true;
@@ -12780,7 +12782,8 @@ namespace Terraria
 				NetMessage.SendData(36, -1, -1, "", Main.myPlayer, 0f, 0f, 0f, 0, 0, 0);
 				NetMessage.SendData(16, -1, -1, "", Main.myPlayer, 0f, 0f, 0f, 0, 0, 0);
 				NetMessage.SendData(40, -1, -1, "", Main.myPlayer, 0f, 0f, 0f, 0, 0, 0);
-			}
+                NetMessage.SendData(109, -1, -1, "", Main.myPlayer, 0f, 0f, 0f, 0, 0, 0);
+            }
 			if (Netplay.Connection.IsActive)
 			{
 				RemoteServer connection = Netplay.Connection;

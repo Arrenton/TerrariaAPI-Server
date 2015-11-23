@@ -31,7 +31,8 @@ namespace Terraria
         public short statDef = 1;
         public short statAP = 1;
         public short breathPoint = 0;
-        public byte[] Ability = new byte[255];
+        public List<int> Ability = new List<int>();
+        public List<int> LearnedAbilities = new List<int>();
         public short At = 0;
         public short Def = 0;
         public short St = 0;
@@ -47,12 +48,16 @@ namespace Terraria
         public short boostRng = 0;
         public short boostMag = 0;
         public short boostDef = 0;
-        public short boostHP = 0;
         public short boostRoc = 0;
         public short boostArw = 0;
         public short boostBul = 0;
-        public short boostThr = 0;
         public short boostSum = 0;
+        public short boostThr = 0;
+        public short boostHP = 0;
+        public short boostMP = 0;
+        public short boostEXP = 0;
+        public short boostPotion = 0;
+        public short boostHeart = 0;
         public short bonusStr = 0;
         public short bonusRng = 0;
         public short bonusMag = 0;
@@ -62,11 +67,13 @@ namespace Terraria
         public short baseMag = 1;
         public short baseDef = 1;
         public short baseDefense = 0;
+        public float KnockbackResist = 1f;
         public byte Spec = 0;
         private byte tt = 0;
         public int lifeRegen2 = 0;
         public bool Regenerate = true;
         public bool MRegenerate = true;
+        public bool Endured = false;
         public bool Lvup = false;
         public byte EXPRate = 0;
         public byte lifeRegenCount2 = 0;
@@ -573,7 +580,7 @@ namespace Terraria
 
 		public int[] buffTime = new int[22];
 
-		public bool[] buffImmune = new bool[191];
+		public bool[] buffImmune = new bool[Main.maxBuffTypes];
 
 		public int heldProj = -1;
 
@@ -2888,6 +2895,7 @@ namespace Terraria
         }
         public void GainExperience(int EXP)
         {
+            EXP = (int)((float)EXP * ((100 + this.boostEXP) / 100f));
             if (Main.CriticalMode)
             {
                 EXP = (int)(EXP * 1.25);
@@ -2906,7 +2914,10 @@ namespace Terraria
             if (Lvup)
             {
                 if (Main.netMode == 1)
-                    NetMessage.SendData(77, -1, -1, "", whoAmI, 0, 0f, 0f, 0);
+                {
+                    NetMessage.SendData(105, -1, -1, "", whoAmI, 0, 0f, 0f, 0);
+                    NetMessage.SendData(109, -1, -1, "", whoAmI, 0, 0f, 0f, 0);
+                }
             }
         }
         public void LevelUpCheck()
@@ -2936,7 +2947,131 @@ namespace Terraria
             if (this.Level == 80)
                 this.MaxExp = 0;
         }
+        public bool CheckAbility(int id)
+        {
+            for (int i = 0; i < this.Ability.Count; i++)
+            {
+                if (this.Ability[i] == id)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public void UpdateAbilities()
+        {
+            int statLifeMax2 = (short)((float)(this.statLifeMax2 / (Main.CriticalMode ? 2 : 1)) * (float)((100 + this.boostHP) / 100f));
+            short hp = (short)((float)this.heartPoint);
+            if (hp < 1) { hp = 1; }
+            int statLifeMax3 = (short)(hp * ((float)((float)statLifeMax2) / 20f));
+            if ((this.statLife <= (double)statLifeMax3 * 0.2))
+            {
+                if (this.CheckAbility(2))
+                {
+                    this.manaRegenBonus += 25;
+                }
+                if (this.CheckAbility(3))
+                {
+                    this.boostDef += 7;
+                }
+                if (this.CheckAbility(4))
+                {
+                    this.boostStr += 7;
+                    this.boostThr += 7;
+                }
+                if (this.CheckAbility(5))
+                {
+                    this.boostMag += 7;
+                    this.boostSum += 7;
+                }
+                if (this.CheckAbility(6))
+                {
+                    this.boostRng += 7;
+                }
+                if (this.CheckAbility(8))
+                {
+                    this.boostEXP += 50;
+                }
+            }
+            if (this.CheckAbility(9))
+            {
+                this.boostPotion += 20;
+            }
+            if (this.CheckAbility(10))
+            {
+                this.boostPotion += 20;
+            }
+            if (this.CheckAbility(11))
+            {
+                this.meleeCrit += 3;
+                this.rangedCrit += 3;
+                this.magicCrit += 3;
+                this.thrownCrit += 3;
+            }
+            if (this.CheckAbility(12))
+            {
+                this.meleeCrit += 3;
+                this.rangedCrit += 3;
+                this.magicCrit += 3;
+                this.thrownCrit += 3;
+            }
+            if (this.CheckAbility(13))
+            {
+                this.meleeCrit += 3;
+                this.rangedCrit += 3;
+                this.magicCrit += 3;
+                this.thrownCrit += 3;
+            }
+            if (this.CheckAbility(14))
+            {
+                this.boostHP += 2;
+            }
+            if (this.CheckAbility(15))
+            {
+                this.boostHP += 2;
+            }
+            if (this.CheckAbility(16))
+            {
+                this.boostHP += 2;
+            }
+            if (this.CheckAbility(17))
+            {
+                this.boostHP += 2;
+            }
+            if (this.CheckAbility(18))
+            {
+                this.boostHP += 2;
+            }
+            if (this.CheckAbility(19))
+            {
+                this.boostMP += 1;
+            }
+            if (this.CheckAbility(20))
+            {
+                this.boostMP += 1;
+            }
+            if (this.CheckAbility(21))
+            {
+                this.boostMP += 1;
+            }
+            if (this.CheckAbility(22))
+            {
+                this.boostMP += 1;
+            }
+            if (this.CheckAbility(23))
+            {
+                this.boostMP += 1;
+            }
+            if (this.CheckAbility(24))
+            {
+                this.moveSpeed += 0.15f;
+            }
+            if (this.CheckAbility(37))
+            {
+                this.maxMinions += 1;
+            }
 
+        }
         public void checkArmor()
 		{
 		}
@@ -5577,19 +5712,23 @@ namespace Terraria
 					{
 						num1 = num1 + Item.coinGrabRange;
 					}
-					if (this.manaMagnet && (Main.item[num].type == 184 || Main.item[num].type == 1735 || Main.item[num].type == 1868))
+					else if (this.manaMagnet && (Main.item[num].type == 184 || Main.item[num].type == 1735 || Main.item[num].type == 1868))
 					{
 						num1 = num1 + Item.manaGrabRange;
 					}
-					if (this.lifeMagnet && (Main.item[num].type == 58 || Main.item[num].type == 1734 || Main.item[num].type == 1867))
+					else if (this.lifeMagnet && (Main.item[num].type == 58 || Main.item[num].type == 1734 || Main.item[num].type == 1867))
 					{
 						num1 = num1 + Item.lifeGrabRange;
 					}
-					if (ItemID.Sets.NebulaPickup[Main.item[num].type])
+					else if (ItemID.Sets.NebulaPickup[Main.item[num].type])
 					{
 						num1 = num1 + 100;
-					}
-					if ((new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height)).Intersects(new Rectangle((int)Main.item[num].position.X, (int)Main.item[num].position.Y, Main.item[num].width, Main.item[num].height)))
+                    }
+                    else if (this.CheckAbility(40))
+                    {
+                        num1 += 75;
+                    }
+                    if ((new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height)).Intersects(new Rectangle((int)Main.item[num].position.X, (int)Main.item[num].position.Y, Main.item[num].width, Main.item[num].height)))
 					{
 						if (i == Main.myPlayer && (this.inventory[this.selectedItem].type != 0 || this.itemAnimation <= 0))
 						{
@@ -5608,13 +5747,12 @@ namespace Terraria
 								}
 							}
 							if (Main.item[num].type == 58 || Main.item[num].type == 1734 || Main.item[num].type == 1867)
-							{
-								Player player = this;
-								player.statLife = player.statLife + 20;
-								if (Main.myPlayer == this.whoAmI)
-								{
-									this.HealEffect(20, true);
-								}
+                            {
+                                this.statLife += (int)(((float)this.heartPoint2) * (1f + (this.boostHeart)));
+                                if (Main.myPlayer == this.whoAmI)
+                                {
+                                    this.HealEffect((int)(((float)this.heartPoint2) * (1f + (this.boostHeart))), true);
+                                }
 								if (this.statLife > this.statLifeMax3)
 								{
 									this.statLife = this.statLifeMax3;
@@ -5697,8 +5835,22 @@ namespace Terraria
 							int num5 = 5;
 							Main.item[num].velocity.X = (Main.item[num].velocity.X * (float)(num5 - 1) + x2) / (float)num5;
 							Main.item[num].velocity.Y = (Main.item[num].velocity.Y * (float)(num5 - 1) + y2) / (float)num5;
-						}
-						else if (!ItemID.Sets.NebulaPickup[Main.item[num].type])
+                        }
+                        else if (this.CheckAbility(40))
+                        {
+                            float num18 = 12f;
+                            Vector2 vector4 = new Vector2(Main.item[num].position.X + (float)(Main.item[num].width / 2), Main.item[num].position.Y + (float)(Main.item[num].height / 2));
+                            float num19 = base.Center.X - vector4.X;
+                            float num20 = base.Center.Y - vector4.Y;
+                            float num21 = (float)Math.Sqrt((double)(num19 * num19 + num20 * num20));
+                            num21 = num18 / num21;
+                            num19 *= num21;
+                            num20 *= num21;
+                            int num22 = 5;
+                            Main.item[num].velocity.X = (Main.item[num].velocity.X * (float)(num22 - 1) + num19) / (float)num22;
+                            Main.item[num].velocity.Y = (Main.item[num].velocity.Y * (float)(num22 - 1) + num20) / (float)num22;
+                        }
+                        else if (!ItemID.Sets.NebulaPickup[Main.item[num].type])
 						{
 							if ((double)this.position.X + (double)this.width * 0.5 <= (double)Main.item[num].position.X + (double)Main.item[num].width * 0.5)
 							{
@@ -6407,6 +6559,16 @@ namespace Terraria
                     }
                     this.ManaEffect(num6);
                 }
+                if (this.CheckAbility(41))
+                {
+                    int num6 = (int)((num / (double)this.statLifeMax3) * 125.0);
+                    this.statMana += num6;
+                    if (this.statMana > this.statManaMax3)
+                    {
+                        this.statMana = this.statManaMax3;
+                    }
+                    this.ManaEffect(num6);
+                }
                 if (this.paladinBuff && this.whoAmI != Main.myPlayer)
 				{
 					int num3 = (int)(num * 0.25);
@@ -6475,7 +6637,12 @@ namespace Terraria
 				CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), color, string.Concat((int)num), Crit, false);
 				Player player2 = this;
 				this.statLife -= (int)num;
-				if (cooldownCounter == -1)
+                if (this.statLife <= 0 && !this.Endured && this.CheckAbility(1))
+                {
+                    this.AddBuff(Terraria.ID.BuffID.Endured, 3600, false);
+                    this.statLife = 1;
+                }
+                if (cooldownCounter == -1)
 				{
 					this.immune = true;
 					if (num == 1.0)
@@ -6567,10 +6734,10 @@ namespace Terraria
 					}
 				}
 				if (!this.noKnockback && hitDirection != 0 && (!this.mount.Active || !this.mount.Cart))
-				{
-					this.velocity.X = 4.5f * (float)hitDirection;
-					this.velocity.Y = -3.5f;
-				}
+                {
+                    this.velocity.X = (4.5f * (float)hitDirection) * this.KnockbackResist;
+                    this.velocity.Y = (-3.5f) * this.KnockbackResist;
+                }
 				if (this.statLife <= 0)
 				{
 					this.statLife = 0;
@@ -10357,14 +10524,13 @@ namespace Terraria
 					}
 				}
 				if (item.healLife > 0)
-				{
-					Player player20 = this;
-					player20.statLife = player20.statLife + item.healLife;
-					this.itemTime = item.useTime;
+                {
+                    this.statLife += (int)(((float)this.heartPoint2 * ((float)item.healLife / 20f)) * (1f + ((float)this.boostPotion / 100f)));
+                    this.itemTime = item.useTime;
 					if (Main.myPlayer == this.whoAmI)
-					{
-						this.HealEffect(item.healLife, true);
-					}
+                    {
+                        this.HealEffect((int)(((float)this.heartPoint2 * ((float)item.healLife / 20f)) * (1f + ((float)this.boostPotion / 100f))), true);
+                    }
 				}
 				if (item.healMana > 0)
 				{
@@ -17217,7 +17383,7 @@ namespace Terraria
 				Item item1 = this.inventory[i];
 				if (item1.stack > 0 && item1.type > 0 && item1.potion && item1.healLife > 0)
 				{
-					int num2 = item1.healLife - num;
+					int num2 = (int)(((float)this.heartPoint2 * ((float)item1.healLife / 20f)) * (1f + ((float)this.boostPotion / 100f))) - num;
 					if (num1 < 0)
 					{
 						if (num2 > num1)
@@ -17270,7 +17436,7 @@ namespace Terraria
 					this.AddBuff(21, this.potionDelay, true);
 				}
 			}
-            this.statLife += (int)((float)this.heartPoint2 * ((float)item.healLife / 20f));
+            this.statLife += (int)(((float)this.heartPoint2 * ((float)item.healLife / 20f)) * (1f + ((float)this.boostPotion / 100f)));
             this.statMana += item.healMana;
             if (this.statLife > this.statLifeMax3)
 			{
@@ -17282,7 +17448,7 @@ namespace Terraria
 			}
 			if (item.healLife > 0 && Main.myPlayer == this.whoAmI)
 			{
-                this.HealEffect((int)((float)this.heartPoint2 * ((float)item.healLife / 20f)), true);
+                this.HealEffect((int)(((float)this.heartPoint2 * ((float)item.healLife / 20f)) * (1f + ((float)this.boostPotion / 100f))), true);
             }
 			if (item.healMana > 0 && Main.myPlayer == this.whoAmI)
 			{
@@ -17345,7 +17511,7 @@ namespace Terraria
 							this.AddBuff(21, this.potionDelay, true);
 						}
                     }
-                    this.statLife += (int)((float)this.heartPoint2 * ((float)this.inventory[i].healLife / 20f));
+                    this.statLife += (int)(((float)this.heartPoint2 * ((float)this.inventory[i].healLife / 20f)) * (1f + ((float)this.boostPotion / 100f)));
                     this.statMana += this.inventory[i].healMana;
                     if (this.statLife > this.statLifeMax3)
 					{
@@ -17357,7 +17523,7 @@ namespace Terraria
 					}
 					if (this.inventory[i].healLife > 0 && Main.myPlayer == this.whoAmI)
                     {
-                        this.HealEffect((int)((float)this.heartPoint2 * ((float)this.inventory[i].healLife / 20f)), true);
+                        this.HealEffect((int)(((float)this.heartPoint2 * ((float)this.inventory[i].healLife / 20f)) * (1f + ((float)this.boostPotion / 100f))), true);
                     }
 					if (this.inventory[i].healMana > 0)
 					{
@@ -17501,6 +17667,11 @@ namespace Terraria
             this.boostBul = 0;
             this.boostRoc = 0;
             this.boostHP = 0;
+            this.boostMP = 0;
+            this.boostEXP = 0;
+            this.boostPotion = 0;
+            this.boostHeart = 0;
+            this.KnockbackResist = 1f;
             if (!this.extraAccessory || !Main.expertMode && !Main.gameMenu)
 			{
 				this.extraAccessorySlots = 0;
@@ -22398,7 +22569,7 @@ namespace Terraria
 					this.AddBuff(147, 2, false);
 				}
 			}
-			for (int p = 0; p < 191; p++)
+			for (int p = 0; p < Main.maxBuffTypes; p++)
 			{
 				this.buffImmune[p] = false;
 			}
@@ -22662,11 +22833,8 @@ namespace Terraria
 			else
 			{
 				this.stealth = 1f;
-			}
-			if (this.manaSick)
-			{
-				this.magicDamage *= 1f - this.manaSickReduction;
-			}
+            }
+            this.UpdateAbilities();
 			if (this.inventory[this.selectedItem].type == 1947)
 			{
 				this.meleeSpeed = (1f + this.meleeSpeed) / 2f;
@@ -22729,12 +22897,90 @@ namespace Terraria
                 this.thrownDamage = 0.1f;
             if (this.minionDamage < 0.1f)
                 this.minionDamage = 0.1f;
+            if (this.manaSick)
+            {
+                this.magicDamage *= 1f - this.manaSickReduction;
+            }
+            if (CheckAbility(28))
+            {
+                this.meleeDamage *= 1.04f;
+            }
+            if (CheckAbility(29))
+            {
+                this.meleeDamage *= 1.04f;
+            }
+            if (CheckAbility(30))
+            {
+                this.meleeDamage *= 1.04f;
+            }
+            if (CheckAbility(31))
+            {
+                this.magicDamage *= 1.04f;
+            }
+            if (CheckAbility(32))
+            {
+                this.magicDamage *= 1.04f;
+            }
+            if (CheckAbility(33))
+            {
+                this.magicDamage *= 1.04f;
+            }
+            if (CheckAbility(34))
+            {
+                this.rangedDamage *= 1.04f;
+            }
+            if (CheckAbility(35))
+            {
+                this.rangedDamage *= 1.04f;
+            }
+            if (CheckAbility(36))
+            {
+                this.rangedDamage *= 1.04f;
+            }
+            if (CheckAbility(44))
+            {
+                this.minionDamage *= 1.04f;
+            }
+            if (CheckAbility(45))
+            {
+                this.minionDamage *= 1.04f;
+            }
+            if (CheckAbility(46))
+            {
+                this.minionDamage *= 1.04f;
+            }
+            if (CheckAbility(47))
+            {
+                this.thrownDamage *= 1.04f;
+            }
+            if (CheckAbility(48))
+            {
+                this.thrownDamage *= 1.04f;
+            }
+            if (CheckAbility(49))
+            {
+                this.thrownDamage *= 1.04f;
+            }
             if (Main.CriticalMode)
             {
                 this.statLifeMax2 /= 2;
             }
-            this.baseDefense = (short)(this.statDefense + 4);
-            this.statDefense = (int)((this.statDefense + 4) * (1 + ((this.statDef + this.boostDef) * (0.07f + ((this.statDef + this.boostDef) * 0.0011f)))));
+            this.baseDefense = (short)(this.statDefense + 7);
+            this.statDefense = (int)((this.statDefense + 7) * (1 + ((this.statDef + this.boostDef) * (0.07f + ((this.statDef + this.boostDef) * 0.0002f)))));
+            double defmult = 1f;
+            if (CheckAbility(25))
+            {
+                defmult += 0.05;
+            }
+            if (CheckAbility(26))
+            {
+                defmult += 0.05;
+            }
+            if (CheckAbility(27))
+            {
+                defmult += 0.05;
+            }
+            this.statDefense = (int)((double)this.statDefense * defmult);
             this.statLifeMax2 = (short)((float)this.statLifeMax2 * (float)((100 + this.boostHP) / 100f));
             short hp = (short)((float)this.heartPoint);// * (float)(((float)(100 + this.boostHP) / 100f)));
 
@@ -32322,7 +32568,17 @@ namespace Terraria
 							player30.lifeRegenCount = player30.lifeRegenCount + 480;
                             int REC = -4 + (int)((float)this.heartPoint2 * (4f / 20f));
                             if (REC < 0) { REC = 0; }
-                            this.statLife -= 4 + REC;
+                            bool flagdrain = true;
+                            for (int i = 0; i < 22; i++)
+                            {
+                                if (this.buffType[i] == 191)
+                                {
+                                    if (this.buffTime[i] >= 3400)
+                                        flagdrain = false;
+                                }
+                            }
+                            if (flagdrain)
+                                this.statLife -= 4 + REC;
                             CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegen, string.Concat(4), false, true);
 						}
 						else if (this.lifeRegenCount <= -360)
@@ -32331,7 +32587,17 @@ namespace Terraria
 							player32.lifeRegenCount = player32.lifeRegenCount + 360;
                             int REC = -3 + (int)((float)this.heartPoint2 * (3f / 20f));
                             if (REC < 0) { REC = 0; }
-                            this.statLife -= 3 + REC;
+                            bool flagdrain = true;
+                            for (int i = 0; i < 22; i++)
+                            {
+                                if (this.buffType[i] == 191)
+                                {
+                                    if (this.buffTime[i] >= 3400)
+                                        flagdrain = false;
+                                }
+                            }
+                            if (flagdrain)
+                                this.statLife -= 3 + REC;
                             CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegen, string.Concat(3), false, true);
 						}
 						else if (this.lifeRegenCount > -240)
@@ -32340,7 +32606,17 @@ namespace Terraria
 							player34.lifeRegenCount = player34.lifeRegenCount + 120;
                             int REC = -1 + (int)((float)this.heartPoint2 * (1f / 20f));
                             if (REC < 0) { REC = 0; }
-                            this.statLife -= 1 + REC;
+                            bool flagdrain = true;
+                            for (int i = 0; i < 22; i++)
+                            {
+                                if (this.buffType[i] == 191)
+                                {
+                                    if (this.buffTime[i] >= 3400)
+                                        flagdrain = false;
+                                }
+                            }
+                            if (flagdrain)
+                                this.statLife -= 1 + REC;
                             CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegen, string.Concat(1), false, true);
 						}
 						else
@@ -32349,7 +32625,17 @@ namespace Terraria
 							player36.lifeRegenCount = player36.lifeRegenCount + 240;
                             int REC = -2 + (int)((float)this.heartPoint2 * (2f / 20f));
                             if (REC < 0) { REC = 0; }
-                            this.statLife -= 2 + REC;
+                            bool flagdrain = true;
+                            for (int i = 0; i < 22; i++)
+                            {
+                                if (this.buffType[i] == 191)
+                                {
+                                    if (this.buffTime[i] >= 3400)
+                                        flagdrain = false;
+                                }
+                            }
+                            if (flagdrain)
+                                this.statLife -= 2 + REC;
                             CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegen, string.Concat(2), false, true);
 						}
 						if (this.statLife > 0 || this.whoAmI != Main.myPlayer)
@@ -32378,7 +32664,17 @@ namespace Terraria
 				player38.lifeRegenCount = player38.lifeRegenCount + 600;
                 int REC = -5 + (int)((float)this.heartPoint2 * (5f / 20f));
                 if (REC < 0) { REC = 0; }
-                this.statLife -= 5 + REC;
+                bool flagdrain = true;
+                for (int i = 0; i < 22; i++)
+                {
+                    if (this.buffType[i] == 191)
+                    {
+                        if (this.buffTime[i] >= 3400)
+                            flagdrain = false;
+                    }
+                }
+                if (flagdrain)
+                    this.statLife -= 5 + REC;
                 CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegen, string.Concat(5), false, true);
 				if (this.statLife > 0 || this.whoAmI != Main.myPlayer)
 				{

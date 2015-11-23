@@ -57,7 +57,7 @@ namespace Terraria
             switch (msgType)
             {
                 case 1:
-                    writer.Write("Terraria" + Main.curRelease + "0001");
+                    writer.Write("Terraria" + Main.curRelease + "0002");
                     break;
                 case 2:
                     writer.Write(text);
@@ -123,6 +123,25 @@ namespace Terraria
                         writer.Write(bb3);
                         writer.Write(player.Spec);
                         writer.Write(player.EXPRate);
+                        for (int i = 0; i < Leveled.Abilities.AbilityList.Count; i++)
+                        {
+                            if (i < player.Ability.Count)
+                            {
+                                writer.Write((byte)player.Ability[i]);
+                            }
+                            else
+                            {
+                                writer.Write((byte)0);
+                            }
+                            if (i < player.LearnedAbilities.Count)
+                            {
+                                writer.Write((byte)player.LearnedAbilities[i]);
+                            }
+                            else
+                            {
+                                writer.Write((byte)0);
+                            }
+                        }
                         break;
                     }
                 case 5:
@@ -1184,6 +1203,39 @@ namespace Terraria
                 case 108:
                     writer.Write((byte)number);
                     writer.Write((int)number2);
+                    break;
+                case 109:
+                    writer.Write((byte)number);
+                    try
+                    {
+                        for (int i = 0; i < Leveled.Abilities.AbilityList.Count; i++)
+                        {
+                            if (i < Main.player[number].Ability.Count)
+                            {
+                                writer.Write((byte)Main.player[number].Ability[i]);
+                            }
+                            else
+                            {
+                                writer.Write((byte)0);
+                            }
+                            if (i < Main.player[number].LearnedAbilities.Count)
+                            {
+                                writer.Write((byte)Main.player[number].LearnedAbilities[i]);
+                            }
+                            else
+                            {
+                                writer.Write((byte)0);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+#if DEBUG
+										Console.WriteLine(ex);
+										System.Diagnostics.Debugger.Break();
+
+#endif
+                    }
                     break;
             }
 			int num19 = (int) writer.BaseStream.Position;
@@ -2319,7 +2371,7 @@ namespace Terraria
 						NetMessage.SendData(45, -1, i, "", i, 0f, 0f, 0f, 0, 0, 0);
 						NetMessage.SendData(42, -1, i, "", i, 0f, 0f, 0f, 0, 0, 0);
 						NetMessage.SendData(50, -1, i, "", i, 0f, 0f, 0f, 0, 0, 0);
-					}
+                    }
 
 					if (sendInventory)
 					{
