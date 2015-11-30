@@ -11670,8 +11670,25 @@ namespace Terraria
 				this.soundKilled = 1;
 				this.catchItem = 3564;
 				this.rarity = 3;
-			}
-			if (flag)
+            }
+            else if (this.type == 540)
+            {
+                this.name = "Vile Spit";
+                this.width = 16;
+                this.height = 16;
+                this.aiStyle = 9;
+                this.damage = 65;
+                this.defense = 0;
+                this.lifeMax = 1;
+                this.soundHit = 0;
+                this.soundKilled = 9;
+                this.noGravity = true;
+                this.noTileCollide = true;
+                this.knockBackResist = 0f;
+                this.scale = 0.9f;
+                this.alpha = 80;
+            }
+            if (flag)
 			{
 				for (int num2 = 0; num2 < Main.maxBuffTypes; num2++)
 				{
@@ -16192,6 +16209,15 @@ namespace Terraria
                     this.Level = 1;
                     this.ExptoGive = 150;
                     this.NoDamage = true;
+                    break;
+                    
+                case 540:
+
+                    //"Vile Spit";
+                    this.Level = 25;
+                    this.ExptoGive = 2;
+                    this.projectile = true;
+
                     break;
 
                 default:
@@ -22462,7 +22488,7 @@ namespace Terraria
 							this.TargetClosest(true);
 							if (Collision.CanHitLine(base.Center, 1, 1, Main.player[this.target].Center, 1, 1))
 							{
-								NPC.NewNPC((int)(this.position.X + (float)(this.width / 2) + this.velocity.X), (int)(this.position.Y + (float)(this.height / 2) + this.velocity.Y), 112, 0, 0f, 1f, 0f, 0f, 255);
+								NPC.NewNPC((int)(this.position.X + (float)(this.width / 2) + this.velocity.X), (int)(this.position.Y + (float)(this.height / 2) + this.velocity.Y), 540, 0, 0f, 1f, 0f, 0f, 255);
 							}
 						}
 					}
@@ -22475,7 +22501,7 @@ namespace Terraria
 							this.TargetClosest(true);
 							if (Collision.CanHitLine(base.Center, 1, 1, Main.player[this.target].Center, 1, 1))
 							{
-								NPC.NewNPC((int)(this.position.X + (float)(this.width / 2) + this.velocity.X), (int)(this.position.Y + (float)(this.height / 2) + this.velocity.Y), 112, 0, 0f, 1f, 0f, 0f, 255);
+								NPC.NewNPC((int)(this.position.X + (float)(this.width / 2) + this.velocity.X), (int)(this.position.Y + (float)(this.height / 2) + this.velocity.Y), 540, 0, 0f, 1f, 0f, 0f, 255);
 							}
 						}
 					}
@@ -26089,9 +26115,9 @@ namespace Terraria
 					if (this.type == 25)
 					{
 						num538 = 5f;
-					}
-					if (this.type == 112)
-					{
+                    }
+                    if (this.type == 112 || this.type == 540)
+                    {
 						num538 = 7f;
 					}
 					Vector2 vector53 = new Vector2(this.position.X + (float)this.width * 0.5f, this.position.Y + (float)this.height * 0.5f);
@@ -26101,9 +26127,9 @@ namespace Terraria
 					num541 = num538 / num541;
 					this.velocity.X = num539 * num541;
 					this.velocity.Y = num540 * num541;
-				}
-				if (this.type == 112)
-				{
+                }
+                if (this.type == 112 || this.type == 540)
+                {
                     this.damage = CalculateDamage(((this.ai[1] == 1f) ? 65 : this.defDamage), this.Level);
                     this.ai[0] += 1f;
 					if (this.ai[0] > 3f)
@@ -26115,7 +26141,7 @@ namespace Terraria
 						this.position += this.velocity;
 					}
 				}
-				if (this.type == 112 && Collision.SolidCollision(this.position, this.width, this.height))
+				if ((this.type == 112 || this.type == 540) && Collision.SolidCollision(this.position, this.width, this.height))
 				{
 					int arg_1FD8D_0 = Main.netMode;
 					this.StrikeNPCNoInteraction(999, 0f, 0, false, false, false);
@@ -63150,7 +63176,7 @@ namespace Terraria
 						{
 							num46 = NPC.NewNPC(num * 16 + 8, num2 * 16, 78, 0, 0f, 0f, 0f, 0f, 255);
 						}
-						else if (Main.hardMode && (num45 == 112 || num45 == 234) && Main.rand.Next(2) == 0)
+						else if (Main.hardMode && (num45 == 112 || num45 == 540 || num45 == 234) && Main.rand.Next(2) == 0)
 						{
 							num46 = NPC.NewNPC(num * 16 + 8, num2 * 16, 79, 0, 0f, 0f, 0f, 0f, 255);
 						}
@@ -63228,7 +63254,7 @@ namespace Terraria
 								}
 							}
 						}
-						else if ((num45 == 22 && Main.player[j].ZoneCorrupt) || num45 == 23 || num45 == 25 || num45 == 112 || num45 == 163)
+						else if ((num45 == 22 && Main.player[j].ZoneCorrupt) || num45 == 23 || num45 == 25 || num45 == 112 || num45 == 540 || num45 == 163)
 						{
 							if (Main.hardMode && (double)num2 >= Main.rockLayer && Main.rand.Next(3) == 0)
 							{

@@ -1214,8 +1214,9 @@ namespace Terraria.ID
 		public const short SquirrelRed = 538;
 
 		public const short SquirrelGold = 539;
+        public const short VileSpit2 = 540;
 
-		public const short Count = 540;
+        public const short Count = 541;
 
 		public static class Sets
 		{
