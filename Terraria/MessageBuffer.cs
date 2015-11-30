@@ -1278,96 +1278,98 @@ namespace Terraria
 					return;
 				}
 				case 23:
-				{
-					if (Main.netMode != 1)
-					{
-						return;
-					}
-					int num48 = this.reader.ReadInt16();
-					Vector2 vector22 = this.reader.ReadVector2();
-					Vector2 vector23 = this.reader.ReadVector2();
-					int num49 = this.reader.ReadByte();
-					BitsByte bitsByte11 = this.reader.ReadByte();
-					float[] singleArray = new float[NPC.maxAI];
-					for (int n1 = 0; n1 < NPC.maxAI; n1++)
-					{
-						if (!bitsByte11[n1 + 2])
-						{
-							singleArray[n1] = 0f;
-						}
-						else
-						{
-							singleArray[n1] = this.reader.ReadSingle();
-						}
-					}
-					int num50 = this.reader.ReadInt16();
-					int num51 = 0;
-					if (!bitsByte11[7])
-					{
-						if (Main.npcLifeBytes[num50] == 2)
-						{
-							num51 = this.reader.ReadInt16();
-						}
-						else if (Main.npcLifeBytes[num50] != 4)
-						{
-							num51 = this.reader.ReadSByte();
-						}
-						else
-						{
-							num51 = this.reader.ReadInt32();
-						}
-					}
-					int num52 = -1;
-					NPC nPC = Main.npc[num48];
-					if (!nPC.active || nPC.netID != num50)
-					{
-						if (nPC.active)
-						{
-							num52 = nPC.type;
-						}
-						nPC.active = true;
-						nPC.netDefaults(num50);
-					}
-					nPC.position = vector22;
-					nPC.velocity = vector23;
-					nPC.target = num49;
-					nPC.direction = (bitsByte11[0] ? 1 : -1);
-					nPC.directionY = (bitsByte11[1] ? 1 : -1);
-					nPC.spriteDirection = (bitsByte11[6] ? 1 : -1);
-					if (!bitsByte11[7])
-					{
-						nPC.life = num51;
-					}
-					else
-					{
-						int num53 = nPC.lifeMax;
-						int num54 = num53;
-						nPC.life = num53;
-						num51 = num54;
-					}
-					if (num51 <= 0)
-					{
-						nPC.active = false;
-					}
-					for (int o1 = 0; o1 < NPC.maxAI; o1++)
-					{
-						nPC.ai[o1] = singleArray[o1];
-					}
-					if (num50 == 262)
-					{
-						NPC.plantBoss = num48;
-					}
-					if (num50 == 245)
-					{
-						NPC.golemBoss = num48;
-					}
-					if (!Main.npcCatchable[nPC.type])
-					{
-						return;
-					}
-					nPC.releaseOwner = this.reader.ReadByte();
-					return;
-				}
+                    {
+                        if (Main.netMode != 1)
+                        {
+                            return;
+                        }
+                        int num48 = this.reader.ReadInt16();
+                        Vector2 vector22 = this.reader.ReadVector2();
+                        Vector2 vector23 = this.reader.ReadVector2();
+                        int num49 = this.reader.ReadByte();
+                        BitsByte bitsByte11 = this.reader.ReadByte();
+                        float[] singleArray = new float[NPC.maxAI];
+                        for (int n1 = 0; n1 < NPC.maxAI; n1++)
+                        {
+                            if (!bitsByte11[n1 + 2])
+                            {
+                                singleArray[n1] = 0f;
+                            }
+                            else
+                            {
+                                singleArray[n1] = this.reader.ReadSingle();
+                            }
+                        }
+                        int num50 = this.reader.ReadInt16();
+                        int num51 = 0;
+                        if (!bitsByte11[7])
+                        {
+                            if (Main.npcLifeBytes[num50] == 2)
+                            {
+                                num51 = this.reader.ReadInt16();
+                            }
+                            else if (Main.npcLifeBytes[num50] != 4)
+                            {
+                                num51 = this.reader.ReadSByte();
+                            }
+                            else
+                            {
+                                num51 = this.reader.ReadInt32();
+                            }
+                        }
+                        int num52 = -1;
+                        NPC nPC = Main.npc[num48];
+                        if (!nPC.active || nPC.netID != num50)
+                        {
+                            if (nPC.active)
+                            {
+                                num52 = nPC.type;
+                            }
+                            nPC.active = true;
+                            nPC.netDefaults(num50);
+                        }
+                        nPC.Level = this.reader.ReadByte();
+                        nPC.SetStats();
+                        nPC.position = vector22;
+                        nPC.velocity = vector23;
+                        nPC.target = num49;
+                        nPC.direction = (bitsByte11[0] ? 1 : -1);
+                        nPC.directionY = (bitsByte11[1] ? 1 : -1);
+                        nPC.spriteDirection = (bitsByte11[6] ? 1 : -1);
+                        if (!bitsByte11[7])
+                        {
+                            nPC.life = num51;
+                        }
+                        else
+                        {
+                            int num53 = nPC.lifeMax;
+                            int num54 = num53;
+                            nPC.life = num53;
+                            num51 = num54;
+                        }
+                        if (num51 <= 0)
+                        {
+                            nPC.active = false;
+                        }
+                        for (int o1 = 0; o1 < NPC.maxAI; o1++)
+                        {
+                            nPC.ai[o1] = singleArray[o1];
+                        }
+                        if (num50 == 262)
+                        {
+                            NPC.plantBoss = num48;
+                        }
+                        if (num50 == 245)
+                        {
+                            NPC.golemBoss = num48;
+                        }
+                        if (!Main.npcCatchable[nPC.type])
+                        {
+                            return;
+                        }
+                        nPC.releaseOwner = this.reader.ReadByte();
+                        return;
+                    }
 				case 24:
 				{
 					int num55 = this.reader.ReadInt16();
