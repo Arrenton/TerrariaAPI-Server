@@ -21576,27 +21576,27 @@ namespace Terraria
 					}
 				}
 				else
-				{
-                    this.defense = 2;
-                    this.damage = 23;
-					if (Main.expertMode)
-					{
-						if (flag30)
-						{
-							this.defense = -2;
-						}
-						if (flag31)
-						{
-							this.damage = (int)(20f * Main.expertDamage);
-							this.defense = -4;
-						}
-						else
-						{
-							this.damage = (int)(18f * Main.expertDamage);
-						}
+                {
+                    int defense = 9;
+                    int damage = 23;
+                    if (Main.expertMode)
+                    {
+                        if (flag30)
+                        {
+                            defense = 5;
+                        }
+                        if (flag31)
+                        {
+                            damage = (int)(20f * Main.expertDamage);
+                            defense = 3;
+                        }
+                        else
+                        {
+                            damage = (int)(18f * Main.expertDamage);
+                        }
                     }
-                    this.defense = CalculateDefense(this.defense, this.Level);
-                    this.damage = CalculateDefense(this.damage, this.Level);
+                    this.defense = CalculateDefense(defense, this.Level);
+                    this.damage = CalculateDamage(damage, this.Level);
                     if (this.ai[1] == 0f && flag30)
 					{
 						this.ai[1] = 5f;
@@ -64853,16 +64853,14 @@ namespace Terraria
                 }
             }
             double num = (double)Damage;
-			int num2 = this.defense;
-			if (this.ichor)
-			{
-				num2 -= 20;
-			}
-			if (num2 < 0)
-			{
-				num2 = 0;
-			}
-			num = Main.CalculateDamage((int)num, num2);
+            if (this.ichor)
+            {
+                num = Main.CalculateDamage((int)num, (int)((float)this.defense * 0.9f));
+            }
+            else
+            {
+                num = Main.CalculateDamage((int)num, this.defense);
+            }
 			if (crit)
 			{
 				num *= 2.0;
@@ -66883,87 +66881,87 @@ namespace Terraria
 						num19 = 2;
 					}
 					this.lifeRegenCount += this.lifeRegen;
-					while (this.lifeRegenCount >= 120)
-					{
-						this.lifeRegenCount -= 120;
-						if (!this.immortal)
-						{
-							if (this.life < this.lifeMax)
+                    while (this.lifeRegenCount >= 120)
+                    {
+                        this.lifeRegenCount -= 120;
+                        if (!this.immortal)
+                        {
+                            if (this.life < this.lifeMax)
                             {
                                 int REC = -1 + (int)((float)this.lifePoint / 30f);
                                 if (REC < 0) { REC = 0; }
                                 this.life += 1 + REC;
                             }
-							if (this.life > this.lifeMax)
-							{
-								this.life = this.lifeMax;
-							}
-						}
-					}
-					if (num19 > 0)
-					{
-						while (this.lifeRegenCount <= -120 * num19)
-						{
-							this.lifeRegenCount += 120 * num19;
-							int whoAmI = this.whoAmI;
-							if (this.realLife >= 0)
-							{
-								whoAmI = this.realLife;
+                            if (this.life > this.lifeMax)
+                            {
+                                this.life = this.lifeMax;
+                            }
+                        }
+                    }
+                    if (num19 > 0)
+                    {
+                        while (this.lifeRegenCount <= -120 * num19)
+                        {
+                            this.lifeRegenCount += 120 * num19;
+                            int whoAmI = this.whoAmI;
+                            if (this.realLife >= 0)
+                            {
+                                whoAmI = this.realLife;
                             }
                             int REC = -num19 + (int)((float)this.lifePoint * ((float)num19 / 20f));
                             if (REC < 0) { REC = 0; }
                             if (!Main.npc[whoAmI].immortal)
                             {
                                 Main.npc[whoAmI].life -= num19 + REC;
-							}
-							CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegenNegative, string.Concat(num19), false, true);
-							if (Main.npc[whoAmI].life <= 0 && !Main.npc[whoAmI].immortal)
-							{
-								Main.npc[whoAmI].life = 1;
-								if (Main.netMode != 1)
-								{
-									Main.npc[whoAmI].StrikeNPCNoInteraction(9999, 0f, 0, false, false, false);
-									if (Main.netMode == 2)
-									{
-										NetMessage.SendData(28, -1, -1, "", whoAmI, 9999f, 0f, 0f, 0, 0, 0);
-									}
-								}
-							}
-						}
-					}
-					else
-					{
-						while (this.lifeRegenCount <= -120)
-						{
-							this.lifeRegenCount += 120;
-							int whoAmI2 = this.whoAmI;
-							if (this.realLife >= 0)
-							{
-								whoAmI2 = this.realLife;
+                            }
+                            CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegenNegative, string.Concat(num19 + REC), false, true);
+                            if (Main.npc[whoAmI].life <= 0 && !Main.npc[whoAmI].immortal)
+                            {
+                                Main.npc[whoAmI].life = 1;
+                                if (Main.netMode != 1)
+                                {
+                                    Main.npc[whoAmI].StrikeNPCNoInteraction(9999, 0f, 0, false, false, false);
+                                    if (Main.netMode == 2)
+                                    {
+                                        NetMessage.SendData(28, -1, -1, "", whoAmI, 9999f, 0f, 0f, 0, 0, 0);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        while (this.lifeRegenCount <= -120)
+                        {
+                            this.lifeRegenCount += 120;
+                            int whoAmI2 = this.whoAmI;
+                            if (this.realLife >= 0)
+                            {
+                                whoAmI2 = this.realLife;
                             }
                             int REC = -1 + (int)((float)this.lifePoint * (1f / 20f));
                             if (REC < 0) { REC = 0; }
                             if (!Main.npc[whoAmI2].immortal)
-							{
-								Main.npc[whoAmI2].life -= 1 + REC;
-							}
-							CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegenNegative, string.Concat(1 + REC), false, true);
-							if (Main.npc[whoAmI2].life <= 0 && !Main.npc[whoAmI2].immortal)
-							{
-								Main.npc[whoAmI2].life = 1;
-								if (Main.netMode != 1)
-								{
-									Main.npc[whoAmI2].StrikeNPCNoInteraction(9999, 0f, 0, false, false, false);
-									if (Main.netMode == 2)
-									{
-										NetMessage.SendData(28, -1, -1, "", whoAmI2, 9999f, 0f, 0f, 0, 0, 0);
-									}
-								}
-							}
-						}
-					}
-				}
-				if (Main.netMode != 1 && Main.bloodMoon)
+                            {
+                                Main.npc[whoAmI2].life -= 1 + REC;
+                            }
+                            CombatText.NewText(new Rectangle((int)this.position.X, (int)this.position.Y, this.width, this.height), CombatText.LifeRegenNegative, string.Concat(1 + REC), false, true);
+                            if (Main.npc[whoAmI2].life <= 0 && !Main.npc[whoAmI2].immortal)
+                            {
+                                Main.npc[whoAmI2].life = 1;
+                                if (Main.netMode != 1)
+                                {
+                                    Main.npc[whoAmI2].StrikeNPCNoInteraction(9999, 0f, 0, false, false, false);
+                                    if (Main.netMode == 2)
+                                    {
+                                        NetMessage.SendData(28, -1, -1, "", whoAmI2, 9999f, 0f, 0f, 0, 0, 0);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (Main.netMode != 1 && Main.bloodMoon)
 				{
 					bool flag2 = false;
 					if (this.value == 0f)
