@@ -602,6 +602,7 @@ namespace Terraria
                             }
                         }
                         writer.Write(nPC.Level);
+                        writer.Write(boolean1);
                         if (Main.npcCatchable[nPC.type])
                         {
                             writer.Write((byte)nPC.releaseOwner);

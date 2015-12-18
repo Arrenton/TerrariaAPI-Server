@@ -1329,6 +1329,7 @@ namespace Terraria
                             nPC.netDefaults(num50);
                         }
                         nPC.Level = this.reader.ReadByte();
+                        bool iskilled = this.reader.ReadBoolean();
                         nPC.SetStats();
                         nPC.position = vector22;
                         nPC.velocity = vector23;
@@ -1385,7 +1386,7 @@ namespace Terraria
 						return;
 					}
 					NetMessage.SendData(24, -1, this.whoAmI, "", num55, (float)num56, 0f, 0f, 0, 0, 0);
-					//NetMessage.SendData(23, -1, -1, "", num55, 0f, 0f, 0f, 0, 0, 0);
+					NetMessage.SendData(23, -1, -1, "", num55, 0f, 0f, 0f, 0, 0, 0);
 					return;
 				}
 				case 25:
@@ -1626,7 +1627,7 @@ namespace Terraria
 						Main.npc[num71].netUpdate = true;
 						return;
 					}
-					//NetMessage.SendData(23, -1, -1, "", num71, 0f, 0f, 0f, 0, 0, 0);
+					NetMessage.SendData(23, -1, -1, "", num71, 0f, 0f, 0f, 0, 0, 0, true);
 					return;
 				}
 				case 29:
@@ -2269,12 +2270,13 @@ namespace Terraria
 					int num147 = this.reader.ReadInt16();
 
 					Main.npc[num145].AddBuff(num146, num147, false);
-					if (Main.netMode != 2)
-					{
-						return;
-					}
-					//NetMessage.SendData(54, -1, -1, "", num145, 0f, 0f, 0f, 0, 0, 0);
-					return;
+                        if (Main.netMode == 2)
+                        {
+                            NetMessage.SendData(54, -1, -1, "", num145, 0f, 0f, 0f, 0, 0, 0);
+                            return;
+                        }
+                        //NetMessage.SendData(54, -1, -1, "", num145, 0f, 0f, 0f, 0, 0, 0);
+                        return;
 				}
 				case 54:
 				{

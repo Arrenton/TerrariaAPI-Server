@@ -15357,19 +15357,19 @@ namespace Terraria
                 case 402:
                     //Milkyway Weaver
                     this.Level = 95;
-                    this.ExptoGive = 47;
+                    this.ExptoGive = 7;
                     break;
 
                 case 403:
                     //Milkyway Weaver
                     this.Level = 95;
-                    this.ExptoGive = 47;
+                    this.ExptoGive = 7;
                     break;
 
                 case 404:
                     //Milkyway Weaver
                     this.Level = 95;
-                    this.ExptoGive = 47;
+                    this.ExptoGive = 7;
                     break;
 
                 case 405:
@@ -15381,146 +15381,146 @@ namespace Terraria
                 case 406:
                     //Star Cell
                     this.Level = 92;
-                    this.ExptoGive = 22;
+                    this.ExptoGive = 4;
                     break;
 
                 case 407:
                     //Flow Invader
                     this.Level = 94;
-                    this.ExptoGive = 38;
+                    this.ExptoGive = 8;
                     break;
 
                 case 408:
                     //Flow Invader Tiny
                     this.Level = 93;
-                    this.ExptoGive = 28;
+                    this.ExptoGive = 5;
                     break;
 
                 case 409:
                     //Twinkle Popper
                     this.Level = 94;
-                    this.ExptoGive = 35;
+                    this.ExptoGive = 6;
                     break;
 
                 case 410:
                     //Twinkle
                     this.Level = 93;
-                    this.ExptoGive = 17;
+                    this.ExptoGive = 2;
                     break;
 
                 case 411:
                     //Stargazer
                     this.Level = 92;
-                    this.ExptoGive = 33;
+                    this.ExptoGive = 7;
                     break;
 
                 case 412:
                     //Crawltipede
                     this.Level = 96;
-                    this.ExptoGive = 48;
+                    this.ExptoGive = 8;
                     break;
 
                 case 413:
                     //Crawltipede
                     this.Level = 96;
-                    this.ExptoGive = 48;
+                    this.ExptoGive = 8;
                     break;
 
                 case 414:
                     //Crawltipede
                     this.Level = 96;
-                    this.ExptoGive = 48;
+                    this.ExptoGive = 8;
                     break;
 
                 case 415:
                     //Drakomire
                     this.Level = 95;
-                    this.ExptoGive = 41;
+                    this.ExptoGive = 7;
                     break;
 
                 case 416:
                     //Drakomire Rider
                     this.Level = 96;
-                    this.ExptoGive = 42;
+                    this.ExptoGive = 6;
                     break;
 
                 case 417:
                     //Sroller
                     this.Level = 93;
-                    this.ExptoGive = 38;
+                    this.ExptoGive = 6;
                     break;
 
                 case 418:
                     //Corite
                     this.Level = 94;
-                    this.ExptoGive = 39;
+                    this.ExptoGive = 6;
                     break;
 
                 case 419:
                     //Selenian
                     this.Level = 95;
-                    this.ExptoGive = 40;
+                    this.ExptoGive = 6;
                     break;
 
                 case 420:
                     //Nebula Floater
                     this.Level = 94;
-                    this.ExptoGive = 37;
+                    this.ExptoGive = 6;
                     break;
 
                 case 421:
                     //Brain Suckler
                     this.Level = 93;
-                    this.ExptoGive = 33;
+                    this.ExptoGive = 6;
                     break;
 
                 case 422:
                     //Vortex Pillar
                     this.Level = 98;
-                    this.ExptoGive = 1250;
+                    this.ExptoGive = 1950;
                     this.NoDamage = true;
                     break;
 
                 case 423:
                     //Evolution Beast
                     this.Level = 95;
-                    this.ExptoGive = 36;
+                    this.ExptoGive = 6;
                     break;
 
                 case 424:
                     //Predictor
                     this.Level = 94;
-                    this.ExptoGive = 38;
+                    this.ExptoGive = 6;
                     break;
 
                 case 425:
                     //Storm Diver
                     this.Level = 94;
-                    this.ExptoGive = 37;
+                    this.ExptoGive = 6;
                     break;
 
                 case 426:
                     //Alien Queen
                     this.Level = 95;
-                    this.ExptoGive = 41;
+                    this.ExptoGive = 2;
                     break;
 
                 case 427:
                     //Alien Hornet
                     this.Level = 93;
-                    this.ExptoGive = 34;
+                    this.ExptoGive = 2;
                     break;
 
                 case 428:
                     //Alien Larva
                     this.Level = 90;
-                    this.ExptoGive = 29;
+                    this.ExptoGive = 1;
                     break;
 
                 case 429:
                     //Vortexian
                     this.Level = 92;
-                    this.ExptoGive = 37;
+                    this.ExptoGive = 6;
                     break;
 
                 case 430:
@@ -15908,7 +15908,7 @@ namespace Terraria
                 case 493:
                     //"Stardust Pillar";
                     this.Level = 98;
-                    this.ExptoGive = 1250;
+                    this.ExptoGive = 1950;
                     this.NoDamage = true;
                     break;
 
@@ -15993,7 +15993,7 @@ namespace Terraria
                 case 507:
                     //"Nebula Pillar";
                     this.Level = 98;
-                    this.ExptoGive = 1250;
+                    this.ExptoGive = 1950;
                     this.NoDamage = true;
                     break;
 
@@ -16055,14 +16055,14 @@ namespace Terraria
                 case 517:
                     //"Solar Pillar";
                     this.Level = 98;
-                    this.ExptoGive = 1250;
+                    this.ExptoGive = 1950;
                     this.NoDamage = true;
                     break;
 
                 case 518:
                     //"Drakanian";
                     this.Level = 96;
-                    this.ExptoGive = 44;
+                    this.ExptoGive = 6;
                     break;
 
                 case 519:
@@ -16218,6 +16218,10 @@ namespace Terraria
                 if (NPC.downedPlantBoss)
                 {
                     max = 50;
+                }
+                if (NPC.downedMoonlord)
+                {
+                    max = 100;
                 }
                 if (neglevel > max)
                     neglevel = max;
@@ -30518,72 +30522,74 @@ namespace Terraria
 						this.TargetClosest(true);
 						float num790 = 0.1f;
 						float num791 = 300f;
-						if ((double)Main.npc[Main.wof].life < (double)Main.npc[Main.wof].lifeMax * 0.25)
-						{
-							this.damage = (int)(75f * Main.damageMultiplier);
-							this.defense = 40;
-							if (!Main.expertMode)
-							{
-								num791 = 900f;
-							}
-							else
-							{
-								num790 += 0.1f;
-							}
-						}
-						else if ((double)Main.npc[Main.wof].life < (double)Main.npc[Main.wof].lifeMax * 0.5)
-						{
-							this.damage = (int)(60f * Main.damageMultiplier);
-							this.defense = 30;
-							if (!Main.expertMode)
-							{
-								num791 = 700f;
-							}
-							else
-							{
-								num790 += 0.066f;
-							}
-						}
-						else if ((double)Main.npc[Main.wof].life < (double)Main.npc[Main.wof].lifeMax * 0.75)
-						{
-							this.damage = (int)(45f * Main.damageMultiplier);
-							this.defense = 20;
-							if (!Main.expertMode)
-							{
-								num791 = 500f;
-							}
-							else
-							{
-								num790 += 0.033f;
-							}
-						}
-						if (Main.expertMode)
-						{
-							this.defense = this.defDefense;
-							if (this.whoAmI % 4 == 0)
-							{
-								num791 *= 1.75f;
-							}
-							if (this.whoAmI % 4 == 1)
-							{
-								num791 *= 1.5f;
-							}
-							if (this.whoAmI % 4 == 2)
-							{
-								num791 *= 1.25f;
-							}
-							if (this.whoAmI % 3 == 0)
-							{
-								num791 *= 1.5f;
-							}
-							if (this.whoAmI % 3 == 1)
-							{
-								num791 *= 1.25f;
-							}
-							num791 *= 0.75f;
+                        int damage = 0;
+                        int defense = 7;
+                        if ((double)Main.npc[Main.wof].life < (double)Main.npc[Main.wof].lifeMax * 0.25)
+                        {
+                            damage = (int)(75f * Main.damageMultiplier);
+                            defense = 40;
+                            if (!Main.expertMode)
+                            {
+                                num791 = 900f;
+                            }
+                            else
+                            {
+                                num790 += 0.1f;
+                            }
                         }
-                        this.damage = CalculateDamage(this.damage, this.Level);
-                        this.defense = CalculateDefense(this.defense, this.Level);
+                        else if ((double)Main.npc[Main.wof].life < (double)Main.npc[Main.wof].lifeMax * 0.5)
+                        {
+                            damage = (int)(60f * Main.damageMultiplier);
+                            defense = 30;
+                            if (!Main.expertMode)
+                            {
+                                num791 = 700f;
+                            }
+                            else
+                            {
+                                num790 += 0.066f;
+                            }
+                        }
+                        else if ((double)Main.npc[Main.wof].life < (double)Main.npc[Main.wof].lifeMax * 0.75)
+                        {
+                            damage = (int)(45f * Main.damageMultiplier);
+                            defense = 20;
+                            if (!Main.expertMode)
+                            {
+                                num791 = 500f;
+                            }
+                            else
+                            {
+                                num790 += 0.033f;
+                            }
+                        }
+                        if (Main.expertMode)
+                        {
+                            defense = this.defDefense;
+                            if (this.whoAmI % 4 == 0)
+                            {
+                                num791 *= 1.75f;
+                            }
+                            if (this.whoAmI % 4 == 1)
+                            {
+                                num791 *= 1.5f;
+                            }
+                            if (this.whoAmI % 4 == 2)
+                            {
+                                num791 *= 1.25f;
+                            }
+                            if (this.whoAmI % 3 == 0)
+                            {
+                                num791 *= 1.5f;
+                            }
+                            if (this.whoAmI % 3 == 1)
+                            {
+                                num791 *= 1.25f;
+                            }
+                            num791 *= 0.75f;
+                        }
+                        this.damage = CalculateDamage(damage, this.Level);
+                        this.defense = CalculateDefense(defense, this.Level);
                         float num792 = Main.npc[Main.wof].position.X + (float)(Main.npc[Main.wof].width / 2);
 						float num793 = Main.npc[Main.wof].position.Y;
 						float num794 = (float)(Main.wofB - Main.wofT);
@@ -39433,8 +39439,8 @@ namespace Terraria
 										if (flag131)
 										{
 											this.damage = (int)((float)this.defDamage * 1.1f * num1449);
-											this.defense = 0;
-										}
+											this.defense = (int)((float)this.defDefense * 0.5f);
+                                        }
 										else if (flag130)
 										{
 											this.damage = (int)((float)this.defDamage * 1.2f * num1449);
@@ -42240,7 +42246,7 @@ namespace Terraria
 										}
 										if (this.ai[0] == -2f)
 										{
-                                            this.damage = CalculateDamage(80, this.Level);
+                                            this.damage = CalculateDamage((int)((float)80 * 1.75f), this.Level);
                                             num1641 = 0;
 											this.dontTakeDamage = true;
 											this.ai[1] += 1f;
@@ -42319,7 +42325,7 @@ namespace Terraria
 													Vector2 vector209 = base.Center + Vector2.Normalize(vector208) * vector205.Length() * 0.4f + value35;
 													Vector2 vector210 = Vector2.Normalize(vector208) * 8f;
 													float ai = (6.28318548f * (float)Main.rand.NextDouble() - 3.14159274f) / 30f + 0.0174532924f * num1638;
-                                                    int DMG = CalculateDamage(30, this.Level);
+                                                    int DMG = CalculateDamage((int)((float)30 * 1.75f), this.Level);
                                                     Projectile.NewProjectile(vector209.X, vector209.Y, vector210.X, vector210.Y, 452, DMG, 0f, Main.myPlayer, 0f, ai);
 												}
 											}
@@ -42366,7 +42372,7 @@ namespace Terraria
 													vector213.X += ((float)num1652 - 3.5f) * num1638 * 3f;
 													vector213.Y += ((float)num1652 - 4.5f) * 1f;
 													vector213 *= 1.2f;
-                                                    int DMG = CalculateDamage(50, this.Level);
+                                                    int DMG = CalculateDamage((int)((float)50 * 1.75f), this.Level);
                                                     Projectile.NewProjectile(base.Center.X, base.Center.Y, vector213.X, vector213.Y, 454, DMG, 1f, Main.myPlayer, 0f, (float)this.whoAmI);
 												}
 												Vector2 vector214 = Vector2.SmoothStep(value36, value36 + value37, (num1639 - 30f) / 180f) - base.Center;
@@ -42453,7 +42459,7 @@ namespace Terraria
 											{
 												Vector2 vector220 = Utils.Vector2FromElipse(this.localAI[0].ToRotationVector2(), vector205 * this.localAI[1]);
 												Vector2 vector221 = Vector2.Normalize(v2) * 8f;
-                                                int DMG = CalculateDamage(30, this.Level);
+                                                int DMG = CalculateDamage((int)((float)30 * 1.75f), this.Level);
                                                 Projectile.NewProjectile(base.Center.X + vector220.X, base.Center.Y + vector220.Y, vector221.X, vector221.Y, 462, DMG, 0f, Main.myPlayer, 0f, 0f);
 											}
 										}
@@ -42612,7 +42618,7 @@ namespace Terraria
 														Vector2 vector224 = base.Center + Vector2.Normalize(vector223) * vector205.Length() * 0.4f + value40;
 														Vector2 vector225 = Vector2.Normalize(vector223) * 8f;
 														float ai2 = (6.28318548f * (float)Main.rand.NextDouble() - 3.14159274f) / 30f + 0.0174532924f * num1638;
-                                                        int DMG = CalculateDamage(5, this.Level);
+                                                        int DMG = CalculateDamage((int)((float)5 * 1.75f), this.Level);
                                                         Projectile.NewProjectile(vector224.X, vector224.Y, vector225.X, vector225.Y, 452, DMG, 0f, Main.myPlayer, 0f, ai2);
 														return;
 													}
@@ -42646,7 +42652,7 @@ namespace Terraria
 														vector228.X += ((float)num1662 - 3.5f) * num1638 * 3f;
 														vector228.Y += ((float)num1662 - 4.5f) * 1f;
 														vector228 *= 1.2f;
-                                                        int DMG = CalculateDamage(1, this.Level);
+                                                        int DMG = CalculateDamage((int)((float)1 * 1.75f), this.Level);
                                                         Projectile.NewProjectile(base.Center.X, base.Center.Y, vector228.X, vector228.Y, 454, DMG, 1f, Main.myPlayer, 0f, (float)this.whoAmI);
 													}
 													Vector2 vector229 = Vector2.SmoothStep(value41, value41 + value42, (this.ai[1] - 30f) / 180f) - base.Center;
@@ -42786,7 +42792,7 @@ namespace Terraria
 												this.ai[0] = -3f;
 												return;
                                             }
-                                            this.damage = CalculateDamage(80, this.Level);
+                                            this.damage = CalculateDamage((int)((float)80 * 1.75f), this.Level);
                                             this.dontTakeDamage = true;
 											this.ai[1] += 1f;
 											if (this.ai[1] >= 32f)
@@ -42885,7 +42891,7 @@ namespace Terraria
 														num1683 = 1f;
 													}
 													vector234 = vector234.RotatedBy((double)(-(double)num1683 * 6.28318548f / 6f), default(Vector2));
-                                                    int DMG = CalculateDamage(75, this.Level);
+                                                    int DMG = CalculateDamage((int)((float)75 * 1.75f), this.Level);
                                                     Projectile.NewProjectile(base.Center.X, base.Center.Y, vector234.X, vector234.Y, 455, DMG, 0f, Main.myPlayer, num1683 * 6.28318548f / 540f, (float)this.whoAmI);
 													this.ai[2] = (vector234.ToRotation() + 9.424778f) * num1683;
 													this.netUpdate = true;
@@ -42972,7 +42978,7 @@ namespace Terraria
 											{
 												Vector2 vector235 = Utils.Vector2FromElipse(this.localAI[0].ToRotationVector2(), value43 * this.localAI[1]);
 												Vector2 vector236 = Vector2.Normalize(v5) * 8f;
-                                                int DMG = CalculateDamage(30, this.Level);
+                                                int DMG = CalculateDamage((int)((float)30 * 1.75f), this.Level);
                                                 Projectile.NewProjectile(base.Center.X + vector235.X, base.Center.Y + vector235.Y, vector236.X, vector236.Y, 462, DMG, 0f, Main.myPlayer, 0f, 0f);
 											}
 										}
@@ -43041,7 +43047,7 @@ namespace Terraria
 											{
 												Vector2 vector238 = num1693.ToRotationVector2();
 												vector238 = Vector2.One;
-                                                int DMG = CalculateDamage(1, this.Level);
+                                                int DMG = CalculateDamage((int)((float)1 * 1.75f), this.Level);
                                                 Projectile.NewProjectile(base.Center.X, base.Center.Y, vector238.X, vector238.Y, 455, DMG, 0f, Main.myPlayer, 0.0104719754f, (float)this.whoAmI);
 											}
 											this.ai[1] += 1f;
@@ -43079,7 +43085,7 @@ namespace Terraria
 												value43 = new Vector2(27f, 59f);
 												Vector2 vector241 = Utils.Vector2FromElipse(this.localAI[0].ToRotationVector2(), value43 * this.localAI[1]);
 												Vector2 vector242 = Vector2.Normalize(v7) * 8f;
-                                                int DMG = CalculateDamage(5, this.Level);
+                                                int DMG = CalculateDamage((int)((float)5 * 1.75f), this.Level);
                                                 Projectile.NewProjectile(base.Center.X + vector241.X, base.Center.Y + vector241.Y, vector242.X, vector242.Y, 462, DMG, 0f, Main.myPlayer, 0f, 0f);
 											}
 											if (this.ai[1] >= 90f)
@@ -43329,7 +43335,7 @@ namespace Terraria
 												{
 													Vector2 vector244 = Utils.Vector2FromElipse(this.localAI[0].ToRotationVector2(), value50 * this.localAI[1]);
 													Vector2 vector245 = Vector2.Normalize(v9) * 8f;
-                                                    int DMG = CalculateDamage(35, this.Level);
+                                                    int DMG = CalculateDamage((int)((float)35 * 1.75f), this.Level);
                                                     Projectile.NewProjectile(base.Center.X + vector244.X, base.Center.Y + vector244.Y, vector245.X, vector245.Y, 462, DMG, 0f, Main.myPlayer, 0f, 0f);
 													return;
 												}
@@ -43398,7 +43404,7 @@ namespace Terraria
 															vec7 = Vector2.UnitY * -1f;
 														}
 														vec7 *= 4f;
-                                                        int DMG = CalculateDamage(55, this.Level);
+                                                        int DMG = CalculateDamage((int)((float)55 * 1.75f), this.Level);
                                                         Projectile.NewProjectile(base.Center.X + vector246.X, base.Center.Y + vector246.Y, vec7.X, vec7.Y, 454, DMG, 0f, Main.myPlayer, 30f, (float)this.whoAmI);
 														return;
 													}
@@ -43519,7 +43525,7 @@ namespace Terraria
 														Vector2 vector248 = base.Center + Vector2.Normalize(vector247) * value50.Length() * 0.4f;
 														Vector2 vector249 = Vector2.Normalize(vector247) * 8f;
 														float ai3 = (6.28318548f * (float)Main.rand.NextDouble() - 3.14159274f) / 30f + 0.0174532924f * this.ai[2];
-                                                        int DMG = CalculateDamage(35, this.Level);
+                                                        int DMG = CalculateDamage((int)((float)35 * 1.75f), this.Level);
                                                         Projectile.NewProjectile(vector248.X, vector248.Y, vector249.X, vector249.Y, 452, DMG, 0f, Main.myPlayer, 0f, ai3);
 														return;
 													}
@@ -43565,7 +43571,7 @@ namespace Terraria
 																num1719 = 1f;
 															}
 															vector251 = vector251.RotatedBy((double)(-(double)num1719 * 6.28318548f / 6f), default(Vector2));
-                                                            int DMG = CalculateDamage(50, this.Level);
+                                                            int DMG = CalculateDamage((int)((float)50 * 1.75f), this.Level);
                                                             Projectile.NewProjectile(base.Center.X, base.Center.Y, vector251.X, vector251.Y, 455, DMG, 0f, Main.myPlayer, num1719 * 6.28318548f / 540f, (float)this.whoAmI);
 															this.ai[2] = (vector251.ToRotation() + 9.424778f) * num1719;
 															this.netUpdate = true;
@@ -67211,10 +67217,10 @@ namespace Terraria
 						{
 							this.AddBuff(24, 420, false);
 							this.immune[255] = 30;
-							this.StrikeNPCNoInteraction(50, 0f, 0, false, false, false);
-							if (Main.netMode == 2 && Main.netMode != 0)
+                            this.StrikeNPCNoInteraction(90 + (this.Level * 3), 0f, 0, false, false, false);
+                            if (Main.netMode == 2 && Main.netMode != 0)
 							{
-								NetMessage.SendData(28, -1, -1, "", this.whoAmI, 50f, 0f, 0f, 0, 0, 0);
+								NetMessage.SendData(28, -1, -1, "", this.whoAmI, 90 + (this.Level * 3), 0f, 0f, 0, 0, 0);
 							}
 						}
 					}
