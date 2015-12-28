@@ -138,7 +138,7 @@ namespace Terraria
 					{
 						return;
 					}
-					if (this.reader.ReadString() != string.Concat("Terraria", Main.curRelease + "0002"))
+					if (this.reader.ReadString() != string.Concat("Terraria", Main.curRelease + "0004"))
 					{
 						NetMessage.SendData(2, this.whoAmI, -1, Lang.mp[4], 0, 0f, 0f, 0f, 0, 0, 0);
 						return;
@@ -3291,6 +3291,12 @@ namespace Terraria
                         {
                             NetMessage.SendData(109, -1, -1, "", id, 0, 0f, 0f, 0);
                         }
+                        return;
+                    }
+                case 110: //Recieve EXP from server
+                    {
+                        int id = this.reader.ReadByte();
+                        //NetMessage.SendData(110, -1, -1, "", id);
                         return;
                     }
                 default:

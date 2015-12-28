@@ -2811,8 +2811,8 @@ namespace Terraria
                 this.XP += 40 + (int)((i * (35 + 0)) + Math.Round((i * 2.52f) * ((i * 1.18f) * (i * 0.087f))));
                 if (i == 79)
                     this.XP += 2935;
-                if (i == 80)
-                    this.XP += 75000;
+                if (i >= 80 && i <= 100)
+                    this.XP += 125000;
                 if (i == 89)
                     this.XP += 3726;
                 if (i == 98)
@@ -2936,8 +2936,8 @@ namespace Terraria
             this.MaxExp = 40 + (int)((this.Level * 35) + Math.Round((this.Level * 2.52f) * ((this.Level * 1.18f) * (this.Level * 0.087f))));
             if (this.Level == 79)
                 this.MaxExp += 2935;
-            if (this.Level == 80)
-                this.MaxExp += 75000;
+            if (this.Level >= 80 && this.Level <= 100)
+                this.MaxExp += 125000;
             if (this.Level == 89)
                 this.MaxExp += 3726;
             if (this.Level == 98)
@@ -8052,12 +8052,12 @@ namespace Terraria
 					{
                         AmmoDmg = this.PickAmmo(item, ref num46, ref single14, ref flag9, ref weaponDamage, ref single15, ItemID.Sets.gunProj[item.type]);
 					}
-					if (item.type == 3475 || item.type == 3540)
+					/*if (item.type == 3475 || item.type == 3540)
 					{
 						single15 = item.knockBack;
 						num47 = weaponDamage;
 						single14 = item.shootSpeed;
-					}
+					}*/
 					if (item.type == 71)
 					{
 						flag9 = false;
@@ -29658,8 +29658,9 @@ namespace Terraria
 		}
 
 		public void UpdateEquips(int i)
-		{
-			for (int num = 0; num < 58; num++)
+        {
+            int Vanity = 0;
+            for (int num = 0; num < 58; num++)
 			{
 				int num1 = this.inventory[num].type;
 				if ((num1 == 15 || num1 == 707) && this.accWatch < 1)
@@ -29724,8 +29725,12 @@ namespace Terraria
 				{
 					this.accDreamCatcher = true;
 				}
-			}
-			for (int j = 0; j < 8 + this.extraAccessorySlots; j++)
+            }
+            if (this.CheckAbility(53))
+            {
+                Vanity = 10;
+            }
+            for (int j = 0; j < 8 + this.extraAccessorySlots + Vanity; j++)
 			{
 				if (!this.armor[j].expertOnly || Main.expertMode)
 				{
@@ -30842,9 +30847,13 @@ namespace Terraria
 			bool flag = false;
 			bool flag1 = false;
 			bool flag2 = false;
-			for (int k = 3; k < 8 + this.extraAccessorySlots; k++)
+			for (int k = 3; k < 8 + this.extraAccessorySlots + Vanity; k++)
 			{
-				if (!this.armor[k].expertOnly || Main.expertMode)
+                if (k >= 10 && k <= 12)
+                {
+                    return;
+                }
+                if (!this.armor[k].expertOnly || Main.expertMode)
 				{
 					if (this.armor[k].type == 3015)
 					{

@@ -5140,7 +5140,7 @@ namespace Terraria
 			ServerApi.Hooks.InvokeGameInitialize();
 			string str;
 			Main.rand = new Random();
-			Console.Title = string.Concat("Terraria Server ", Main.versionNumber2);
+			Console.Title = string.Concat("Terraria Leveled Server Version 10.2 12/28/2015 (", Main.versionNumber2 + ")");
 			Main.dedServ = true;
 			Main.showSplash = false;
 			if (Main.autoGen)
@@ -5168,7 +5168,7 @@ namespace Terraria
 				while (flag)
 				{
 					Main.LoadWorlds();
-					Console.WriteLine(string.Concat("Terraria Server ", Main.versionNumber2));
+					Console.WriteLine(string.Concat("Terraria Leveled Server Version 10.1 12/20/2015 (", Main.versionNumber2 + ")"));
 					Console.WriteLine("");
 					for (int j = 0; j < Main.WorldList.Count; j++)
 					{

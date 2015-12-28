@@ -29881,7 +29881,8 @@ namespace Terraria
 					if (flag14)
 					{
 						player.PickAmmo(player.inventory[player.selectedItem], ref num46, ref num47, ref flag14, ref weaponDamage, ref weaponKnockback, false);
-						float num50 = player.inventory[player.selectedItem].shootSpeed * this.scale;
+                        weaponDamage = this.damage;
+                        float num50 = player.inventory[player.selectedItem].shootSpeed * this.scale;
 						Vector2 vector33 = vector;
 						Vector2 vector34 = Main.screenPosition + new Vector2((float)Main.mouseX, (float)Main.mouseY) - vector33;
 						if (player.gravDir == -1f)
@@ -29983,7 +29984,8 @@ namespace Terraria
 					if (flag16)
 					{
 						player.PickAmmo(player.inventory[player.selectedItem], ref num54, ref num55, ref flag16, ref num56, ref num57, false);
-						float num58 = player.inventory[player.selectedItem].shootSpeed * this.scale;
+                        num56 = this.damage;
+                        float num58 = player.inventory[player.selectedItem].shootSpeed * this.scale;
 						Vector2 vector36 = vector;
 						Vector2 vector37 = Main.screenPosition + new Vector2((float)Main.mouseX, (float)Main.mouseY) - vector36;
 						if (player.gravDir == -1f)

@@ -380,6 +380,13 @@ namespace Leveled
             AbilityList[52].Add("3"); //AP Cost
             AbilityList[52].Add("11"); //Icon
             AbilityList[52].Add("Increases Knockback resist by 6%"); //Discription
+
+            AbilityList.Add(new List<string>());
+            AbilityList[53].Add("Vanity Enabler"); //Name
+            AbilityList[53].Add("999"); //Level Learned
+            AbilityList[53].Add("1"); //AP Cost
+            AbilityList[53].Add("15"); //Icon
+            AbilityList[53].Add("Your vanity slots will now act as extra slots, enabling stat gains from them.\nCongratulations on your level 1 Moon Lord victory!"); //Discription
         }
     }
 }

@@ -3233,6 +3233,10 @@ namespace Terraria
                 this.scaleStats();
             }
             this.SetStats();
+            if (Main.expertMode && flag)
+            {
+                this.scaleLevel();
+            }
         }
         public void SetDefaultsKeepPlayerInteraction(int Type)
 		{
@@ -16219,7 +16223,15 @@ namespace Terraria
                 {
                     max = 50;
                 }
-                if (NPC.downedMoonlord)
+                if (NPC.downedGolemBoss)
+                {
+                    max = 60;
+                }
+                if (NPC.downedAncientCultist)
+                {
+                    max = 70;
+                }
+                if (NPC.downedMoonlord && Main.CriticalMode)
                 {
                     max = 100;
                 }
@@ -55938,91 +55950,106 @@ namespace Terraria
 					this.netUpdate = true;
 					return;
                 }
-                int baseExp = this.Exp;
-                int[] teamxp = new int[5];
-                    for (int i = 0; i < 255; i++)
+                try
                 {
-                    if (Main.netMode == 2)
+                    int baseExp = this.Exp;
+                    int[] teamxp = new int[6];
+                    for (int i = 0; i < 255; i++)
                     {
-                        this.Exp = baseExp;
-                        if (this.boss || this.boss2)
+                        if (Main.netMode == 2)
                         {
-                            double b1 = 1d;
-                            b1 = 1d + (float)(this.Level - Main.player[i].Level) / 10d;
-                            if (b1 > 1.75d)
-                                b1 = 1.75d;
-                            if (b1 < 0.1d)
-                                b1 = 0.1d;
-                            this.Exp = (int)(Math.Round((double)this.Exp * b1));
-                        }
-                        else
-                        {
-                            double b1 = 1d;
-                            b1 = 1d + (double)(this.Level - Main.player[i].Level) / 30d;
-                            if (b1 > 1.75d)
-                                b1 = 1.75d;
-                            if (b1 < 0.1d)
-                                b1 = 0.1d;
-                            this.Exp = (int)(Math.Round((double)this.Exp * b1));
-                        }
-                        if (this.Exp < 1)
-                        {
-                            this.Exp = 1;
-                        }
-                        if (this.Dead == 0 && this.tapped[i] && this.ExptoGive > 0)
-                        {
-                            if (this.tag[i] >= this.defaultHP * 0.5f)
+                            this.Exp = baseExp;
+                            if (this.boss || this.boss2)
                             {
-                                if (Main.player[i].team != 0)
-                                {
-                                    if (teamxp[Main.player[i].team] < this.Exp)
-                                        teamxp[Main.player[i].team] = this.Exp;
-                                }
-                                NetMessage.SendData(108, -1, -1, "", i, (float)this.Exp, 0f, 0f, 0);
-                                if (this.boss)
-                                    NetMessage.SendData(25, -1, -1, Main.player[i].name + " helped slay " + this.displayName + ", dealt " + this.tag[i] + " damage (" + String.Format("{0:f2}", (double)(this.tag[i] / (double)this.lifeMax) * 100d) + "%) and gained " + ((double)this.Exp * (1d - (double)Main.player[i].EXPRate)) + " EXP.", 255, 25f, 127f, 255f, 0);
+                                double b1 = 1d;
+                                b1 = 1d + (float)(this.Level - Main.player[i].Level) / 10d;
+                                if (b1 > 1.75d)
+                                    b1 = 1.75d;
+                                if (b1 < 0.1d)
+                                    b1 = 0.1d;
+                                this.Exp = (int)(Math.Round((double)this.Exp * b1));
                             }
-                            else if (this.tag[i] > 0 && this.tapped[i] && this.ExptoGive > 0)
+                            else
                             {
-                                if (this.boss)
-                                    NetMessage.SendData(25, -1, -1, Main.player[i].name + " helped slay " + this.displayName + ", dealt " + this.tag[i] + " damage (" + String.Format("{0:f2}", (double)(this.tag[i] / (double)this.lifeMax) * 100d) + "%) and gained " + ((double)this.Exp * (1d - (double)Main.player[i].EXPRate)) + " EXP.", 255, 25f, 127f, 255f, 0);
-                                NetMessage.SendData(108, -1, -1, "", i, (float)((int)Math.Ceiling((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5))))), 0f, 0f, 0);
-                                if (Main.player[i].team != 0)
-                                {
-                                    if (teamxp[Main.player[i].team] < (int)Math.Ceiling((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5)))))
-                                        teamxp[Main.player[i].team] = (int)Math.Ceiling((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5))));
-                                }
+                                double b1 = 1d;
+                                b1 = 1d + (double)(this.Level - Main.player[i].Level) / 30d;
+                                if (b1 > 1.75d)
+                                    b1 = 1.75d;
+                                if (b1 < 0.1d)
+                                    b1 = 0.1d;
+                                this.Exp = (int)(Math.Round((double)this.Exp * b1));
                             }
-                            if (teamxp[Main.player[i].team] > 0)
+                            if (this.Exp < 1)
                             {
-                                for (int i2 = 0; i2 < 255; i2++)
+                                this.Exp = 1;
+                            }
+                            if (this.Dead == 0 && this.tapped[i] && this.ExptoGive > 0)
+                            {
+                                if (this.tag[i] >= this.defaultHP * 0.5f)
                                 {
-                                    for (int i3 = 1; i3 < 5; i3++)
+                                    if (Main.player[i].team != 0)
                                     {
-                                        int XP = 0;
-                                        if (Main.player[i2].team == Main.player[i].team)
+                                        if (teamxp[Main.player[i].team] < this.Exp)
+                                            teamxp[Main.player[i].team] = this.Exp;
+                                    }
+                                    NetMessage.SendData(108, -1, -1, "", i, (float)this.Exp, 0f, 0f, 0);
+                                    if (this.type == 398 && Main.player[i].Level == 1 && Main.expertMode)
+                                    {
+                                        NetMessage.SendData(110, -1, -1, "", i, 0, 0f, 0f, 0);
+                                    }
+                                    if (this.boss)
+                                        NetMessage.SendData(25, -1, -1, Main.player[i].name + " helped slay " + this.displayName + ", dealt " + this.tag[i] + " damage (" + String.Format("{0:f2}", (double)(this.tag[i] / (double)this.lifeMax) * 100d) + "%) and gained " + ((double)this.Exp * (1d - (double)Main.player[i].EXPRate)) + " EXP.", 255, 25f, 127f, 255f, 0);
+                                }
+                                else if (this.tag[i] > 0 && this.tapped[i] && this.ExptoGive > 0)
+                                {
+                                    if (this.boss)
+                                        NetMessage.SendData(25, -1, -1, Main.player[i].name + " helped slay " + this.displayName + ", dealt " + this.tag[i] + " damage (" + String.Format("{0:f2}", (double)(this.tag[i] / (double)this.lifeMax) * 100d) + "%) and gained " + ((double)this.Exp * (1d - (double)Main.player[i].EXPRate)) + " EXP.", 255, 25f, 127f, 255f, 0);
+                                    NetMessage.SendData(108, -1, -1, "", i, (float)((int)Math.Ceiling((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5))))), 0f, 0f, 0);
+                                    if (Main.player[i].team != 0)
+                                    {
+                                        if (teamxp[Main.player[i].team] < (int)Math.Ceiling((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5)))))
+                                            teamxp[Main.player[i].team] = (int)Math.Ceiling((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5))));
+                                    }
+                                }
+                                if (teamxp[Main.player[i].team] > 0)
+                                {
+                                    for (int i2 = 0; i2 < 255; i2++)
+                                    {
+                                        for (int i3 = 1; i3 < 5; i3++)
                                         {
-                                            if (i2 != i && (Main.player[i2].CheckAbility(38)) && Main.player[i2].team == i3)
+                                            int XP = 0;
+                                            if (Main.player[i2].team == Main.player[i].team)
                                             {
-                                                XP += (int)((float)teamxp[i3] * 0.1f);
-                                                if (XP < 1) { XP = 1; }
-                                            }
-                                            if (i2 != i && (Main.player[i2].CheckAbility(39)) && Main.player[i2].team == i3)
-                                            {
-                                                XP += (int)((float)teamxp[i3] * 0.25f);
-                                                if (XP < 1) { XP = 1; }
-                                            }
-                                            if (i2 != i && XP > 0 && Main.player[i2].team == i3)
-                                            {
-                                                NetMessage.SendData(108, -1, -1, "", i2, (float)XP, 0f, 0f, 0);
+                                                if (i2 != i && (Main.player[i2].CheckAbility(38)) && Main.player[i2].team == i3)
+                                                {
+                                                    XP += (int)((float)teamxp[i3] * 0.1f);
+                                                    if (XP < 1) { XP = 1; }
+                                                }
+                                                if (i2 != i && (Main.player[i2].CheckAbility(39)) && Main.player[i2].team == i3)
+                                                {
+                                                    XP += (int)((float)teamxp[i3] * 0.25f);
+                                                    if (XP < 1) { XP = 1; }
+                                                }
+                                                if (i2 != i && XP > 0 && Main.player[i2].team == i3)
+                                                {
+                                                    NetMessage.SendData(108, -1, -1, "", i2, (float)XP, 0f, 0f, 0);
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
                         }
+                        this.tag[i] = 0;
                     }
-                    this.tag[i] = 0;
+                }
+                catch (Exception ex)
+                {
+#if DEBUG
+						Console.WriteLine(ex);
+						System.Diagnostics.Debugger.Break();
+
+#endif
                 }
                 NPC.noSpawnCycle = true;
 				if (this.townNPC && this.type != 37 && this.type != 453)
