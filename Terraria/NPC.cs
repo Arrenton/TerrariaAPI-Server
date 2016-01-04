@@ -12064,16 +12064,24 @@ namespace Terraria
 			this.life = this.lifeMax;
             this.defaultHP = this.lifeMax;
         }
-        public int CalculateDamage(int Damage, int Level)
+        public int CalculateDamage(int Damage, int Level, bool invokestatchange = true)
         {
             float baseStr = 85f;
             if (Level > 80)
             {
                 baseStr *= 1f + (float)((float)(Level - 80) / 100f);
             }
-            this.baseAtk = (short)(5 + (short)(baseStr * ((float)(Level / 100f))));
+            if (invokestatchange)
+                this.baseAtk = (short)(5 + (short)(baseStr * ((float)(Level / 100f))));
             float BaseDamage = 1f;
-            BaseDamage += ((0.07f + ((this.baseAtk + (Level / 4) + (int)(Math.Pow(Math.Floor((double)Level / 7), 1.5))) * 0.0003f)) * (float)(this.baseAtk + (Level / 4) + (int)(Math.Pow(Math.Floor((double)Level / 7), 1.5))));
+            if (invokestatchange)
+            {
+                BaseDamage += ((0.07f + ((this.baseAtk + (Level / 4) + (int)(Math.Pow(Math.Floor((double)Level / 7), 1.5))) * 0.0003f)) * (float)(this.baseAtk + (Level / 4) + (int)(Math.Pow(Math.Floor((double)Level / 7), 1.5))));
+            }
+            else
+            {
+                BaseDamage += ((0.07f + (((short)(5 + (short)(baseStr * ((float)(Level / 100f)))) + (Level / 4) + (int)(Math.Pow(Math.Floor((double)Level / 7), 1.5))) * 0.0003f)) * (float)((short)(5 + (short)(baseStr * ((float)(Level / 100f)))) + (Level / 4) + (int)(Math.Pow(Math.Floor((double)Level / 7), 1.5))));
+            }
             int damage = (int)((float)(Damage) * (BaseDamage * (1f / (1f + (float)Damage / 125f))) + 5E-06f);
             Main.playerCount = -1;
             float boostatk = 0f;
@@ -12138,16 +12146,23 @@ namespace Terraria
             }
             return damage;
         }
-        public int CalculateDefense(int Defense, int Level)
+        public int CalculateDefense(int Defense, int Level, bool invokestatchange = true)
         {
             float baseStat = 75f;
             if (Level > 80)
             {
                 baseStat *= 1f + (float)((float)(Level - 80) / 100f);
             }
-            this.baseVit = (short)(4 + (short)(baseStat * ((float)(Level / 100f))));
-            int defense = (int)(Defense * (1 + ((baseVit + (Level / 6)) * (0.07f + ((baseVit + (Level / 6)) * 0.0003f)))));
-
+            if (invokestatchange)
+                this.baseVit = (short)(4 + (short)(baseStat * ((float)(Level / 100f))));
+            if (invokestatchange)
+            {
+                int defense = (int)(Defense * (1 + ((baseVit + (Level / 6)) * (0.07f + ((baseVit + (Level / 6)) * 0.0003f)))));
+            }
+            else
+            {
+                int defense = (int)(Defense * (1 + (((short)(4 + (short)(baseStat * ((float)(Level / 100f)))) + (Level / 6)) * (0.07f + (((short)(4 + (short)(baseStat * ((float)(Level / 100f)))) + (Level / 6)) * 0.0003f)))));
+            }
             Main.playerCount = -1;
             float boostdef = 0f;
             if (!Main.expertMode && !this.townNPC && this.Level > 1)
@@ -55956,6 +55971,51 @@ namespace Terraria
                     int[] teamxp = new int[6];
                     for (int i = 0; i < 255; i++)
                     {
+                        int bossdown = 0;
+                        if (this.tag[i] >= this.defaultHP * 0.5f && this.tapped[i])
+                        {
+                            if (this.type == 50) { bossdown = 1; }//King Slime
+                            if (this.type == 4) { bossdown = 2; } //Eye of Cthulhu
+                            if (this.type == 13 || this.type == 14 || this.type == 15)
+                            {
+                                bool flag = true;
+                                for (int j = 0; j < 200; j++)
+                                {
+                                    if (j != this.whoAmI && Main.npc[j].active && (Main.npc[j].type == 13 || Main.npc[j].type == 14 || Main.npc[j].type == 15))
+                                    {
+                                        flag = false;
+                                        break;
+                                    }
+                                }
+                                if (flag)
+                                {
+                                    bossdown = 3; //Eater of Worlds
+                                }
+                            }
+                            if (this.type == 266) { bossdown = 4; } //Brain of Cthulhu
+                            if (this.type == 222) { bossdown = 5; } //Queen Bee
+                            if (this.type == 35) { bossdown = 6; } //Skeletron
+                            if (this.type == 113) { bossdown = 7; } //Wall of Flesh
+                            if (this.type == 125 || this.type == 126)
+                            {
+                                int num65 = 125;
+                                if (this.type == 125)
+                                {
+                                    num65 = 126;
+                                }
+                                if (!NPC.AnyNPCs(num65))
+                                {
+                                    bossdown = 8; // The Twins
+                                }
+                            }
+                            if (this.type == 134) { bossdown = 9; } //The Destroyer
+                            if (this.type == 127) { bossdown = 10; } //Skeletron Prime
+                            if (this.type == 262) { bossdown = 11; } //Plantera
+                            if (this.type == 245) { bossdown = 12; } //Golem
+                            if (this.type == 370) { bossdown = 13; } //Duke
+                            if (this.type == 439) { bossdown = 14; } //Cultist
+                            if (this.type == 398) { bossdown = 15; } //Moon Lord
+                        }
                         if (Main.netMode == 2)
                         {
                             this.Exp = baseExp;
@@ -55997,13 +56057,17 @@ namespace Terraria
                                     {
                                         NetMessage.SendData(110, -1, -1, "", i, 0, 0f, 0f, 0);
                                     }
+                                    if (bossdown > 0)
+                                    {
+                                        NetMessage.SendData(111, -1, -1, "", i, bossdown - 1, 0f, 0f, 0);
+                                    }
                                     if (this.boss)
-                                        NetMessage.SendData(25, -1, -1, Main.player[i].name + " helped slay " + this.displayName + ", dealt " + this.tag[i] + " damage (" + String.Format("{0:f2}", (double)(this.tag[i] / (double)this.lifeMax) * 100d) + "%) and gained " + ((double)this.Exp * (1d - (double)Main.player[i].EXPRate)) + " EXP.", 255, 25f, 127f, 255f, 0);
+                                        NetMessage.SendData(25, -1, -1, Main.player[i].name + " helped slay " + this.displayName + ", dealt " + this.tag[i] + " damage (" + String.Format("{0:f2}", (double)(this.tag[i] / (double)this.lifeMax) * 100d) + "%) and gained " + (int)((float)this.Exp * (100 - Main.player[i].EXPRate) / 100f) + " EXP.", 255, 25f, 127f, 255f, 0);
                                 }
                                 else if (this.tag[i] > 0 && this.tapped[i] && this.ExptoGive > 0)
                                 {
                                     if (this.boss)
-                                        NetMessage.SendData(25, -1, -1, Main.player[i].name + " helped slay " + this.displayName + ", dealt " + this.tag[i] + " damage (" + String.Format("{0:f2}", (double)(this.tag[i] / (double)this.lifeMax) * 100d) + "%) and gained " + ((double)this.Exp * (1d - (double)Main.player[i].EXPRate)) + " EXP.", 255, 25f, 127f, 255f, 0);
+                                        NetMessage.SendData(25, -1, -1, Main.player[i].name + " helped slay " + this.displayName + ", dealt " + this.tag[i] + " damage (" + String.Format("{0:f2}", (double)(this.tag[i] / (double)this.lifeMax) * 100d) + "%) and gained " + (int)((float)this.Exp * (100 - Main.player[i].EXPRate) / 100f) + " EXP.", 255, 25f, 127f, 255f, 0);
                                     NetMessage.SendData(108, -1, -1, "", i, (float)((int)Math.Ceiling((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5))))), 0f, 0f, 0);
                                     if (Main.player[i].team != 0)
                                     {

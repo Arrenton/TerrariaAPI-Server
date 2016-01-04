@@ -1080,26 +1080,25 @@ namespace Terraria
 										switch (num64)
 										{
 											case 0:
-											{
-												if (!Wiring.CheckMech(i, j, 200))
-												{
-													break;
-												}
-												int num67 = -1;
-												if (tile.frameX != 0)
-												{
-													num67 = 1;
-												}
-												single = (float)(12 * num67);
-												num66 = 70;
-												num65 = 98;
-												zero = new Vector2((float)(i * 16 + 8), (float)(j * 16 + 7))
-												{
-													X = zero.X + (float)(10 * num67),
-													Y = zero.Y + 2f
-												};
-												break;
-											}
+                                                {
+                                                    if (!Wiring.CheckMech(i, j, 200))
+                                                    {
+                                                        break;
+                                                    }
+                                                    int num67 = -1;
+                                                    if (tile.frameX != 0)
+                                                    {
+                                                        num67 = 1;
+                                                    }
+                                                    single = (float)(12 * num67);
+                                                    num66 = 70;
+                                                    num65 = 98;
+                                                    zero = new Vector2((float)(i * 16 + 8), (float)(j * 16 + 7));
+
+                                                    zero.X += (float)(10 * num67);
+                                                    zero.Y += 2f;
+                                                    break;
+                                                }
 											case 1:
 											{
 												if (!Wiring.CheckMech(i, j, 200))
@@ -1114,12 +1113,11 @@ namespace Terraria
 												single = (float)(12 * num68);
 												num66 = 300;
 												num65 = 184;
-												zero = new Vector2((float)(i * 16 + 8), (float)(j * 16 + 7))
-												{
-													X = zero.X + (float)(10 * num68),
-													Y = zero.Y + 2f
-												};
-												break;
+                                                    zero = new Vector2((float)(i * 16 + 8), (float)(j * 16 + 7));
+                                                    
+                                                    zero.X += (float)(10 * num68);
+                                                    zero.Y += 2f;
+                                                    break;
 											}
 											case 2:
 											{
@@ -1135,12 +1133,10 @@ namespace Terraria
 												single = (float)(5 * num69);
 												num66 = 245;
 												num65 = 187;
-												zero = new Vector2((float)(i * 16 + 8), (float)(j * 16 + 7))
-												{
-													X = zero.X + (float)(10 * num69),
-													Y = zero.Y + 2f
-												};
-												break;
+                                                    zero = new Vector2((float)(i * 16 + 8), (float)(j * 16 + 7));
+                                                    zero.X += (float)(10 * num69);
+                                                    zero.Y += 2f;
+                                                    break;
 											}
 											case 3:
 											{
@@ -1201,11 +1197,10 @@ namespace Terraria
 												single = (float)Main.rand.Next(-20, 21) * 0.05f;
 												single1 = 4f + (float)Main.rand.Next(0, 21) * 0.05f;
 												num66 = 260;
-												zero = new Vector2((float)(i * 16 + 8), (float)(j * 16 + 16))
-												{
-													Y = zero.Y + 6f
-												};
-												Projectile.NewProjectile((float)((int)zero.X), (float)((int)zero.Y), single, single1, num65, num66, 2f, Main.myPlayer, 0f, 0f);
+                                                    zero = new Vector2((float)(i * 16 + 8), (float)(j * 16 + 16));
+                                                    
+                                                    zero.Y += 6f;
+                                                    Projectile.NewProjectile((float)((int)zero.X), (float)((int)zero.Y), single, single1, num65, num66, 2f, Main.myPlayer, 0f, 0f);
 												break;
 											}
 											case 4:

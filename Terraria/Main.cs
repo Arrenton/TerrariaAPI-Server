@@ -5168,7 +5168,7 @@ namespace Terraria
 				while (flag)
 				{
 					Main.LoadWorlds();
-					Console.WriteLine(string.Concat("Terraria Leveled Server Version 10.1 12/20/2015 (", Main.versionNumber2 + ")"));
+					Console.WriteLine(string.Concat("Terraria Leveled Server Version 10.3 1/3/2016 (", Main.versionNumber2 + ")"));
 					Console.WriteLine("");
 					for (int j = 0; j < Main.WorldList.Count; j++)
 					{

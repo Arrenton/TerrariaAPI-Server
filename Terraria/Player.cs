@@ -2877,13 +2877,13 @@ namespace Terraria
             this.Lf = (short)(this.heartPoint * ((float)this.statLifeMax2 / 20f));
             this.statManaMax3 = (short)(this.starPoint * ((float)this.statManaMax2 / 20f));
             this.StatPoints = (short)(Math.Floor((float)(this.Level + 4) / 6f) - this.bonusStr - this.bonusRng - this.bonusMag - this.bonusDef);
-            if ((this.StatPoints > (short)(Math.Floor((float)(this.Level + 4) / 6f) - this.bonusStr - this.bonusRng - this.bonusMag - this.bonusDef)) || (this.StatPoints < 0))
+            /*if ((this.StatPoints > (short)(Math.Floor((float)(this.Level + 4) / 6f) - this.bonusStr - this.bonusRng - this.bonusMag - this.bonusDef)) || (this.StatPoints < 0))
             {
                 this.bonusStr = 0;
                 this.bonusRng = 0;
                 this.bonusMag = 0;
                 this.bonusDef = 0;
-            }
+            }*/
             this.MaxAP = (short)(Math.Round((double)((99) * ((((float)this.Level / 3f) * 3) / 85f) + (4))));
             float boost = 1f + (float)((float)(this.Level - 80) / 100f);
             if (boost < 1f)
@@ -30849,10 +30849,6 @@ namespace Terraria
 			bool flag2 = false;
 			for (int k = 3; k < 8 + this.extraAccessorySlots + Vanity; k++)
 			{
-                if (k >= 10 && k <= 12)
-                {
-                    return;
-                }
                 if (!this.armor[k].expertOnly || Main.expertMode)
 				{
 					if (this.armor[k].type == 3015)
@@ -32086,14 +32082,17 @@ namespace Terraria
 					}
 				}
 			}
-			for (int l = 3; l < 8 + this.extraAccessorySlots; l++)
+			for (int l = 3; l < 8 + this.extraAccessorySlots + Vanity; l++)
 			{
 				if (this.armor[l].wingSlot > 0)
 				{
-					if (!this.hideVisual[l] || this.velocity.Y != 0f && !this.mount.Active)
-					{
-						this.wings = this.armor[l].wingSlot;
-					}
+                    if (l <= 9)
+                    {
+                        if (!this.hideVisual[l] || this.velocity.Y != 0f && !this.mount.Active)
+                        {
+                            this.wings = this.armor[l].wingSlot;
+                        }
+                    }
 					this.wingsLogic = this.armor[l].wingSlot;
 				}
 			}

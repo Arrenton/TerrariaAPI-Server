@@ -31234,7 +31234,7 @@ namespace Terraria
 					if (this.ai[1] < 1f)
 					{
 						int num230 = Main.expertMode ? 25 : 40;
-                        num230 = Main.npc[255].CalculateDamage(num230, 85);
+                        num230 = Main.npc[0].CalculateDamage(num230, 85, false);
 						int num231 = Projectile.NewProjectile(base.Center.X - (float)(this.direction * 30), base.Center.Y - 4f, (float)(-(float)this.direction) * 0.01f, 0f, 384, num230, 4f, this.owner, 16f, 15f);
 						Main.projectile[num231].netUpdate = true;
 					}
@@ -31269,7 +31269,7 @@ namespace Terraria
 							}
 						}
 						int num236 = Main.expertMode ? 50 : 80;
-                        num236 = Main.npc[255].CalculateDamage(num236, 85);
+                        num236 = Main.npc[0].CalculateDamage(num236, 85, false);
                         int num237 = Projectile.NewProjectile((float)(num233 * 16 + 8), (float)(num232 * 16 - 24), 0f, 0f, 386, num236, 4f, Main.myPlayer, 16f, 24f);
 						Main.projectile[num237].netUpdate = true;
 					}

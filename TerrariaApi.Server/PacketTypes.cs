@@ -111,5 +111,7 @@ public enum PacketTypes
     Nothing = 106,
     UpdateStats = 107,
     SendEXP = 108,
-    UpdateAbilities = 109
+    UpdateAbilities = 109,
+    GainSocialAbility = 110,
+    DownBoss = 111
 }

@@ -57,7 +57,7 @@ namespace Terraria
             switch (msgType)
             {
                 case 1:
-                    writer.Write("Terraria" + Main.curRelease + "0004");
+                    writer.Write("Terraria" + Main.curRelease + "0005");
                     break;
                 case 2:
                     writer.Write(text);
@@ -1241,6 +1241,10 @@ namespace Terraria
                     break;
                 case 110:
                     writer.Write((byte)number);
+                    break;
+                case 111:
+                    writer.Write((byte)number);
+                    writer.Write((byte)number2);
                     break;
             }
 			int num19 = (int) writer.BaseStream.Position;
