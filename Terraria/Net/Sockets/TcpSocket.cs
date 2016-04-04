@@ -129,8 +129,8 @@ namespace Terraria.Net.Sockets
 			
 			try
 			{
-				this._connection.GetStream().Write(data, offset, size);
-			}
+                this._connection.GetStream().BeginWrite(data, offset, size, this.SendCallback, new Tuple<SocketSendCallback, object>(callback, state));
+            }
 			catch (Exception ex)
 			{
 				//Write failed

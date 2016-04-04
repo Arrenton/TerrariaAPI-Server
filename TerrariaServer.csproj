@@ -5,7 +5,7 @@
     <ProjectGuid>{6877506E-ADC6-4142-98A6-79E4FA02855A}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <AssemblyName>Terraria Leveled Server</AssemblyName>
+    <AssemblyName>TerrariaServer</AssemblyName>
     <OutputType>Exe</OutputType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -169,7 +169,6 @@
     <Compile Include="Terraria\IStaticPortMapping.cs" />
     <Compile Include="Terraria\IStaticPortMappingCollection.cs" />
     <Compile Include="Terraria\Net\Sockets\EventArgs\WriteFailedEventArgs.cs" />
-    <Compile Include="Terraria\Net\Sockets\SendQueue.cs" />
     <Compile Include="Terraria\StreamExt.cs" />
     <Compile Include="Terraria\StreamGenericExt.cs" />
     <Compile Include="Terraria\Terraria.GameContent.UI\EmoteBubble.cs" />

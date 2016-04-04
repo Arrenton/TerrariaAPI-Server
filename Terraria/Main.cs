@@ -2631,7 +2631,7 @@ namespace Terraria
 
         public static double CalculateDamage(int Damage, int Defense)
         {
-            double num = (Math.Pow(Damage + 10, 2) - Defense) / (35f + (Defense * (2f * (1f + ((float)Defense / 900f)))));
+            double num = (Math.Pow(Damage + 10, 1.99) - Defense) / (35f + (Defense * (2f * (1f + ((float)Defense / 900f)))));
             if (num < 1.0)
             {
                 num = 1.0;
@@ -2645,18 +2645,18 @@ namespace Terraria
 
         public static double CalculatePlayerDamage(int Damage, int Defense)
 		{
-            double damage = (Math.Pow(Damage + 10, 2) - Defense) / (35f + (Defense * (2f * (1f + ((float)Defense / 900f)))));
+            double damage = (Math.Pow(Damage + 10, 1.99) - Defense) / (35f + (Defense * (2f * (1f + ((float)Defense / 900f)))));
             if (Main.expertMode)
 			{
-                damage = (Math.Pow(Damage + 10, 2) - Defense) / (35f + (Defense * (2.5f * (1f + ((float)Defense / 900f)))));
+                damage = (Math.Pow(Damage + 10, 1.99) - Defense) / (35f + (Defense * (2.5f * (1f + ((float)Defense / 900f)))));
             }
 			if (damage < 1.0)
 			{
 				damage = 1.0;
             }
-            if (damage > 99999.0)
+            if (damage > 20000.0)
             {
-                damage = 99999.0;
+                damage = 20000.0;
             }
             return damage;
 		}
@@ -5168,7 +5168,7 @@ namespace Terraria
 				while (flag)
 				{
 					Main.LoadWorlds();
-					Console.WriteLine(string.Concat("Terraria Leveled Server Version 10.3 1/3/2016 (", Main.versionNumber2 + ")"));
+					Console.WriteLine(string.Concat("Terraria Leveled Server Version 10.5 4/3/2016 (", Main.versionNumber2 + ")"));
 					Console.WriteLine("");
 					for (int j = 0; j < Main.WorldList.Count; j++)
 					{

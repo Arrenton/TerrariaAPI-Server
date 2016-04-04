@@ -8133,7 +8133,9 @@ namespace Terraria
 										float num11 = (this.scale - 1f) * 100f;
 										num11 = Utils.Clamp<float>(num11, 0f, 50f);
 										this.damage = (int)((float)this.damage * (1f + num11 * 0.23f));
-									}
+                                        int basedmg = this.damage;
+                                        this.damage = (int)((float)(basedmg) * (Main.player[this.owner].minionDamage * (1f / (1f + ((float)basedmg / (125f + ((float)basedmg / 90f)))))));
+                                    }
 									int num10 = Main.DamageVar((float)this.damage);
 									bool flag4 = !this.npcProj && !this.trap;
 									if (this.type == 604)
@@ -8463,7 +8465,7 @@ namespace Terraria
                                     if ((this.type == 108 || this.type == 98 || this.type == 184 || this.type == 187 || this.type == 185 || this.type == 186) || (this.npcProj || this.trap))
                                         own = 256;
                                     bool tap = true;
-                                    if ((this.type == 92 || (this.type >= 167 && this.type <= 170) || (this.type >= 191 && this.type <= 195) || this.type == 221 || this.type == 266 || this.type == 308 || this.type == 309 || this.type == 317 || this.type == 373 || this.type == 374 || this.type == 376 || this.type == 375 || this.type == 377 || this.type == 378 || this.type == 379 || this.type == 384 || this.type == 386 || this.type == 387 || this.type == 388 || this.type == 389 || this.type == 390 || this.type == 391 || this.type == 392 || this.type == 393 || this.type == 394 || this.type == 395 || this.type == 407) || (this.npcProj || this.trap))
+                                    if ((this.type == 92 || (this.type >= 167 && this.type <= 170) || (this.type >= 191 && this.type <= 195) || this.type == 221 || this.type == 266 || this.type == 308 || this.type == 309 || this.type == 317 || this.type == 373 || this.type == 374 || this.type == 376 || this.type == 375 || this.type == 377 || this.type == 378 || this.type == 379 || this.type == 384 || this.type == 386 || this.type == 387 || this.type == 388 || this.type == 389 || this.type == 390 || this.type == 391 || this.type == 392 || this.type == 393 || this.type == 394 || this.type == 395 || this.type == 407 || this.type == 625 || this.type == 626 || this.type == 627 || this.type == 628) || (this.npcProj || this.trap))
                                         tap = false;
                                     if (flag4)
 									{
@@ -19329,8 +19331,10 @@ namespace Terraria
 																			{
 																				this.damage *= 3;
 																				vector91 = new Vector2?(projectile.Center);
-																			}
-																			if (!Collision.CanHitLine(Main.player[this.owner].Center, 0, 0, projectile.Center, 0, 0))
+                                                                        }
+                                                                        int BaseDam = this.damage;
+                                                                        this.damage = (int)((float)((double)BaseDam) * (Main.player[this.owner].magicDamage * (1f / (1f + ((float)(double)(BaseDam) / (125f + ((float)(BaseDam) / 90f)))))));
+                                                                        if (!Collision.CanHitLine(Main.player[this.owner].Center, 0, 0, projectile.Center, 0, 0))
 																			{
 																				vector91 = new Vector2?(Main.player[this.owner].Center);
 																			}
@@ -29510,8 +29514,9 @@ namespace Terraria
 				}
 			}
 			if (this.type == 460)
-			{
-				this.ai[0] += 1f;
+            {
+                this.damage = player.inventory[player.selectedItem].damage;
+                this.ai[0] += 1f;
 				int num18 = 0;
 				if (this.ai[0] >= 60f)
 				{
@@ -29578,7 +29583,10 @@ namespace Terraria
 								vector20 = -Vector2.UnitY;
 							}
 							int num24 = (int)((float)this.damage * 3f);
-							int num25 = Projectile.NewProjectile(center.X, center.Y, vector20.X, vector20.Y, 461, num24, this.knockBack, this.owner, 0f, (float)this.whoAmI);
+
+                            int DAM = (int)((float)((double)num24) * (player.magicDamage * (1f / (1f + ((float)(double)(num24) / (125f + ((float)(num24) / 90f)))))));
+                            num24 = DAM;
+                            int num25 = Projectile.NewProjectile(center.X, center.Y, vector20.X, vector20.Y, 461, num24, this.knockBack, this.owner, 0f, (float)this.whoAmI);
 							this.ai[1] = (float)num25;
 							this.netUpdate = true;
 						}
@@ -29606,7 +29614,10 @@ namespace Terraria
 							}
 							float num28 = 0.7f + (float)num18 * 0.3f;
 							int num29 = (num28 < 1f) ? this.damage : ((int)((float)this.damage * 2f));
-							Projectile.NewProjectile(center2.X, center2.Y, vector21.X, vector21.Y, num26, num29, this.knockBack, this.owner, 0f, num28);
+
+                            int DAM = (int)((float)((double)num29) * (player.magicDamage * (1f / (1f + ((float)(double)(num29) / (125f + ((float)(num29) / 90f)))))));
+                            num29 = DAM;
+                            Projectile.NewProjectile(center2.X, center2.Y, vector21.X, vector21.Y, num26, num29, this.knockBack, this.owner, 0f, num28);
 						}
 						this.Kill();
 					}
@@ -29622,9 +29633,9 @@ namespace Terraria
 				if (this.ai[0] > 120f)
 				{
 					num30 = 5f;
-				}
-				this.damage = (int)((float)player.inventory[player.selectedItem].damage * player.magicDamage);
-				this.ai[0] += 1f;
+                }
+                this.damage = (int)((float)player.inventory[player.selectedItem].damage);
+                this.ai[0] += 1f;
 				this.ai[1] += 1f;
 				bool flag9 = false;
 				if (this.ai[0] % num30 == 0f)

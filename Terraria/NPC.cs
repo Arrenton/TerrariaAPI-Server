@@ -12061,7 +12061,11 @@ namespace Terraria
 			}
 			this.defDefense = this.defense;
 			this.defDamage = this.damage;
-			this.life = this.lifeMax;
+            if (this.type == 68)
+            {
+                this.lifeMax = 9999;
+            }
+            this.life = this.lifeMax;
             this.defaultHP = this.lifeMax;
         }
         public int CalculateDamage(int Damage, int Level, bool invokestatchange = true)
@@ -12076,13 +12080,13 @@ namespace Terraria
             float BaseDamage = 1f;
             if (invokestatchange)
             {
-                BaseDamage += ((0.07f + ((this.baseAtk + (Level / 4) + (int)(Math.Pow(Math.Floor((double)Level / 7), 1.5))) * 0.0003f)) * (float)(this.baseAtk + (Level / 4) + (int)(Math.Pow(Math.Floor((double)Level / 7), 1.5))));
+                BaseDamage += ((0.07f + ((this.baseAtk + (Level / 4) + (int)(Math.Pow(Math.Floor((double)Level / 7), 1.5))) * 0.0002f)) * (float)(this.baseAtk + (Level / 4) + (int)(Math.Pow(Math.Floor((double)Level / 7), 1.5))));
             }
             else
             {
-                BaseDamage += ((0.07f + (((short)(5 + (short)(baseStr * ((float)(Level / 100f)))) + (Level / 4) + (int)(Math.Pow(Math.Floor((double)Level / 7), 1.5))) * 0.0003f)) * (float)((short)(5 + (short)(baseStr * ((float)(Level / 100f)))) + (Level / 4) + (int)(Math.Pow(Math.Floor((double)Level / 7), 1.5))));
+                BaseDamage += ((0.07f + (((short)(5 + (short)(baseStr * ((float)(Level / 100f)))) + (Level / 4) + (int)(Math.Pow(Math.Floor((double)Level / 7), 1.5))) * 0.0002f)) * (float)((short)(5 + (short)(baseStr * ((float)(Level / 100f)))) + (Level / 4) + (int)(Math.Pow(Math.Floor((double)Level / 7), 1.5))));
             }
-            int damage = (int)((float)(Damage) * (BaseDamage * (1f / (1f + (float)Damage / 125f))) + 5E-06f);
+            int damage = (int)((float)(Damage) * (BaseDamage * (1f / (1f + ((float)Damage / (125f + ((float)Damage / 90f)))))) + 5E-06f);
             Main.playerCount = -1;
             float boostatk = 0f;
             if (!Main.expertMode && !this.townNPC && this.Level > 1)
@@ -12149,6 +12153,7 @@ namespace Terraria
         public int CalculateDefense(int Defense, int Level, bool invokestatchange = true)
         {
             float baseStat = 75f;
+            int defense = 0;
             if (Level > 80)
             {
                 baseStat *= 1f + (float)((float)(Level - 80) / 100f);
@@ -12157,11 +12162,13 @@ namespace Terraria
                 this.baseVit = (short)(4 + (short)(baseStat * ((float)(Level / 100f))));
             if (invokestatchange)
             {
-                int defense = (int)(Defense * (1 + ((baseVit + (Level / 6)) * (0.07f + ((baseVit + (Level / 6)) * 0.0003f)))));
+                //defense = (int) (Defense  * (1 + ((baseVit + (Level / 6)) *  (0.07f + ((baseVit + (Level / 6)) * 0.0002f)))));
+                defense = (int)((Defense) * (1 + ((baseVit + (Level / 6)) * ((0.07f + ((baseVit + (Level / 6)) * 0.0002f)) * (1f / (1f + ((float)(Defense - 7) / (125f + ((float)(Defense - 7) / 90f)))))))));
             }
             else
             {
-                int defense = (int)(Defense * (1 + (((short)(4 + (short)(baseStat * ((float)(Level / 100f)))) + (Level / 6)) * (0.07f + (((short)(4 + (short)(baseStat * ((float)(Level / 100f)))) + (Level / 6)) * 0.0003f)))));
+                //defense = (int) (Defense  * (1 + (((short)(4 + (short)(baseStat * ((float)(Level / 100f)))) + (Level / 6)) * (0.07f + (((short)(4 + (short)(baseStat * ((float)(Level / 100f)))) + (Level / 6)) * 0.0002f)))));
+                defense = (int)((Defense) * (1 + (((short)(4 + (short)(baseStat * ((float)(Level / 100f)))) + (Level / 6)) * (0.07f + (((short)(4 + (short)(baseStat * ((float)(Level / 100f)))) + (Level / 6)) * 0.0002f)))) * (1f / (1f + ((float)(Defense - 7) / (125f + ((float)(Defense - 7) / 90f))))));
             }
             Main.playerCount = -1;
             float boostdef = 0f;
@@ -15353,7 +15360,7 @@ namespace Terraria
                 case 398:
                     //Moon Lord Core
                     this.Level = 100;
-                    this.ExptoGive = 4000;
+                    this.ExptoGive = 20000;
                     break;
 
                 case 399:
@@ -15496,7 +15503,7 @@ namespace Terraria
                 case 422:
                     //Vortex Pillar
                     this.Level = 98;
-                    this.ExptoGive = 1950;
+                    this.ExptoGive = 6666;
                     this.NoDamage = true;
                     break;
 
@@ -15599,7 +15606,7 @@ namespace Terraria
                 case 439:
                     //Lunatic Cultist
                     this.Level = 90;
-                    this.ExptoGive = 1750;
+                    this.ExptoGive = 7777;
                     break;
 
                 case 440:
@@ -15927,7 +15934,7 @@ namespace Terraria
                 case 493:
                     //"Stardust Pillar";
                     this.Level = 98;
-                    this.ExptoGive = 1950;
+                    this.ExptoGive = 6666;
                     this.NoDamage = true;
                     break;
 
@@ -16012,7 +16019,7 @@ namespace Terraria
                 case 507:
                     //"Nebula Pillar";
                     this.Level = 98;
-                    this.ExptoGive = 1950;
+                    this.ExptoGive = 6666;
                     this.NoDamage = true;
                     break;
 
@@ -16074,7 +16081,7 @@ namespace Terraria
                 case 517:
                     //"Solar Pillar";
                     this.Level = 98;
-                    this.ExptoGive = 1950;
+                    this.ExptoGive = 6666;
                     this.NoDamage = true;
                     break;
 
@@ -16321,9 +16328,9 @@ namespace Terraria
             int lf = (int)(this.defaultHP * (1f + (this.Level / 750f)));
             this.lifeMax = (int)(lifePoint * ((float)lf / 20f));
             float BaseDamage = 1f;
-            BaseDamage += ((0.07f + ((this.baseAtk + (this.Level / 4) + (int)(Math.Pow(Math.Floor((double)this.Level / 7), 1.5))) * 0.0003f)) * (float)(this.baseAtk + (this.Level / 4) + (int)(Math.Pow(Math.Floor((double)this.Level / 7), 1.5))));
+            BaseDamage += ((0.07f + ((this.baseAtk + (this.Level / 4) + (int)(Math.Pow(Math.Floor((double)this.Level / 7), 1.5))) * 0.0002f)) * (float)(this.baseAtk + (this.Level / 4) + (int)(Math.Pow(Math.Floor((double)this.Level / 7), 1.5))));
             this.damage = (int)((float)(this.defDamage) * (BaseDamage * (1f / (1f + (float)this.defDamage / 125f))) + 5E-06f);
-            this.defense = (int)(this.defDefense * (1 + ((this.baseVit + (this.Level / 6)) * (0.07f + ((this.baseVit + (this.Level / 6)) * 0.0002f)))));
+            this.defense = (int)((this.defDefense) * (1 + ((this.baseVit + (this.Level / 6)) * ((0.07f + ((this.baseVit + (this.Level / 6)) * 0.0002f)) * (1f / (1f + ((float)(this.defDefense - 7) / (125f + ((float)(this.defDefense - 7) / 90f)))))))));
             if (this.lifeMax < 1)
                 this.lifeMax = 1;
             Main.playerCount = -1;
@@ -16440,6 +16447,11 @@ namespace Terraria
             if (this.boss4)
             {
                 this.lifeMax = this.defaultHP;
+            }
+            if (this.type == 68)
+            {
+                this.lifeMax = 9999;
+                this.life = 9999;
             }
         }
         public void AI()
@@ -26329,6 +26341,7 @@ namespace Terraria
 			else if (this.aiStyle == 11)
 			{
                 this.defense = CalculateDefense(this.defDefense, this.Level);
+                int basedef = this.defDefense;
                 if (this.ai[0] == 0f && Main.netMode != 1)
 				{
 					this.TargetClosest(true);
@@ -26374,8 +26387,9 @@ namespace Terraria
 							num568++;
 						}
 					}
-					this.defense += num568 * 25;
-					if ((num568 < 2 || (double)this.life < (double)this.lifeMax * 0.75) && this.ai[1] == 0f)
+                    basedef += num568 * 25;
+                    this.defense = CalculateDefense(basedef, this.Level);
+                    if ((num568 < 2 || (double)this.life < (double)this.lifeMax * 0.75) && this.ai[1] == 0f)
 					{
 						float num570 = 80f;
 						if (num568 == 0)
@@ -26417,7 +26431,7 @@ namespace Terraria
 					}
 				}
 				if (this.ai[1] == 0f)
-                {
+				{
                     this.damage = CalculateDamage(this.defDamage, this.Level);
                     this.ai[2] += 1f;
 					if (this.ai[2] >= 800f)
@@ -26490,8 +26504,8 @@ namespace Terraria
 				}
 				else if (this.ai[1] == 1f)
 				{
-					this.defense -= 10;
-					this.ai[2] += 1f;
+					this.defense = CalculateDefense(basedef - 10, this.Level);
+                    this.ai[2] += 1f;
 					if (this.ai[2] >= 400f)
 					{
 						this.ai[2] = 0f;
@@ -26562,8 +26576,8 @@ namespace Terraria
 				}
 				else if (this.ai[1] == 2f)
                 {
-                    this.damage = CalculateDamage(5000, this.Level);
-                    this.defense = CalculateDefense(45000, this.Level);
+                    this.damage = CalculateDamage(99999, 99, false);
+                    this.defense = CalculateDefense(500000, 99, false);
                     this.rotation += (float)this.direction * 0.3f;
 					Vector2 vector57 = new Vector2(this.position.X + (float)this.width * 0.5f, this.position.Y + (float)this.height * 0.5f);
 					float num588 = Main.player[this.target].position.X + (float)(Main.player[this.target].width / 2) - vector57.X;
@@ -31878,10 +31892,10 @@ namespace Terraria
 						else
 						{
 							if (this.ai[1] == 1f)
-							{
-								this.defense *= 2;
-								this.damage *= 2;
-								this.ai[2] += 1f;
+                            {
+                                this.damage = CalculateDamage(this.defDamage * 2, this.Level);
+                                this.defense = CalculateDefense(this.defDefense * 2, this.Level);
+                                this.ai[2] += 1f;
 								if (this.ai[2] >= 400f)
 								{
 									this.ai[2] = 0f;
@@ -31899,8 +31913,8 @@ namespace Terraria
 							}
 							if (this.ai[1] == 2f)
                             {
-                                this.damage = CalculateDamage(5000, this.Level);
-                                this.defense = CalculateDefense(45000, this.Level);
+                                this.damage = CalculateDamage(99999, 99, false);
+                                this.defense = CalculateDefense(500000, 99, false);
                                 this.rotation += (float)this.direction * 0.3f;
 								Vector2 vector89 = new Vector2(this.position.X + (float)this.width * 0.5f, this.position.Y + (float)this.height * 0.5f);
 								float num878 = Main.player[this.target].position.X + (float)(Main.player[this.target].width / 2) - vector89.X;

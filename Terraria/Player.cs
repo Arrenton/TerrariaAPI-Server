@@ -6645,8 +6645,8 @@ namespace Terraria
                 if (cooldownCounter == -1)
 				{
 					this.immune = true;
-					if (num == 1.0)
-					{
+                    if ((num <= ((double)this.heartPoint2 / 30d)) || (num == 1.0))
+                    {
 						this.immuneTime = 20;
 						if (this.longInvince)
 						{
@@ -9005,20 +9005,20 @@ namespace Terraria
 								y6 = 0f;
 								center.X = (float)Main.mouseX + Main.screenPosition.X;
 								center.Y = (float)Main.mouseY + Main.screenPosition.Y;
-								int num78 = Projectile.NewProjectile(center.X, center.Y, x6, y6, num46, num47, single15, i, 0f, 0f);
-								num78 = Projectile.NewProjectile(center.X, center.Y, x6, y6, num46 + 1, num47, single15, i, (float)num78, 0f);
+								int num78 = Projectile.NewProjectile(center.X, center.Y, x6, y6, num46, item.damage, single15, i, 0f, 0f);
+								num78 = Projectile.NewProjectile(center.X, center.Y, x6, y6, num46 + 1, item.damage, single15, i, (float)num78, 0f);
 								int num79 = num78;
-								num78 = Projectile.NewProjectile(center.X, center.Y, x6, y6, num46 + 2, num47, single15, i, (float)num78, 0f);
+								num78 = Projectile.NewProjectile(center.X, center.Y, x6, y6, num46 + 2, item.damage, single15, i, (float)num78, 0f);
 								Main.projectile[num79].localAI[1] = (float)num78;
 								num79 = num78;
-								num78 = Projectile.NewProjectile(center.X, center.Y, x6, y6, num46 + 3, num47, single15, i, (float)num78, 0f);
+								num78 = Projectile.NewProjectile(center.X, center.Y, x6, y6, num46 + 3, item.damage, single15, i, (float)num78, 0f);
 								Main.projectile[num79].localAI[1] = (float)num78;
 							}
 							else if (num76 != -1 && num77 != -1)
 							{
-								int num80 = Projectile.NewProjectile(center.X, center.Y, x6, y6, num46 + 1, num47, single15, i, Main.projectile[num77].ai[0], 0f);
+								int num80 = Projectile.NewProjectile(center.X, center.Y, x6, y6, num46 + 1, item.damage, single15, i, Main.projectile[num77].ai[0], 0f);
 								int num81 = num80;
-								num80 = Projectile.NewProjectile(center.X, center.Y, x6, y6, num46 + 2, num47, single15, i, (float)num80, 0f);
+								num80 = Projectile.NewProjectile(center.X, center.Y, x6, y6, num46 + 2, item.damage, single15, i, (float)num80, 0f);
 								Main.projectile[num81].localAI[1] = (float)num80;
 								Main.projectile[num81].netUpdate = true;
 								Main.projectile[num81].ai[1] = 1f;
@@ -22882,10 +22882,10 @@ namespace Terraria
 				this.moveSpeed *= 0.75f;
             }
             //////Level Stat Bonuses
-            this.meleeDamage += ((0.07f + ((this.statStr + this.boostStr) * 0.0003f)) * (float)(0 + this.statStr + this.boostStr));
-            this.rangedDamage += ((0.07f + ((this.statRng + this.boostRng) * 0.0003f)) * (float)(0 + this.statRng + this.boostRng));
-            this.magicDamage += ((0.07f + ((this.statMag + this.boostMag) * 0.0003f)) * (float)(0 + this.statMag + this.boostMag));
-            this.thrownDamage += ((0.07f + (((float)Math.Round(this.statStr * 0.8f) + this.boostThr) * 0.0003f)) * (float)(0 + Math.Round(this.statStr * 0.8f) + this.boostThr));
+            this.meleeDamage += ((0.07f + ((this.statStr + this.boostStr) * 0.0002f)) * (float)(0 + this.statStr + this.boostStr));
+            this.rangedDamage += ((0.07f + ((this.statRng + this.boostRng) * 0.0002f)) * (float)(0 + this.statRng + this.boostRng));
+            this.magicDamage += ((0.07f + ((this.statMag + this.boostMag) * 0.0002f)) * (float)(0 + this.statMag + this.boostMag));
+            this.thrownDamage += ((0.07f + (((float)Math.Round(this.statStr * 0.8f) + this.boostThr) * 0.0002f)) * (float)(0 + Math.Round(this.statStr * 0.8f) + this.boostThr));
             this.minionDamage += ((0.07f + (((float)Math.Round(this.statMag * 0.8f) + this.boostSum) * 0.0002f)) * (float)(0 + Math.Round(this.statMag * 0.8f) + this.boostSum));
             if (this.meleeDamage < 0.1f)
                 this.meleeDamage = 0.1f;
@@ -22966,7 +22966,7 @@ namespace Terraria
                 this.statLifeMax2 /= 2;
             }
             this.baseDefense = (short)(this.statDefense + 7);
-            this.statDefense = (int)((this.statDefense + 7) * (1 + ((this.statDef + this.boostDef) * (0.07f + ((this.statDef + this.boostDef) * 0.0002f)))));
+            this.statDefense = (int)((this.statDefense + 7) * (1 + ((this.statDef + this.boostDef) * ((0.07f + ((this.statDef + this.boostDef) * 0.0002f)) * (1f / (1f + ((float)(this.baseDefense - 7) / (125f + ((float)(this.baseDefense - 7) / 90f)))))))));
             double defmult = 1f;
             if (CheckAbility(25))
             {

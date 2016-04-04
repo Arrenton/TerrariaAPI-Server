@@ -11,53 +11,54 @@ using Terraria.IO;
 using Terraria.Net.Sockets;
 using TerrariaApi.Server;
 using System.Text;
+using System.Net;
 
 namespace Terraria
 {
-	public class NetMessage
-	{
-		public static MessageBuffer[] buffer = new MessageBuffer[257];
+    public class NetMessage
+    {
+        public static MessageBuffer[] buffer = new MessageBuffer[257];
 
-		public static void SendData(int msgType, int remoteClient = -1, int ignoreClient = -1, string text = "",
-			int number = 0, float number2 = 0f, float number3 = 0f, float number4 = 0f, int number5 = 0, int number6 = 0,
-			int number7 = 0, bool boolean1 = false) 
-		{
-			if (Main.netMode == 0)
-			{
-				return;
-			}
-			int num = 256;
-			if (Main.netMode == 2 && remoteClient >= 0)
-			{
-				num = remoteClient;
-			}
+        public static void SendData(int msgType, int remoteClient = -1, int ignoreClient = -1, string text = "",
+            int number = 0, float number2 = 0f, float number3 = 0f, float number4 = 0f, int number5 = 0, int number6 = 0,
+            int number7 = 0, bool boolean1 = false)
+        {
+            if (Main.netMode == 0)
+            {
+                return;
+            }
+            int num = 256;
+            if (Main.netMode == 2 && remoteClient >= 0)
+            {
+                num = remoteClient;
+            }
 
-			if (text == null)
-			{
-				text = "";
-			}
+            if (text == null)
+            {
+                text = "";
+            }
 
-			if (ServerApi.Hooks.InvokeNetSendData(ref msgType, ref remoteClient, ref ignoreClient, ref text, ref number,
-				ref number2, ref number3, ref number4, ref number5, ref number6, ref number7, ref boolean1))
-			{
-				return;
-			}
+            if (ServerApi.Hooks.InvokeNetSendData(ref msgType, ref remoteClient, ref ignoreClient, ref text, ref number,
+                ref number2, ref number3, ref number4, ref number5, ref number6, ref number7, ref boolean1))
+            {
+                return;
+            }
 
-			MemoryStream ms = new MemoryStream(16384);
-			BinaryWriter writer = new BinaryWriter(ms);
-			writer.BaseStream.Position = 2L;
-			long position = 0L;
-			writer.Write((byte) msgType);
+            MemoryStream ms = new MemoryStream();
+            BinaryWriter writer = new BinaryWriter(ms);
+            writer.BaseStream.Position = 2L;
+            long position = 0L;
+            writer.Write((byte)msgType);
 
-			if (text == null)
-			{
-				text = "";
-			}
+            if (text == null)
+            {
+                text = "";
+            }
 
             switch (msgType)
             {
                 case 1:
-                    writer.Write("Terraria" + Main.curRelease + "0005");
+                    writer.Write("Terraria" + Main.curRelease + "0007");
                     break;
                 case 2:
                     writer.Write(text);
@@ -320,24 +321,11 @@ namespace Terraria
                     break;
                 case 10:
                     {
-                        /*
-                         * TileSection packets must be sent and arrive in the same order
-                         * on the client and before the TileFrameSection packet or else 
-                         * we will end up with graphical tile glitches.
-                         */
+                        byte[] tileData = new byte[65535];
 
-                        Netplay.Clients[remoteClient].sendQueue.AllocAndSet(SendQueue.kSendQueueLargeBlockSize, (seg) =>
-                        {
-                            seg.Heap[seg.Offset + 2] = (byte)PacketTypes.TileSendSection;
-                            seg.Heap[seg.Offset + 3] = 1; //compressed flag
-
-                        int len = NetMessage.CompressTileBlock(number, (int)number2, (short)number3, (short)number4, seg.Heap, seg.Offset + 4);
-                            Array.Copy(BitConverter.GetBytes(len + 4), 0, seg.Heap, seg.Offset, 2);
-
-                            return true;
-                        });
-
-                        return;
+                        int num3 = NetMessage.CompressTileBlock(number, (int)number2, (short)number3, (short)number4, tileData, 0);
+                        writer.Write(tileData, 0, num3);
+                        break;
                     }
                 case 11:
                     writer.Write((short)number);
@@ -1247,357 +1235,376 @@ namespace Terraria
                     writer.Write((byte)number2);
                     break;
             }
-			int num19 = (int) writer.BaseStream.Position;
-			writer.BaseStream.Position = position;
-			writer.Write((short) num19);
-			writer.BaseStream.Position = (long) num19;
+            int num19 = (int)writer.BaseStream.Position;
+            writer.BaseStream.Position = position;
+            writer.Write((short)num19);
+            writer.BaseStream.Position = (long)num19;
 
-			byte[] packetContents = ms.ToArray();
-			ms.Dispose();
-			writer.Dispose();
+            byte[] packetContents = ms.ToArray();
+            ms.Dispose();
+            writer.Dispose();
 
-			if (remoteClient == -1)
-			{
-				if (msgType == 34 || msgType == 69)
-				{
-					for (int num20 = 0; num20 < 256; num20++)
-					{
-						if (num20 != ignoreClient && NetMessage.buffer[num20].broadcast && Netplay.Clients[num20].Socket.IsConnected())
-						{
-							try
-							{
-								NetMessage.buffer[num20].spamCount++;
-								Main.txMsg++;
-								Main.txData += num19;
+            if (remoteClient == -1)
+            {
+                if (msgType == 34 || msgType == 69)
+                {
+                    for (int num20 = 0; num20 < 256; num20++)
+                    {
+                        if (num20 != ignoreClient && NetMessage.buffer[num20].broadcast && Netplay.Clients[num20].Socket.IsConnected())
+                        {
+                            try
+                            {
+                                NetMessage.buffer[num20].spamCount++;
+                                Main.txMsg++;
+                                Main.txData += num19;
 
-								var seg = Netplay.Clients[num20].sendQueue.AllocAndCopy(ref packetContents, 0, packetContents.Length);
-								Netplay.Clients[num20].sendQueue.Enqueue(seg);
-
-
-								//Netplay.Clients[num20].Socket.AsyncSend(packetContents, 0, num19,
-								//	new SocketSendCallback(Netplay.Clients[num20].ServerWriteCallBack), null);
-							}
-							catch (Exception ex)
-							{
+                                Netplay.Clients[num20].Socket.AsyncSend(packetContents, 0, num19,
+                                new SocketSendCallback(Netplay.Clients[num20].ServerWriteCallBack), null);
+                            }
+                            catch (Exception ex)
+                            {
 #if DEBUG
 										Console.WriteLine(ex);
 										System.Diagnostics.Debugger.Break();
 
 #endif
-							}
-						}
-					}
-				}
-				else if (msgType == 20)
-				{
-					for (int num21 = 0; num21 < 256; num21++)
-					{
-						if (num21 != ignoreClient && NetMessage.buffer[num21].broadcast && Netplay.Clients[num21].Socket.IsConnected() &&
-						    Netplay.Clients[num21].SectionRange(number, (int) number2, (int) number3))
-						{
-							try
-							{
-								NetMessage.buffer[num21].spamCount++;
-								Main.txMsg++;
-								Main.txData += num19;
+                            }
+                        }
+                    }
+                }
+                else if (msgType == 20)
+                {
+                    for (int num21 = 0; num21 < 256; num21++)
+                    {
+                        if (num21 != ignoreClient && NetMessage.buffer[num21].broadcast && Netplay.Clients[num21].Socket.IsConnected() &&
+                            Netplay.Clients[num21].SectionRange(number, (int)number2, (int)number3))
+                        {
+                            try
+                            {
+                                NetMessage.buffer[num21].spamCount++;
+                                Main.txMsg++;
+                                Main.txData += num19;
 
-								var seg = Netplay.Clients[num21].sendQueue.AllocAndCopy(ref packetContents, 0, packetContents.Length);
-								Netplay.Clients[num21].sendQueue.Enqueue(seg);
-
-								//Netplay.Clients[num21].Socket.AsyncSend(packetContents, 0, num19,
-								//	new SocketSendCallback(Netplay.Clients[num21].ServerWriteCallBack), null);
-							}
-							catch (Exception ex)
-							{
+                                Netplay.Clients[num21].Socket.AsyncSend(packetContents, 0, num19,
+                                    new SocketSendCallback(Netplay.Clients[num21].ServerWriteCallBack), null);
+                            }
+                            catch (Exception ex)
+                            {
 #if DEBUG
 										Console.WriteLine(ex);
 										System.Diagnostics.Debugger.Break();
 
 #endif
-							}
-						}
-					}
-				}
-				else if (msgType == 23)
-				{
-					NPC nPC3 = Main.npc[number];
-					for (int num22 = 0; num22 < 256; num22++)
-					{
-						if (num22 != ignoreClient && NetMessage.buffer[num22].broadcast && Netplay.Clients[num22].Socket.IsConnected())
-						{
-							bool flag3 = false;
-							if (nPC3.boss || nPC3.netAlways || nPC3.townNPC || !nPC3.active)
-							{
-								flag3 = true;
-							}
-							else if (nPC3.netSkip <= 0)
-							{
-								Rectangle rect = Main.player[num22].getRect();
-								Rectangle rect2 = nPC3.getRect();
-								rect2.X -= 2500;
-								rect2.Y -= 2500;
-								rect2.Width += 5000;
-								rect2.Height += 5000;
-								if (rect.Intersects(rect2))
-								{
-									flag3 = true;
-								}
-							}
-							else
-							{
-								flag3 = true;
-							}
-							if (flag3)
-							{
-								try
-								{
-									NetMessage.buffer[num22].spamCount++;
-									Main.txMsg++;
-									Main.txData += num19;
+                            }
+                        }
+                    }
+                }
+                else if (msgType == 23)
+                {
+                    NPC nPC3 = Main.npc[number];
+                    for (int num22 = 0; num22 < 256; num22++)
+                    {
+                        if (num22 != ignoreClient && NetMessage.buffer[num22].broadcast && Netplay.Clients[num22].Socket.IsConnected())
+                        {
+                            bool flag3 = false;
+                            if (nPC3.boss || nPC3.netAlways || nPC3.townNPC || !nPC3.active)
+                            {
+                                flag3 = true;
+                            }
+                            else if (nPC3.netSkip <= 0)
+                            {
+                                Rectangle rect = Main.player[num22].getRect();
+                                Rectangle rect2 = nPC3.getRect();
+                                rect2.X -= 2500;
+                                rect2.Y -= 2500;
+                                rect2.Width += 5000;
+                                rect2.Height += 5000;
+                                if (rect.Intersects(rect2))
+                                {
+                                    flag3 = true;
+                                }
+                            }
+                            else
+                            {
+                                flag3 = true;
+                            }
+                            if (flag3)
+                            {
+                                try
+                                {
+                                    NetMessage.buffer[num22].spamCount++;
+                                    Main.txMsg++;
+                                    Main.txData += num19;
 
-									var seg = Netplay.Clients[num22].sendQueue.AllocAndCopy(ref packetContents, 0, packetContents.Length);
-									Netplay.Clients[num22].sendQueue.Enqueue(seg);
-
-									//Netplay.Clients[num22].Socket.AsyncSend(packetContents, 0, num19,
-									//	new SocketSendCallback(Netplay.Clients[num22].ServerWriteCallBack), null);
-								}
-								catch (Exception ex)
-								{
+                                    Netplay.Clients[num22].Socket.AsyncSend(packetContents, 0, num19,
+                                        new SocketSendCallback(Netplay.Clients[num22].ServerWriteCallBack), null);
+                                }
+                                catch (Exception ex)
+                                {
 #if DEBUG
 											Console.WriteLine(ex);
 											System.Diagnostics.Debugger.Break();
 
 #endif
-								}
-							}
-						}
-					}
-					nPC3.netSkip++;
-					if (nPC3.netSkip > 4)
-					{
-						nPC3.netSkip = 0;
-					}
-				}
-				else if (msgType == 28)
-				{
-					NPC nPC4 = Main.npc[number];
-					for (int num23 = 0; num23 < 256; num23++)
-					{
-						if (num23 != ignoreClient && NetMessage.buffer[num23].broadcast && Netplay.Clients[num23].Socket.IsConnected())
-						{
-							bool flag4 = false;
-							if (nPC4.life <= 0)
-							{
-								flag4 = true;
-							}
-							else
-							{
-								Rectangle rect3 = Main.player[num23].getRect();
-								Rectangle rect4 = nPC4.getRect();
-								rect4.X -= 3000;
-								rect4.Y -= 3000;
-								rect4.Width += 6000;
-								rect4.Height += 6000;
-								if (rect3.Intersects(rect4))
-								{
-									flag4 = true;
-								}
-							}
-							if (flag4)
-							{
-								try
-								{
-									NetMessage.buffer[num23].spamCount++;
-									Main.txMsg++;
-									Main.txData += num19;
+                                }
+                            }
+                        }
+                    }
+                    nPC3.netSkip++;
+                    if (nPC3.netSkip > 4)
+                    {
+                        nPC3.netSkip = 0;
+                    }
+                }
+                else if (msgType == 28)
+                {
+                    NPC nPC4 = Main.npc[number];
+                    for (int num23 = 0; num23 < 256; num23++)
+                    {
+                        if (num23 != ignoreClient && NetMessage.buffer[num23].broadcast && Netplay.Clients[num23].Socket.IsConnected())
+                        {
+                            bool flag4 = false;
+                            if (nPC4.life <= 0)
+                            {
+                                flag4 = true;
+                            }
+                            else
+                            {
+                                Rectangle rect3 = Main.player[num23].getRect();
+                                Rectangle rect4 = nPC4.getRect();
+                                rect4.X -= 3000;
+                                rect4.Y -= 3000;
+                                rect4.Width += 6000;
+                                rect4.Height += 6000;
+                                if (rect3.Intersects(rect4))
+                                {
+                                    flag4 = true;
+                                }
+                            }
+                            if (flag4)
+                            {
+                                try
+                                {
+                                    NetMessage.buffer[num23].spamCount++;
+                                    Main.txMsg++;
+                                    Main.txData += num19;
 
-									var seg = Netplay.Clients[num23].sendQueue.AllocAndCopy(ref packetContents, 0, packetContents.Length);
-									Netplay.Clients[num23].sendQueue.Enqueue(seg);
-									//	Netplay.Clients[num23].Socket.AsyncSend(packetContents, 0, num19,
-									//		new SocketSendCallback(Netplay.Clients[num23].ServerWriteCallBack), null);
-								}
-								catch (Exception ex)
-								{
+                                    Netplay.Clients[num23].Socket.AsyncSend(packetContents, 0, num19,
+                                        new SocketSendCallback(Netplay.Clients[num23].ServerWriteCallBack), null);
+                                }
+                                catch (Exception ex)
+                                {
 #if DEBUG
 											Console.WriteLine(ex);
 											System.Diagnostics.Debugger.Break();
 
 #endif
-								}
-							}
-						}
-					}
-				}
-				else if (msgType == 13)
-				{
-					for (int num24 = 0; num24 < 256; num24++)
-					{
-						if (num24 != ignoreClient && NetMessage.buffer[num24].broadcast && Netplay.Clients[num24].Socket.IsConnected())
-						{
-							try
-							{
-								NetMessage.buffer[num24].spamCount++;
-								Main.txMsg++;
-								Main.txData += num19;
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (msgType == 13)
+                {
+                    for (int num24 = 0; num24 < 256; num24++)
+                    {
+                        if (num24 != ignoreClient && NetMessage.buffer[num24].broadcast && Netplay.Clients[num24].Socket.IsConnected())
+                        {
+                            try
+                            {
+                                NetMessage.buffer[num24].spamCount++;
+                                Main.txMsg++;
+                                Main.txData += num19;
 
-								var seg = Netplay.Clients[num24].sendQueue.AllocAndCopy(ref packetContents, 0, packetContents.Length);
-								Netplay.Clients[num24].sendQueue.Enqueue(seg);
-
-								//Netplay.Clients[num24].Socket.AsyncSend(packetContents, 0, num19,
-								//	new SocketSendCallback(Netplay.Clients[num24].ServerWriteCallBack), null);
-							}
-							catch (Exception ex)
-							{
+                                Netplay.Clients[num24].Socket.AsyncSend(packetContents, 0, num19,
+                                    new SocketSendCallback(Netplay.Clients[num24].ServerWriteCallBack), null);
+                            }
+                            catch (Exception ex)
+                            {
 #if DEBUG
 										Console.WriteLine(ex);
 										System.Diagnostics.Debugger.Break();
 
 #endif
-							}
-						}
-					}
-					Main.player[number].netSkip++;
-					if (Main.player[number].netSkip > 2)
-					{
-						Main.player[number].netSkip = 0;
-					}
-				}
-				else if (msgType == 27)
-				{
-					Projectile projectile2 = Main.projectile[number];
-					for (int num25 = 0; num25 < 256; num25++)
-					{
-						if (num25 != ignoreClient && NetMessage.buffer[num25].broadcast && Netplay.Clients[num25].Socket.IsConnected())
-						{
-							bool flag5 = false;
-							if (projectile2.type == 12 || Main.projPet[projectile2.type] || projectile2.aiStyle == 11 ||
-							    projectile2.netImportant)
-							{
-								flag5 = true;
-							}
-							else
-							{
-								Rectangle rect5 = Main.player[num25].getRect();
-								Rectangle rect6 = projectile2.getRect();
-								rect6.X -= 5000;
-								rect6.Y -= 5000;
-								rect6.Width += 10000;
-								rect6.Height += 10000;
-								if (rect5.Intersects(rect6))
-								{
-									flag5 = true;
-								}
-							}
-							if (flag5)
-							{
-								try
-								{
-									NetMessage.buffer[num25].spamCount++;
-									Main.txMsg++;
-									Main.txData += num19;
+                            }
+                        }
+                    }
+                    Main.player[number].netSkip++;
+                    if (Main.player[number].netSkip > 2)
+                    {
+                        Main.player[number].netSkip = 0;
+                    }
+                }
+                else if (msgType == 27)
+                {
+                    Projectile projectile2 = Main.projectile[number];
+                    for (int num25 = 0; num25 < 256; num25++)
+                    {
+                        if (num25 != ignoreClient && NetMessage.buffer[num25].broadcast && Netplay.Clients[num25].Socket.IsConnected())
+                        {
+                            bool flag5 = false;
+                            if (projectile2.type == 12 || Main.projPet[projectile2.type] || projectile2.aiStyle == 11 ||
+                                projectile2.netImportant)
+                            {
+                                flag5 = true;
+                            }
+                            else
+                            {
+                                Rectangle rect5 = Main.player[num25].getRect();
+                                Rectangle rect6 = projectile2.getRect();
+                                rect6.X -= 5000;
+                                rect6.Y -= 5000;
+                                rect6.Width += 10000;
+                                rect6.Height += 10000;
+                                if (rect5.Intersects(rect6))
+                                {
+                                    flag5 = true;
+                                }
+                            }
+                            if (flag5)
+                            {
+                                try
+                                {
+                                    NetMessage.buffer[num25].spamCount++;
+                                    Main.txMsg++;
+                                    Main.txData += num19;
 
-									var seg = Netplay.Clients[num25].sendQueue.AllocAndCopy(ref packetContents, 0, packetContents.Length);
-									Netplay.Clients[num25].sendQueue.Enqueue(seg);
-
-									//Netplay.Clients[num25].Socket.AsyncSend(packetContents, 0, num19,
-									//	new SocketSendCallback(Netplay.Clients[num25].ServerWriteCallBack), null);
-								}
-								catch (Exception ex)
-								{
+                                    Netplay.Clients[num25].Socket.AsyncSend(packetContents, 0, num19,
+                                        new SocketSendCallback(Netplay.Clients[num25].ServerWriteCallBack), null);
+                                }
+                                catch (Exception ex)
+                                {
 #if DEBUG
 											Console.WriteLine(ex);
 											System.Diagnostics.Debugger.Break();
 
 #endif
-								}
-							}
-						}
-					}
-				}
-				else
-				{
-					for (int num26 = 0; num26 < 256; num26++)
-					{
-						if (num26 != ignoreClient &&
-						    (NetMessage.buffer[num26].broadcast || (Netplay.Clients[num26].State >= 3 && msgType == 10)) &&
-						    Netplay.Clients[num26].Socket.IsConnected())
-						{
-							try
-							{
-								NetMessage.buffer[num26].spamCount++;
-								Main.txMsg++;
-								Main.txData += num19;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for (int num26 = 0; num26 < 256; num26++)
+                    {
+                        if (num26 != ignoreClient &&
+                            (NetMessage.buffer[num26].broadcast || (Netplay.Clients[num26].State >= 3 && msgType == 10)) &&
+                            Netplay.Clients[num26].Socket.IsConnected())
+                        {
+                            try
+                            {
+                                NetMessage.buffer[num26].spamCount++;
+                                Main.txMsg++;
+                                Main.txData += num19;
 
-								var seg = Netplay.Clients[num26].sendQueue.AllocAndCopy(ref packetContents, 0, packetContents.Length);
-								Netplay.Clients[num26].sendQueue.Enqueue(seg);
-
-								//Netplay.Clients[num26].Socket.AsyncSend(packetContents, 0, num19,
-								//	new SocketSendCallback(Netplay.Clients[num26].ServerWriteCallBack), null);
-							}
-							catch (Exception ex)
-							{
+                                Netplay.Clients[num26].Socket.AsyncSend(packetContents, 0, num19,
+                                    new SocketSendCallback(Netplay.Clients[num26].ServerWriteCallBack), null);
+                            }
+                            catch (Exception ex)
+                            {
 #if DEBUG
 										Console.WriteLine(ex);
 										System.Diagnostics.Debugger.Break();
 
 #endif
-							}
-						}
-					}
-				}
-			}
-			else if (Netplay.Clients[remoteClient].Socket.IsConnected())
-			{
-				try
-				{
-					NetMessage.buffer[remoteClient].spamCount++;
-					Main.txMsg++;
-					Main.txData += num19;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (Netplay.Clients[remoteClient].Socket.IsConnected())
+            {
+                try
+                {
+                    NetMessage.buffer[remoteClient].spamCount++;
+                    Main.txMsg++;
+                    Main.txData += num19;
 
-					var seg = Netplay.Clients[remoteClient].sendQueue.AllocAndCopy(ref packetContents, 0, packetContents.Length);
-					Netplay.Clients[remoteClient].sendQueue.Enqueue(seg);
-
-					//Netplay.Clients[remoteClient].Socket.AsyncSend(packetContents, 0, num19,
-					//	new SocketSendCallback(Netplay.Clients[remoteClient].ServerWriteCallBack), null);
-				}
-				catch (Exception ex)
-				{
+                    Netplay.Clients[remoteClient].Socket.AsyncSend(packetContents, 0, num19,
+                        new SocketSendCallback(Netplay.Clients[remoteClient].ServerWriteCallBack), null);
+                }
+                catch (Exception ex)
+                {
 #if DEBUG
 							Console.WriteLine(ex);
 							System.Diagnostics.Debugger.Break();
 
 #endif
-				}
-			}
-			//if (msgType == 2 && Main.netMode == 2)
-			//{
-			//	Netplay.Clients[num].PendingTermination = true;
-			//}
-		}
+                }
+            }
+        }
 
-		public static int CompressTileBlock(int xStart, int yStart, short width, short height, byte[] buffer, int bufferStart)
-		{
-			int result;
-			using (MemoryStream memoryStream = new MemoryStream(buffer, bufferStart, SendQueue.kSendQueueLargeBlockSize))
-			{
-				using (DeflateStream ds = new DeflateStream(memoryStream, CompressionMode.Compress, leaveOpen: true))
-				using (BinaryWriter binaryWriter = new BinaryWriter(ds))
-				{
-					binaryWriter.Write(xStart);
-					binaryWriter.Write(yStart);
-					binaryWriter.Write(width);
-					binaryWriter.Write(height);
+        public static int CompressTileBlock(int xStart, int yStart, short width, short height, byte[] buffer, int bufferStart)
+        {
+            //int result;
 
-					NetMessage.CompressTileBlock_Inner(binaryWriter, xStart, yStart, width, height);
+            //using (MemoryStream ms = new MemoryStream(buffer))
+            //{
+            //    using (DeflateStream ds = new DeflateStream(ms, CompressionMode.Compress, leaveOpen: true))
+            //    using (BinaryWriter binaryWriter = new BinaryWriter(ds))
+            //    {
+            //        binaryWriter.Write(xStart);
+            //        binaryWriter.Write(yStart);
+            //        binaryWriter.Write(width);
+            // 
+            //        NetMessage.CompressTileBlock_Inner(binaryWriter, xStart, yStart, width, height);
 
-					ds.Flush();
-				}
+            //        ds.Flush();
+            //    }
 
-				result = (int) memoryStream.Position;
-			}
-			
-			return result;
-		}
+            //    result = (int)ms.Position;
+            //}
+
+            //return result;
+
+            int result;
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
+                {
+                    binaryWriter.Write(xStart);
+                    binaryWriter.Write(yStart);
+                    binaryWriter.Write(width);
+                    binaryWriter.Write(height);
+                    NetMessage.CompressTileBlock_Inner(binaryWriter, xStart, yStart, (int)width, (int)height);
+                    int num = buffer.Length;
+                    if ((long)bufferStart + memoryStream.Length > (long)num)
+                    {
+                        result = (int)((long)(num - bufferStart) + memoryStream.Length);
+                    }
+                    else
+                    {
+                        memoryStream.Position = 0L;
+                        MemoryStream memoryStream2 = new MemoryStream();
+                        using (DeflateStream deflateStream = new DeflateStream(memoryStream2, CompressionMode.Compress, true))
+                        {
+                            memoryStream.CopyTo(deflateStream);
+                            deflateStream.Flush();
+                            deflateStream.Close();
+                            deflateStream.Dispose();
+                        }
+                        if (memoryStream.Length <= memoryStream2.Length)
+                        {
+                            memoryStream.Position = 0L;
+                            buffer[bufferStart] = 0;
+                            bufferStart++;
+                            memoryStream.Read(buffer, bufferStart, (int)memoryStream.Length);
+                            result = (int)memoryStream.Length + 1;
+                        }
+                        else
+                        {
+                            memoryStream2.Position = 0L;
+                            buffer[bufferStart] = 1;
+                            bufferStart++;
+                            memoryStream2.Read(buffer, bufferStart, (int)memoryStream2.Length);
+                            result = (int)memoryStream2.Length + 1;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
 
 		public static void CompressTileBlock_Inner(BinaryWriter writer, int xStart, int yStart, int width, int height)
 		{
