@@ -108,7 +108,7 @@ public enum PacketTypes
 	MoonLordCountdown = 103,
 	NpcShopItem = 104,
     LevelUP = 105,
-    Nothing = 106,
+    RecieveTileKillXP = 106,
     UpdateStats = 107,
     SendEXP = 108,
     UpdateAbilities = 109,

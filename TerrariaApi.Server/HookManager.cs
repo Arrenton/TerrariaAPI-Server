@@ -522,7 +522,7 @@ namespace TerrariaApi.Server
 
 		internal bool InvokeNpcStrike(
 			NPC npc, ref int damage, ref float knockback, ref int hitDirection, ref bool crit, ref bool noEffect, 
-			ref bool fromNet, Player player)
+			ref bool fromNet, Player player, ref int playerStrike, ref bool tap, ref bool banner)
 		{
 			NpcStrikeEventArgs args = new NpcStrikeEventArgs
 			{
@@ -533,7 +533,10 @@ namespace TerrariaApi.Server
 				Critical = crit,
 				NoEffect = noEffect,
 				FromNet = fromNet,
-				Player = player
+				Player = player,
+                PlayerStrike = playerStrike,
+                Tap = tap,
+                Banner = banner
 			};
 
 			this.NpcStrike.Invoke(args);
@@ -544,6 +547,9 @@ namespace TerrariaApi.Server
 			crit = args.Critical;
 			noEffect = args.NoEffect;
 			fromNet = args.FromNet;
+            playerStrike = args.PlayerStrike;
+            tap = args.Tap;
+            banner = args.Banner;
 			return args.Handled;
 		}
 		#endregion

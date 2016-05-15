@@ -2031,7 +2031,7 @@ namespace Terraria.IO
 			WorldFile.saveWorld(false);
 		}
 
-        public static void saveEXP(bool useCloudSaving, string path)
+        /*public static void saveEXP(bool useCloudSaving, string path)
         {
             string text = path.Substring(0, path.Length - 4);
             string str = string.Concat(new object[]
@@ -2039,7 +2039,6 @@ namespace Terraria.IO
                 text,
                 ".lvl"
             });
-            //string str = path + ".lvl";
 
             byte[] array = null;
             int num = 0;
@@ -2082,7 +2081,7 @@ namespace Terraria.IO
                 return;
             }
             FileUtilities.Write(str, array, num);
-        }
+        }*/
         public static void saveWorld(bool resetTime = false)
 		{
 			if (ServerApi.Hooks.InvokeWorldSave(resetTime))
@@ -2193,7 +2192,8 @@ namespace Terraria.IO
 								FileUtilities.WriteAllBytes(str, numArray);
                             }
                             if (!Main.NoWorldEXP)
-                                saveEXP(false, Main.worldPathName);
+                                Leveled.LeveledRPGModUtilities.saveEXP(false, Main.worldPathName);
+                            WorldGen.GeneratingWorld = false;
                             WorldGen.saveLock = false;
 							Main.serverGenLock = false;
 							return;

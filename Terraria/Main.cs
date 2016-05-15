@@ -29,6 +29,8 @@ namespace Terraria
 {
 	public class Main
 	{
+        public const int AbilityCount = 54;
+
         public static int playerCount = 0;
 
         public static bool NoWorldEXP = false;
@@ -5168,7 +5170,7 @@ namespace Terraria
 				while (flag)
 				{
 					Main.LoadWorlds();
-					Console.WriteLine(string.Concat("Terraria Leveled Server Version 10.5 4/3/2016 (", Main.versionNumber2 + ")"));
+					Console.WriteLine(string.Concat("Terraria Leveled Server Version 10.6.4 5/15/2016 (", Main.versionNumber2 + ")"));
 					Console.WriteLine("");
 					for (int j = 0; j < Main.WorldList.Count; j++)
 					{
@@ -8702,26 +8704,26 @@ namespace Terraria
 		public static void InitLifeBytes()
 		{
 			NPC nPC = new NPC();
-			for (int i = -65; i < 540; i++)
-			{
-				if (i != 0)
-				{
-					nPC.netDefaults(i);
-					if (nPC.lifeMax > 32767)
-					{
-						Main.npcLifeBytes[i] = 4;
-					}
-					else if (nPC.lifeMax <= 127)
-					{
-						Main.npcLifeBytes[i] = 1;
-					}
-					else
-					{
-						Main.npcLifeBytes[i] = 2;
-					}
-				}
-			}
-			nPC = null;
+            for (int i = -65; i < 540; i++)
+            {
+                if (i != 0)
+                {
+                    nPC.netDefaults(i);
+                    if (nPC.lifeMax > 32767 || nPC.boss)
+                    {
+                        Main.npcLifeBytes[i] = 4;
+                    }
+                    else if (nPC.lifeMax > 127)
+                    {
+                        Main.npcLifeBytes[i] = 2;
+                    }
+                    else
+                    {
+                        Main.npcLifeBytes[i] = 1;
+                    }
+                }
+            }
+            nPC = null;
 		}
 
 		protected void InitMap()
@@ -11199,7 +11201,7 @@ namespace Terraria
 		{
 		}
 
-        public static int OreEXP(int Type)
+        public static int OreEXP(int Type, int Type2 = 0)
         {
             int EXP = 0;
             switch (Type)
@@ -11207,7 +11209,7 @@ namespace Terraria
                 case 6:
                     EXP = 6;
                     break;
-                case 7:
+                case 7: //Copper Ore
                     EXP = 3;
                     break;
                 case 8:
@@ -11228,22 +11230,22 @@ namespace Terraria
                 case 58:
                     EXP = 45;
                     break;
-                case 67:
+                case 67: //Amethyst
                     EXP = 10;
                     break;
-                case 66:
+                case 66: //Topaz
                     EXP = 20;
                     break;
-                case 63:
+                case 63: //Sapphire
                     EXP = 30;
                     break;
-                case 65:
+                case 65: //Emerald
                     EXP = 45;
                     break;
-                case 64:
+                case 64: //Ruby
                     EXP = 60;
                     break;
-                case 68:
+                case 68: //Diamond
                     EXP = 75;
                     break;
                 case 107:
@@ -11269,6 +11271,21 @@ namespace Terraria
                     break;
                 case 204:
                     EXP = 80;
+                    break;
+                //Exposed Gems 178
+                case 178:
+                    if (Type2 == 0) //Amethyst
+                        EXP = 7;
+                    if (Type2 == 1) //Topaz
+                        EXP = 12;
+                    if (Type2 == 2) //Sapphire
+                        EXP = 18;
+                    if (Type2 == 3) //Emerald
+                        EXP = 25;
+                    if (Type2 == 4) //Ruby
+                        EXP = 35;
+                    if (Type2 == 5) //Diamond
+                        EXP = 50;
                     break;
                 case 221:
                     EXP = 61;

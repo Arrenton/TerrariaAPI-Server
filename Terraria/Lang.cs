@@ -42,7 +42,7 @@ namespace Terraria
 			Lang.dt = new string[4];
 			Lang.chestType = new string[52];
 			Lang.dresserType = new string[28];
-			Lang.prefix = new string[131];
+			Lang.prefix = new string[140];
 		}
 
 		public Lang()
@@ -39967,12 +39967,21 @@ namespace Terraria
                 Lang.prefix[122] = "Reviving";
                 Lang.prefix[123] = "Berserking";
                 Lang.prefix[124] = "Reaping";
-                Lang.prefix[125] = "";
-                Lang.prefix[126] = "";
-                Lang.prefix[127] = "";
-                Lang.prefix[128] = "";
-                Lang.prefix[129] = "";
-                Lang.prefix[130] = "";
+                Lang.prefix[125] = "Beckoning";
+                Lang.prefix[126] = "Conjuring";
+                Lang.prefix[127] = "Invoking";
+                Lang.prefix[128] = "Commanding";
+                Lang.prefix[129] = "Assembling";
+                Lang.prefix[130] = "Awakening";
+                Lang.prefix[131] = "Awoken";
+                Lang.prefix[132] = "Volleying";
+                Lang.prefix[133] = "Barraging";
+                Lang.prefix[134] = "Bombarding";
+                Lang.prefix[135] = "Slinger's";
+                Lang.prefix[136] = "Skillful";
+                Lang.prefix[137] = "Enlightened";
+                Lang.prefix[138] = "Experienced";
+                Lang.prefix[139] = "Wise";
             }
 			else if (Lang.lang == 2)
 			{
@@ -40620,12 +40629,21 @@ namespace Terraria
                 Lang.prefix[122] = "Reviving";
                 Lang.prefix[123] = "Berserking";
                 Lang.prefix[124] = "Reaping";
-                Lang.prefix[125] = "";
-                Lang.prefix[126] = "";
-                Lang.prefix[127] = "";
-                Lang.prefix[128] = "";
-                Lang.prefix[129] = "";
-                Lang.prefix[130] = "";
+                Lang.prefix[125] = "Beckoning";
+                Lang.prefix[126] = "Conjuring";
+                Lang.prefix[127] = "Invoking";
+                Lang.prefix[128] = "Commanding";
+                Lang.prefix[129] = "Assembling";
+                Lang.prefix[130] = "Awakening";
+                Lang.prefix[131] = "Awoken";
+                Lang.prefix[132] = "Volleying";
+                Lang.prefix[133] = "Barraging";
+                Lang.prefix[134] = "Bombarding";
+                Lang.prefix[135] = "Slinger's";
+                Lang.prefix[136] = "Skillful";
+                Lang.prefix[137] = "Enlightened";
+                Lang.prefix[138] = "Experienced";
+                Lang.prefix[139] = "Wise";
             }
 			else if (Lang.lang == 3)
 			{
@@ -41273,12 +41291,21 @@ namespace Terraria
                 Lang.prefix[122] = "Reviving";
                 Lang.prefix[123] = "Berserking";
                 Lang.prefix[124] = "Reaping";
-                Lang.prefix[125] = "";
-                Lang.prefix[126] = "";
-                Lang.prefix[127] = "";
-                Lang.prefix[128] = "";
-                Lang.prefix[129] = "";
-                Lang.prefix[130] = "";
+                Lang.prefix[125] = "Beckoning";
+                Lang.prefix[126] = "Conjuring";
+                Lang.prefix[127] = "Invoking";
+                Lang.prefix[128] = "Commanding";
+                Lang.prefix[129] = "Assembling";
+                Lang.prefix[130] = "Awakening";
+                Lang.prefix[131] = "Awoken";
+                Lang.prefix[132] = "Volleying";
+                Lang.prefix[133] = "Barraging";
+                Lang.prefix[134] = "Bombarding";
+                Lang.prefix[135] = "Slinger's";
+                Lang.prefix[136] = "Skillful";
+                Lang.prefix[137] = "Enlightened";
+                Lang.prefix[138] = "Experienced";
+                Lang.prefix[139] = "Wise";
             }
 			else if (Lang.lang == 4)
 			{
@@ -41926,12 +41953,21 @@ namespace Terraria
                 Lang.prefix[122] = "Reviving";
                 Lang.prefix[123] = "Berserking";
                 Lang.prefix[124] = "Reaping";
-                Lang.prefix[125] = "";
-                Lang.prefix[126] = "";
-                Lang.prefix[127] = "";
-                Lang.prefix[128] = "";
-                Lang.prefix[129] = "";
-                Lang.prefix[130] = "";
+                Lang.prefix[125] = "Beckoning";
+                Lang.prefix[126] = "Conjuring";
+                Lang.prefix[127] = "Invoking";
+                Lang.prefix[128] = "Commanding";
+                Lang.prefix[129] = "Assembling";
+                Lang.prefix[130] = "Awakening";
+                Lang.prefix[131] = "Awoken";
+                Lang.prefix[132] = "Volleying";
+                Lang.prefix[133] = "Barraging";
+                Lang.prefix[134] = "Bombarding";
+                Lang.prefix[135] = "Slinger's";
+                Lang.prefix[136] = "Skillful";
+                Lang.prefix[137] = "Enlightened";
+                Lang.prefix[138] = "Experienced";
+                Lang.prefix[139] = "Wise";
             }
 			else if (Lang.lang == 5)
 			{
@@ -42579,12 +42615,21 @@ namespace Terraria
                 Lang.prefix[122] = "Reviving";
                 Lang.prefix[123] = "Berserking";
                 Lang.prefix[124] = "Reaping";
-                Lang.prefix[125] = "";
-                Lang.prefix[126] = "";
-                Lang.prefix[127] = "";
-                Lang.prefix[128] = "";
-                Lang.prefix[129] = "";
-                Lang.prefix[130] = "";
+                Lang.prefix[125] = "Beckoning";
+                Lang.prefix[126] = "Conjuring";
+                Lang.prefix[127] = "Invoking";
+                Lang.prefix[128] = "Commanding";
+                Lang.prefix[129] = "Assembling";
+                Lang.prefix[130] = "Awakening";
+                Lang.prefix[131] = "Awoken";
+                Lang.prefix[132] = "Volleying";
+                Lang.prefix[133] = "Barraging";
+                Lang.prefix[134] = "Bombarding";
+                Lang.prefix[135] = "Slinger's";
+                Lang.prefix[136] = "Skillful";
+                Lang.prefix[137] = "Enlightened";
+                Lang.prefix[138] = "Experienced";
+                Lang.prefix[139] = "Wise";
             }
 			for (int i = 0; i < 84; i++)
 			{

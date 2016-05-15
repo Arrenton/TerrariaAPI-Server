@@ -138,7 +138,7 @@ namespace Terraria
 					{
 						return;
 					}
-					if (this.reader.ReadString() != string.Concat("Terraria", Main.curRelease + "0007"))
+					if (this.reader.ReadString() != string.Concat("Terraria", Main.curRelease + "0016"))
 					{
 						NetMessage.SendData(2, this.whoAmI, -1, Lang.mp[4], 0, 0f, 0f, 0f, 0, 0, 0);
 						return;
@@ -224,46 +224,46 @@ namespace Terraria
 					return;
 				}
 				case 4:
-				{
-					int num7 = this.reader.ReadByte();
-					if (Main.netMode == 2)
-					{
-						num7 = this.whoAmI;
-					}
-					if (num7 == Main.myPlayer && !Main.ServerSideCharacter)
-					{
-						return;
-					}
-					Player player = Main.player[num7];
-					player.whoAmI = num7;
-					player.skinVariant = this.reader.ReadByte();
-					player.skinVariant = (int)MathHelper.Clamp((float)player.skinVariant, 0f, 7f);
-					player.hair = this.reader.ReadByte();
-					if (player.hair >= 134)
-					{
-						player.hair = 0;
-					}
-					player.name = this.reader.ReadString().Trim().Trim();
-					player.hairDye = this.reader.ReadByte();
-					BitsByte bitsByte = this.reader.ReadByte();
-					for (int q = 0; q < 8; q++)
-					{
-						player.hideVisual[q] = bitsByte[q];
-					}
-					bitsByte = this.reader.ReadByte();
-					for (int r = 0; r < 2; r++)
-					{
-						player.hideVisual[r + 8] = bitsByte[r];
-					}
-					player.hideMisc = this.reader.ReadByte();
-					player.hairColor = this.reader.ReadRGB();
-					player.skinColor = this.reader.ReadRGB();
-					player.eyeColor = this.reader.ReadRGB();
-					player.shirtColor = this.reader.ReadRGB();
-					player.underShirtColor = this.reader.ReadRGB();
-					player.pantsColor = this.reader.ReadRGB();
-					player.shoeColor = this.reader.ReadRGB();
-					BitsByte bitsByte1 = this.reader.ReadByte();
+                    {
+                        int num7 = this.reader.ReadByte();
+                        if (Main.netMode == 2)
+                        {
+                            num7 = this.whoAmI;
+                        }
+                        if (num7 == Main.myPlayer && !Main.ServerSideCharacter)
+                        {
+                            return;
+                        }
+                        Player player = Main.player[num7];
+                        player.whoAmI = num7;
+                        player.skinVariant = this.reader.ReadByte();
+                        player.skinVariant = (int)MathHelper.Clamp((float)player.skinVariant, 0f, 7f);
+                        player.hair = this.reader.ReadByte();
+                        if (player.hair >= 134)
+                        {
+                            player.hair = 0;
+                        }
+                        player.name = this.reader.ReadString().Trim().Trim();
+                        player.hairDye = this.reader.ReadByte();
+                        BitsByte bitsByte = this.reader.ReadByte();
+                        for (int q = 0; q < 8; q++)
+                        {
+                            player.hideVisual[q] = bitsByte[q];
+                        }
+                        bitsByte = this.reader.ReadByte();
+                        for (int r = 0; r < 2; r++)
+                        {
+                            player.hideVisual[r + 8] = bitsByte[r];
+                        }
+                        player.hideMisc = this.reader.ReadByte();
+                        player.hairColor = this.reader.ReadRGB();
+                        player.skinColor = this.reader.ReadRGB();
+                        player.eyeColor = this.reader.ReadRGB();
+                        player.shirtColor = this.reader.ReadRGB();
+                        player.underShirtColor = this.reader.ReadRGB();
+                        player.pantsColor = this.reader.ReadRGB();
+                        player.shoeColor = this.reader.ReadRGB();
+                        BitsByte bitsByte1 = this.reader.ReadByte();
                         player.Level = this.reader.ReadByte();
                         player.Exp = this.reader.ReadInt32();
                         player.StatPoints = this.reader.ReadByte();
@@ -293,53 +293,53 @@ namespace Terraria
                                 player.LearnedAbilities.Add(LAB);
                         }
                         player.difficulty = 0;
-					if (bitsByte1[0])
-					{
-						player.difficulty += 1;
-					}
-					if (bitsByte1[1])
-					{
-						player.difficulty += 2;
-					}
-					player.extraAccessory = bitsByte1[2];
-					if (Main.netMode != 2)
-					{
-						return;
-					}
-					bool flag = false;
-					if (Netplay.Clients[this.whoAmI].State < 10)
-					{
-						for (int s = 0; s < 255; s++)
-						{
-							if (s != num7 && player.name == Main.player[s].name && Netplay.Clients[s].IsActive)
-							{
-								flag = true;
-							}
-						}
-					}
-					if (flag)
-					{
-						if (!ServerApi.Hooks.InvokeNetNameCollision(num7, player.name))
-						{
-							NetMessage.SendData(2, this.whoAmI, -1, string.Concat(player.name, " ", Lang.mp[5]), 0, 0f, 0f, 0f, 0, 0, 0);
-						}
-						return;
-					}
-					if (player.name.Length > Player.nameLen)
-					{
-						NetMessage.SendData(2, this.whoAmI, -1, "Name is too long.", 0, 0f, 0f, 0f, 0, 0, 0);
-						return;
-					}
-					if (player.name == "")
-					{
-						NetMessage.SendData(2, this.whoAmI, -1, "Empty name.", 0, 0f, 0f, 0f, 0, 0, 0);
-						return;
-					}
-					Netplay.Clients[this.whoAmI].Name = player.name;
-					Netplay.Clients[this.whoAmI].Name = player.name;
-					NetMessage.SendData(4, -1, this.whoAmI, player.name, num7, 0f, 0f, 0f, 0, 0, 0);
-					return;
-				}
+                        if (bitsByte1[0])
+                        {
+                            player.difficulty += 1;
+                        }
+                        if (bitsByte1[1])
+                        {
+                            player.difficulty += 2;
+                        }
+                        player.extraAccessory = bitsByte1[2];
+                        if (Main.netMode != 2)
+                        {
+                            return;
+                        }
+                        bool flag = false;
+                        if (Netplay.Clients[this.whoAmI].State < 10)
+                        {
+                            for (int s = 0; s < 255; s++)
+                            {
+                                if (s != num7 && player.name == Main.player[s].name && Netplay.Clients[s].IsActive)
+                                {
+                                    flag = true;
+                                }
+                            }
+                        }
+                        if (flag)
+                        {
+                            if (!ServerApi.Hooks.InvokeNetNameCollision(num7, player.name))
+                            {
+                                NetMessage.SendData(2, this.whoAmI, -1, string.Concat(player.name, " ", Lang.mp[5]), 0, 0f, 0f, 0f, 0, 0, 0);
+                            }
+                            return;
+                        }
+                        if (player.name.Length > Player.nameLen)
+                        {
+                            NetMessage.SendData(2, this.whoAmI, -1, "Name is too long.", 0, 0f, 0f, 0f, 0, 0, 0);
+                            return;
+                        }
+                        if (player.name == "")
+                        {
+                            NetMessage.SendData(2, this.whoAmI, -1, "Empty name.", 0, 0f, 0f, 0f, 0, 0, 0);
+                            return;
+                        }
+                        Netplay.Clients[this.whoAmI].Name = player.name;
+                        Netplay.Clients[this.whoAmI].Name = player.name;
+                        NetMessage.SendData(4, -1, this.whoAmI, player.name, num7, 0f, 0f, 0f, 0, 0, 0);
+                        return;
+                    }
 				case 5:
 				{
 					int num8 = this.reader.ReadByte();
@@ -878,9 +878,12 @@ namespace Terraria
                         player5.baseHP = (short)this.reader.ReadByte();
                         player5.lifeRegenCount = (short)this.reader.ReadInt16();
                         player5.lifeRegenCount2 = (byte)this.reader.ReadByte();
-                        BitsByte bb1 = 0;
-                        player5.Regenerate = bb1[0];
-                        player5.MRegenerate = bb1[1];
+                        if (Main.netMode == 1)
+                        {
+                            BitsByte bb1 = this.reader.ReadByte();
+                            player5.Regenerate = bb1[0];
+                            player5.MRegenerate = bb1[1];
+                        }
                         player5.PlayerLevelCalculate();
                         if (player5.statLifeMax < 20)
                         {
@@ -1304,17 +1307,18 @@ namespace Terraria
                         int num51 = 0;
                         if (!bitsByte11[7])
                         {
-                            if (Main.npcLifeBytes[num50] == 2)
+                            byte b5 = this.reader.ReadByte();
+                            if (b5 == 2)
                             {
                                 num51 = this.reader.ReadInt16();
                             }
-                            else if (Main.npcLifeBytes[num50] != 4)
+                            else if (b5 == 4)
                             {
-                                num51 = this.reader.ReadSByte();
+                                num51 = this.reader.ReadInt32();
                             }
                             else
                             {
-                                num51 = this.reader.ReadInt32();
+                                num51 = this.reader.ReadSByte();
                             }
                         }
                         int num52 = -1;
@@ -1595,41 +1599,42 @@ namespace Terraria
 					return;
 				}
 				case 28:
-				{
-					int num71 = this.reader.ReadInt16();
-					int num72 = this.reader.ReadInt16();
-					float single5 = this.reader.ReadSingle();
-					int num73 = this.reader.ReadByte() - 1;
-					byte num74 = this.reader.ReadByte();
-                        byte Strike = this.reader.ReadByte();
+                    {
+                        int num71 = this.reader.ReadInt16();
+                        int num72 = this.reader.ReadInt16();
+                        float single5 = this.reader.ReadSingle();
+                        int num73 = this.reader.ReadByte() - 1;
+                        byte num74 = this.reader.ReadByte();
+                        short Strike = this.reader.ReadInt16();
+                        bool Banner = this.reader.ReadBoolean();
                         bool Tap = Convert.ToBoolean(this.reader.ReadByte());
                         if (Main.netMode == 2)
-					{
-						Main.npc[num71].PlayerInteraction(this.whoAmI);
-					}
-					if (num72 < 0)
-					{
-						Main.npc[num71].life = 0;
-						Main.npc[num71].HitEffect(0, 10);
-						Main.npc[num71].active = false;
-					}
-					else
-					{
-						Main.npc[num71].StrikeNPC(num72, single5, num73, num74 == 1, false, true, Main.player[this.whoAmI], Strike, Tap);
-					}
-					if (Main.netMode != 2)
-					{
-						return;
-					}
-					NetMessage.SendData(28, -1, this.whoAmI, "", num71, (float)num72, single5, (float)num73, (int)num74, Strike, 0, Tap);
-					if (Main.npc[num71].life > 0)
-					{
-						Main.npc[num71].netUpdate = true;
-						return;
-					}
-					NetMessage.SendData(23, -1, -1, "", num71, 0f, 0f, 0f, 0, 0, 0, true);
-					return;
-				}
+                        {
+                            Main.npc[num71].PlayerInteraction(this.whoAmI);
+                        }
+                        if (num72 < 0)
+                        {
+                            Main.npc[num71].life = 0;
+                            Main.npc[num71].HitEffect(0, 10);
+                            Main.npc[num71].active = false;
+                        }
+                        else
+                        {
+                            Main.npc[num71].StrikeNPC(num72, single5, num73, num74 == 1, false, true, Main.player[this.whoAmI], Strike, Tap, Banner);
+                        }
+                        if (Main.netMode != 2)
+                        {
+                            return;
+                        }
+                        NetMessage.SendData(28, -1, this.whoAmI, "", num71, (float)num72, single5, (float)num73, (int)num74, Strike, Convert.ToByte(Banner), Tap);
+                        if (Main.npc[num71].life > 0)
+                        {
+                            Main.npc[num71].netUpdate = true;
+                            return;
+                        }
+                        NetMessage.SendData(23, -1, -1, "", num71, 0f, 0f, 0f, 0, 0, 0, Main.npc[num71].life <= 0);
+                        return;
+                    }
 				case 29:
 				{
 					int num75 = this.reader.ReadInt16();
@@ -3240,9 +3245,10 @@ namespace Terraria
                         int Y = (int)this.reader.ReadSingle();
                         Tile tile = Main.tile[X, Y];
                         Tile tile2 = Main.tile2[X, Y];
-                        if ((tile.active() && tile2.Worldspawned) && ((tile.type == 6) || (tile.type == 7) || (tile.type == 8) || (tile.type == 9) || (tile.type == 22) || (tile.type == 37) || (tile.type == 56) || (tile.type == 58) || (tile.type == 67) || (tile.type == 66) || (tile.type == 63) || (tile.type == 65) || (tile.type == 64) || (tile.type == 68) || (tile.type == 107) || (tile.type == 108) || (tile.type == 111) || (tile.type == 167) || (tile.type == 166) || (tile.type == 169) || (tile.type == 168) || (tile.type == 204) || (tile.type == 221) || (tile.type == 222) || (tile.type == 223) || (tile.type == 211)))
+                        if ((tile.active() && tile2.Worldspawned) && ((tile.type == 6) || (tile.type == 7) || (tile.type == 8) || (tile.type == 9) || (tile.type == 22) || (tile.type == 37) || (tile.type == 56) || (tile.type == 58) || (tile.type == 67) || (tile.type == 66) || (tile.type == 63) || (tile.type == 65) || (tile.type == 64) || (tile.type == 68) || (tile.type == 107) || (tile.type == 108) || (tile.type == 111) || (tile.type == 167) || (tile.type == 166) || (tile.type == 169) || (tile.type == 168) || (tile.type == 204) || (tile.type == 221) || (tile.type == 222) || (tile.type == 223) || (tile.type == 211) || (tile.type == 178)))
                         {
-                            NetMessage.SendData(108, -1, -1, "", who, Main.OreEXP(tile.type), 0f, 0f, 0);
+                            tile2.Worldspawned = false;
+                            NetMessage.SendData(108, -1, -1, "", who, Main.OreEXP(tile.type, tile.frameX / 18), 0f, 0f, 0);
                         }
                         return;
                     }
@@ -3261,7 +3267,8 @@ namespace Terraria
                     {
                         int id = this.reader.ReadByte();
                         int XP = this.reader.ReadInt32();
-                        NetMessage.SendData(108, -1, -1, "", id, XP);
+                        int Banner = this.reader.ReadInt32();
+                        NetMessage.SendData(108, -1, -1, "", id, XP, Banner);
                         return;
                     }
                 case 109: //Update Abilities

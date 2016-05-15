@@ -237,8 +237,47 @@ namespace TerrariaApi.Server
 							game.loadLib(arg.Value);
 
 							break;
-						}
-					case "-crashdir":
+                        }
+                    case "-port":
+                        {
+                            int serverPort;
+                            if (int.TryParse(arg.Value, out serverPort))
+                            {
+                                Netplay.ListenPort = serverPort;
+                                ServerApi.LogWriter.ServerWriteLine(string.Format("Listening on port {0}.", serverPort), TraceLevel.Verbose);
+                            }
+                            else
+                            {
+                                // The server should not start up if this argument is invalid.
+                                throw new InvalidOperationException("Invalid value given for command line argument \"-ip\".");
+                            }
+
+                            break;
+                        }
+                    case "-ip":
+                        {
+                            IPAddress ip;
+                            if (IPAddress.TryParse(arg.Value, out ip))
+                            {
+                                Netplay.ServerIP = ip;
+                                ServerApi.LogWriter.ServerWriteLine(string.Format("Listening on IP {0}.", ip), TraceLevel.Verbose);
+                            }
+                            else
+                            {
+                                // The server should not start up if this argument is invalid.
+                                throw new InvalidOperationException("Invalid value given for command line argument \"-ip\".");
+                            }
+
+                            break;
+                        }
+                    case "-config":
+                        {
+                            string filePath = arg.Value;
+                            ServerApi.LogWriter.ServerWriteLine(string.Format("Loading dedicated config file: {0}", filePath), TraceLevel.Verbose);
+                            Main.instance.LoadDedConfig(filePath);
+                            break;
+                        }
+                    case "-crashdir":
 						CrashReporter.crashReportPath = arg.Value;
 						break;
 				}

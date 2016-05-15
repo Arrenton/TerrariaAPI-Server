@@ -8357,9 +8357,10 @@ namespace Terraria
 											Main.player[Main.myPlayer].lastCreatureHit = num17;
 										}
 									}
+                                    bool Banner = false;
 									if (Main.netMode != 2 && flag4)
 									{
-										int num18 = Item.NPCtoBanner(Main.npc[k].BannerID());
+                                        /*int num18 = Item.NPCtoBanner(Main.npc[k].BannerID());
 										if (num18 > 0 && Main.player[this.owner].NPCBannerBuff[num18])
 										{
 											if (Main.expertMode)
@@ -8370,7 +8371,8 @@ namespace Terraria
 											{
 												num10 = (int)((double)num10 * 1.5);
 											}
-										}
+										}*/
+                                        Banner = true;
 									}
 									if (Main.expertMode)
 									{
@@ -8469,11 +8471,11 @@ namespace Terraria
                                         tap = false;
                                     if (flag4)
 									{
-										num26 = (int)Main.npc[k].StrikeNPC(num10, this.knockBack, this.direction, flag5, false, false, Main.player[this.owner], own, tap);
+                                        num26 = (int)Main.npc[k].StrikeNPC(num10, this.knockBack, this.direction, flag5, false, false, Main.player[this.owner], own, tap, Banner);
 									}
 									else
 									{
-										num26 = (int)Main.npc[k].StrikeNPCNoInteraction(num10, this.knockBack, this.direction, flag5, false, false, own, tap);
+                                        num26 = (int)Main.npc[k].StrikeNPCNoInteraction(num10, this.knockBack, this.direction, flag5, false, false, own, tap, Banner);
 									}
 									if (flag4 && Main.player[this.owner].accDreamCatcher)
 									{
@@ -8569,11 +8571,11 @@ namespace Terraria
 									{
 										if (flag5)
 										{
-											NetMessage.SendData(28, -1, -1, "", k, (float)num10, this.knockBack, (float)this.direction, 1, own, 0, tap);
+											NetMessage.SendData(28, -1, -1, "", k, (float)num10, this.knockBack, (float)this.direction, 1, own, Convert.ToByte(Banner), tap);
 										}
 										else
 										{
-											NetMessage.SendData(28, -1, -1, "", k, (float)num10, this.knockBack, (float)this.direction, 0, own, 0, tap);
+											NetMessage.SendData(28, -1, -1, "", k, (float)num10, this.knockBack, (float)this.direction, 0, own, Convert.ToByte(Banner), tap);
 										}
 									}
 									if (this.type >= 390 && this.type <= 392)

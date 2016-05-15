@@ -70,7 +70,6 @@ namespace Terraria
         public float KnockbackResist = 1f;
         public byte Spec = 0;
         private byte tt = 0;
-        public int lifeRegen2 = 0;
         public bool Regenerate = true;
         public bool MRegenerate = true;
         public bool Endured = false;
@@ -6456,7 +6455,7 @@ namespace Terraria
 			}
 		}
 
-		public double Hurt(int Damage, int hitDirection, bool pvp = false, bool quiet = false, string deathText = " was slain...", bool Crit = false, int cooldownCounter = -1)
+		public double Hurt(int Damage, int hitDirection, bool pvp = false, bool quiet = false, string deathText = " was slain...", bool Crit = false, int cooldownCounter = -1, int Banner = 0)
 		{
 			bool flag = !this.immune;
 			if (cooldownCounter == 0)
@@ -6488,7 +6487,18 @@ namespace Terraria
 			}
 			int damage = Damage;
 			double num = Main.CalculatePlayerDamage(damage, this.statDefense);
-			if (Crit)
+            if (Banner > 0 && this.NPCBannerBuff[Banner])
+            {
+                if (Main.expertMode)
+                {
+                    num = (int)((double)num * 0.5);
+                }
+                else
+                {
+                    num = (int)((double)num * 0.75);
+                }
+            }
+            if (Crit)
 			{
 				damage = damage * 2;
             }
@@ -10253,9 +10263,11 @@ namespace Terraria
 												}
 												int num159 = Main.DamageVar((float)num155);
 												int num160 = Item.NPCtoBanner(Main.npc[q2].BannerID());
+                                                bool Banner = false;
 												if (num160 > 0 && this.NPCBannerBuff[num160])
 												{
-                                                    num159 = (!Main.expertMode ? (int)((double)num159 * 1.5) : num159 * 2);
+                                                    //num159 = (!Main.expertMode ? (int)((double)num159 * 1.5) : num159 * 2);
+                                                    Banner = true;
 												}
 												this.StatusNPC(item.type, q2);
 												this.OnHit(Main.npc[q2].Center.X, Main.npc[q2].Center.Y, Main.npc[q2]);
@@ -10263,7 +10275,7 @@ namespace Terraria
 												{
 													num159 = num159 + Main.npc[q2].checkArmorPenetration(this.armorPenetration);
 												}
-												int num161 = (int)Main.npc[q2].StrikeNPC(num159, single102, this.direction, flag17, false, false, this, this.whoAmI, true);
+                                                int num161 = (int)Main.npc[q2].StrikeNPC(num159, single102, this.direction, flag17, false, false, this, this.whoAmI, true, Banner);
 												if (this.inventory[this.selectedItem].type == 3211)
 												{
 													Vector2 vector286 = new Vector2((float)(this.direction * 100 + Main.rand.Next(-25, 26)), (float)Main.rand.Next(-75, 76));
@@ -10340,11 +10352,11 @@ namespace Terraria
 												{
 													if (!flag17)
 													{
-														NetMessage.SendData(28, -1, -1, "", q2, (float)num159, single102, (float)this.direction, 0, this.whoAmI, 0, true);
+														NetMessage.SendData(28, -1, -1, "", q2, (float)num159, single102, (float)this.direction, 0, this.whoAmI, Convert.ToByte(Banner), true);
 													}
 													else
 													{
-														NetMessage.SendData(28, -1, -1, "", q2, (float)num159, single102, (float)this.direction, 1, this.whoAmI, 0, true);
+														NetMessage.SendData(28, -1, -1, "", q2, (float)num159, single102, (float)this.direction, 1, this.whoAmI, Convert.ToByte(Banner), true);
 													}
 												}
 												if (this.accDreamCatcher)
@@ -26489,7 +26501,7 @@ namespace Terraria
 							{
 								num185 = -1;
 							}
-							Main.npc[h].StrikeNPC(num184, single36, num185, flag35, false, false, this, this.whoAmI, false);
+                            Main.npc[h].StrikeNPC(num184, single36, num185, flag35, false, false, this);//, this.whoAmI, false);
 							if (Main.netMode != 0)
 							{
 								NetMessage.SendData(28, -1, -1, "", h, (float)num184, single36, (float)(-num185), 0, this.whoAmI, 0, false);
@@ -26591,16 +26603,17 @@ namespace Terraria
 								}
 								int num189 = Main.DamageVar((float)Main.npc[i11].damage * single37);
 								int num190 = Item.NPCtoBanner(Main.npc[i11].BannerID());
+                                bool Banner = false;
 								if (num190 > 0 && this.NPCBannerBuff[num190])
 								{
-									if (Main.expertMode)
+									/*if (Main.expertMode)
 									{
 										num189 = (int)((double)num189 * 0.5);
 									}
 									else
 									{
 										num189 = (int)((double)num189 * 0.75);
-									}
+									}*/
 								}
 								int type5 = Main.npc[i11].type;
 								if (this.whoAmI == Main.myPlayer && this.thorns > 0f && !this.immune && !Main.npc[i11].dontTakeDamage)
@@ -26611,10 +26624,10 @@ namespace Terraria
 									{
 										num191 = num189;
 									}
-									Main.npc[i11].StrikeNPC(num191, (float)num192, -num188, false, false, false, this, this.whoAmI, false);
+                                    Main.npc[i11].StrikeNPC(num191, (float)num192, -num188, false, false, false, this, this.whoAmI, false, Banner);
 									if (Main.netMode != 0)
 									{
-										NetMessage.SendData(28, -1, -1, "", i11, (float)num191, (float)num192, (float)(-num188), 0, this.whoAmI, 0, false);
+										NetMessage.SendData(28, -1, -1, "", i11, (float)num191, (float)num192, (float)(-num188), 0, this.whoAmI, Convert.ToByte(Banner), false);
 									}
 								}
 								if (this.resistCold && Main.npc[i11].coldDamage)
@@ -26625,7 +26638,7 @@ namespace Terraria
 								{
 									this.StatusPlayer(Main.npc[i11]);
 								}
-								this.Hurt(num189, num188, false, false, Lang.deathMsg(-1, i11, -1, -1), false);
+								this.Hurt(num189, num188, false, false, Lang.deathMsg(-1, i11, -1, -1), false, -1, num190);
 							}
 						}
 					}
@@ -27995,7 +28008,7 @@ namespace Terraria
 									}
 									if (flag)
 									{
-										nPC.StrikeNPC(num2, 0f, 0, false, false, false, this, this.whoAmI, false);
+                                        nPC.StrikeNPC(num2, 0f, 0, false, false, false, this);//, this.whoAmI, false);
 										if (Main.netMode != 0)
 										{
 											NetMessage.SendData(28, -1, -1, "", k, (float)num2, 0f, 0f, 0, this.whoAmI, 0, false);
@@ -32438,7 +32451,7 @@ namespace Terraria
 				Player player23 = this;
 				player23.lifeRegen = player23.lifeRegen + 2;
 			}
-			if (this.bleed)
+			if (this.bleed || !this.Regenerate)
 			{
 				this.lifeRegenTime = 0;
 			}
@@ -32518,10 +32531,6 @@ namespace Terraria
 				single = (!this.shinyStone ? single / 2f : single * 0.75f);
 			}
 			float single2 = (float)this.statLifeMax2 / 400f * 0.85f + 0.15f;
-            if (!this.Regenerate)
-            {
-                single = 1f;
-            }
             single = single * single2;
 			Player player24 = this;
 			player24.lifeRegen = player24.lifeRegen + (int)Math.Round((double)single);

@@ -4,13 +4,14 @@ using TerrariaApi.Server;
 namespace Terraria
 {
 	public class Item : Entity
-	{
-		public const int flaskTime = 72000;
+    {
+        public int BaseRare = -1;
+        public const int flaskTime = 72000;
 		public const int copper = 1;
 		public const int silver = 100;
 		public const int gold = 10000;
 		public const int platinum = 1000000;
-		public const int maxPrefixes = 131;
+		public const int maxPrefixes = 139;
 		public static int potionDelay = 3600;
 		public static int restorationDelay = 3000;
 		public bool questItem;
@@ -754,8 +755,13 @@ namespace Terraria
 						{
 							return false;
 						}
-						num = Main.rand.Next(62, 81);
-					}
+                        for (byte i = 0; i < 2; i++)
+                        {
+                            num = Main.rand.Next(62, 140);
+                            if (num == 81 || num == 82 || num == 83 || num == 83 || (num == 131 && (Main.rand.Next(100) >= 25 || this.BaseRare < 4)))
+                                i = 0;
+                        }
+                    }
 				}
 				if (pre == -3)
 				{
@@ -3025,6 +3031,7 @@ namespace Terraria
 				}
 				this.name = ItemName;
 				this.name = Lang.itemName(this.netID, false);
+                this.BaseRare = this.rare;
 				this.CheckTip();
 			}
 		}

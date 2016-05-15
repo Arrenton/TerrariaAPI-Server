@@ -530,6 +530,8 @@ namespace Terraria
 			}
 		}
 
+        public static bool GeneratingWorld = false;
+
 		private static int lAltarX;
 
 		private static int lAltarY;
@@ -2220,7 +2222,8 @@ namespace Terraria
 		public static void CreateNewWorld(GenerationProgress progress = null)
 		{
 			ThreadPool.QueueUserWorkItem(new WaitCallback(WorldGen.worldGenCallBack), progress);
-		}
+            GeneratingWorld = true;
+        }
 
 		public static void SaveAndQuitCallBack(object threadContext)
 		{
@@ -2349,8 +2352,9 @@ namespace Terraria
 			if (Main.netMode == 0 && Main.anglerWhoFinishedToday.Contains(Main.player[Main.myPlayer].name))
 			{
 				Main.anglerQuestFinished = true;
-			}
-			Main.player[Main.myPlayer].Spawn();
+            }
+            GeneratingWorld = false;
+            Main.player[Main.myPlayer].Spawn();
 			Main.player[Main.myPlayer].Update(Main.myPlayer);
 			Main.ActivePlayerFileData.StartPlayTimer();
 			Player.EnterWorld(Main.player[Main.myPlayer]);
@@ -2442,7 +2446,8 @@ namespace Terraria
 				}
 			}
 			Netplay.StartServer();
-			Main.dayTime = WorldFile.tempDayTime;
+            GeneratingWorld = false;
+            Main.dayTime = WorldFile.tempDayTime;
 			Main.time = WorldFile.tempTime;
 			Main.raining = WorldFile.tempRaining;
 			Main.rainTime = WorldFile.tempRainTime;

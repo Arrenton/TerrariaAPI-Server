@@ -58,7 +58,7 @@ namespace Terraria
             switch (msgType)
             {
                 case 1:
-                    writer.Write("Terraria" + Main.curRelease + "0007");
+                    writer.Write("Terraria" + Main.curRelease + "0016");
                     break;
                 case 2:
                     writer.Write(text);
@@ -385,12 +385,13 @@ namespace Terraria
                     writer.Write((byte)Main.player[number].baseHP);
                     writer.Write((short)Main.player[number].lifeRegenCount);
                     writer.Write((byte)Main.player[number].lifeRegenCount2);
-                    BitsByte bb1 = 0;
-                    bb1[0] = Main.player[number].Regenerate;
-                    bb1[1] = Main.player[number].MRegenerate;
-                    writer.Write(bb1);
-                    //writer.Write((byte)(Main.player[number].Regenerate ? 1 : 0));
-                    //writer.Write((byte)(Main.player[number].MRegenerate ? 1 : 0));
+                    if (Main.netMode == 2)
+                    {
+                        BitsByte bb1 = 0;
+                        bb1[0] = Main.player[number].Regenerate;
+                        bb1[1] = Main.player[number].MRegenerate;
+                        writer.Write(bb1);
+                    }
                     break;
                 case 17:
                     writer.Write((byte)number);
@@ -669,7 +670,8 @@ namespace Terraria
                     writer.Write(number3);
                     writer.Write((byte)(number4 + 1f));
                     writer.Write((byte)number5);
-                    writer.Write((byte)number6);
+                    writer.Write((short)number6);
+                    writer.Write(Convert.ToBoolean(number7));
                     writer.Write((byte)(boolean1 ? 1 : 0));
                     break;
                 case 29:
@@ -1193,6 +1195,7 @@ namespace Terraria
                 case 108:
                     writer.Write((byte)number);
                     writer.Write((int)number2);
+                    writer.Write((int)number3);
                     break;
                 case 109:
                     writer.Write((byte)number);

@@ -46,5 +46,20 @@ namespace TerrariaApi.Server
 			get; 
 			set; 
 		}
-	}
+        public int PlayerStrike
+        {
+            get;
+            set;
+        }
+        public bool Tap
+        {
+            get;
+            set;
+        }
+        public bool Banner
+        {
+            get;
+            set;
+        }
+    }
 }

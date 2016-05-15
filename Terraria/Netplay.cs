@@ -298,7 +298,8 @@ namespace Terraria
 				}
 			IL_16A:
 				int num3 = 0;
-				for (int k = 0; k < 256; k++)
+                WorldGen.GeneratingWorld = false;
+                for (int k = 0; k < 256; k++)
 				{
 					if (NetMessage.buffer[k].checkBytes)
 					{

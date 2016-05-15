@@ -22824,7 +22824,7 @@ namespace Terraria
 						this.life = 0;
 						this.HitEffect(0, 10.0);
 						this.active = false;
-						NetMessage.SendData(28, -1, -1, "", this.whoAmI, -1f, 0f, 0f, 0, 0, 0);
+						NetMessage.SendData(28, -1, -1, "", this.whoAmI, -1f, 0f, 0f, 0, 256, 0);
 					}
 				IL_15374:
 					num75 = this.type;
@@ -22921,7 +22921,7 @@ namespace Terraria
 						this.life = 0;
 						this.HitEffect(0, 10.0);
 						this.active = false;
-						NetMessage.SendData(28, -1, -1, "", this.whoAmI, -1f, 0f, 0f, 0, 0, 0);
+						NetMessage.SendData(28, -1, -1, "", this.whoAmI, -1f, 0f, 0f, 0, 256, 0);
 					}
 				IL_154F7:
 					if (this.type == 13 || this.type == 14 || this.type == 15)
@@ -22932,7 +22932,7 @@ namespace Terraria
 							this.HitEffect(0, 10.0);
 							this.checkDead();
 							this.active = false;
-							NetMessage.SendData(28, -1, -1, "", this.whoAmI, -1f, 0f, 0f, 0, 0, 0);
+							NetMessage.SendData(28, -1, -1, "", this.whoAmI, -1f, 0f, 0f, 0, 256, 0);
 						}
 						if (this.type == 13 && !Main.npc[(int)this.ai[0]].active)
 						{
@@ -22940,7 +22940,7 @@ namespace Terraria
 							this.HitEffect(0, 10.0);
 							this.checkDead();
 							this.active = false;
-							NetMessage.SendData(28, -1, -1, "", this.whoAmI, -1f, 0f, 0f, 0, 0, 0);
+							NetMessage.SendData(28, -1, -1, "", this.whoAmI, -1f, 0f, 0f, 0, 256, 0);
 						}
 						if (this.type == 15 && !Main.npc[(int)this.ai[1]].active)
 						{
@@ -22948,7 +22948,7 @@ namespace Terraria
 							this.HitEffect(0, 10.0);
 							this.checkDead();
 							this.active = false;
-							NetMessage.SendData(28, -1, -1, "", this.whoAmI, -1f, 0f, 0f, 0, 0, 0);
+							NetMessage.SendData(28, -1, -1, "", this.whoAmI, -1f, 0f, 0f, 0, 256, 0);
 						}
 						if (this.type == 14 && (!Main.npc[(int)this.ai[1]].active || Main.npc[(int)this.ai[1]].aiStyle != this.aiStyle))
 						{
@@ -22978,7 +22978,7 @@ namespace Terraria
 					}
 					if (!this.active && Main.netMode == 2)
 					{
-						NetMessage.SendData(28, -1, -1, "", this.whoAmI, -1f, 0f, 0f, 0, 0, 0);
+						NetMessage.SendData(28, -1, -1, "", this.whoAmI, -1f, 0f, 0f, 0, 256, 0);
 					}
 				}
 				int num343 = (int)(this.position.X / 16f) - 1;
@@ -23741,7 +23741,7 @@ namespace Terraria
 					this.StrikeNPCNoInteraction(9999, 0f, 0, false, false, false);
 					if (Main.netMode == 2)
 					{
-						NetMessage.SendData(28, -1, -1, "", this.whoAmI, 9999f, 0f, 0f, 0, 0, 0);
+						NetMessage.SendData(28, -1, -1, "", this.whoAmI, 9999f, 0f, 0f, 0, 256, 0);
 					}
 				}
 				if ((this.type == 148 || this.type == 149) && this.localAI[0] == 0f)
@@ -25346,7 +25346,7 @@ namespace Terraria
 								nPC2.StrikeNPCNoInteraction(num440, num441, this.spriteDirection, false, false, false);
 								if (Main.netMode != 0)
 								{
-									NetMessage.SendData(28, -1, -1, "", num444, (float)num440, num441, (float)this.spriteDirection, 0, 0, 0);
+									NetMessage.SendData(28, -1, -1, "", num444, (float)num440, num441, (float)this.spriteDirection, 0, 256, 0);
 								}
 								nPC2.netUpdate = true;
 								nPC2.immune[myPlayer] = (int)this.ai[1] + 2;
@@ -42287,7 +42287,7 @@ namespace Terraria
 										}
 										if (this.ai[0] == -2f)
 										{
-                                            this.damage = CalculateDamage((int)((float)80 * 1.75f), this.Level);
+                                            this.damage = CalculateDamage((int)((float)80 * 1.50f), this.Level);
                                             num1641 = 0;
 											this.dontTakeDamage = true;
 											this.ai[1] += 1f;
@@ -42366,7 +42366,7 @@ namespace Terraria
 													Vector2 vector209 = base.Center + Vector2.Normalize(vector208) * vector205.Length() * 0.4f + value35;
 													Vector2 vector210 = Vector2.Normalize(vector208) * 8f;
 													float ai = (6.28318548f * (float)Main.rand.NextDouble() - 3.14159274f) / 30f + 0.0174532924f * num1638;
-                                                    int DMG = CalculateDamage((int)((float)30 * 1.75f), this.Level);
+                                                    int DMG = CalculateDamage((int)((float)30 * 1.50f), this.Level);
                                                     Projectile.NewProjectile(vector209.X, vector209.Y, vector210.X, vector210.Y, 452, DMG, 0f, Main.myPlayer, 0f, ai);
 												}
 											}
@@ -42413,7 +42413,7 @@ namespace Terraria
 													vector213.X += ((float)num1652 - 3.5f) * num1638 * 3f;
 													vector213.Y += ((float)num1652 - 4.5f) * 1f;
 													vector213 *= 1.2f;
-                                                    int DMG = CalculateDamage((int)((float)50 * 1.75f), this.Level);
+                                                    int DMG = CalculateDamage((int)((float)50 * 1.50f), this.Level);
                                                     Projectile.NewProjectile(base.Center.X, base.Center.Y, vector213.X, vector213.Y, 454, DMG, 1f, Main.myPlayer, 0f, (float)this.whoAmI);
 												}
 												Vector2 vector214 = Vector2.SmoothStep(value36, value36 + value37, (num1639 - 30f) / 180f) - base.Center;
@@ -42500,7 +42500,7 @@ namespace Terraria
 											{
 												Vector2 vector220 = Utils.Vector2FromElipse(this.localAI[0].ToRotationVector2(), vector205 * this.localAI[1]);
 												Vector2 vector221 = Vector2.Normalize(v2) * 8f;
-                                                int DMG = CalculateDamage((int)((float)30 * 1.75f), this.Level);
+                                                int DMG = CalculateDamage((int)((float)30 * 1.50f), this.Level);
                                                 Projectile.NewProjectile(base.Center.X + vector220.X, base.Center.Y + vector220.Y, vector221.X, vector221.Y, 462, DMG, 0f, Main.myPlayer, 0f, 0f);
 											}
 										}
@@ -42659,7 +42659,7 @@ namespace Terraria
 														Vector2 vector224 = base.Center + Vector2.Normalize(vector223) * vector205.Length() * 0.4f + value40;
 														Vector2 vector225 = Vector2.Normalize(vector223) * 8f;
 														float ai2 = (6.28318548f * (float)Main.rand.NextDouble() - 3.14159274f) / 30f + 0.0174532924f * num1638;
-                                                        int DMG = CalculateDamage((int)((float)5 * 1.75f), this.Level);
+                                                        int DMG = CalculateDamage((int)((float)5 * 1.50f), this.Level);
                                                         Projectile.NewProjectile(vector224.X, vector224.Y, vector225.X, vector225.Y, 452, DMG, 0f, Main.myPlayer, 0f, ai2);
 														return;
 													}
@@ -42693,7 +42693,7 @@ namespace Terraria
 														vector228.X += ((float)num1662 - 3.5f) * num1638 * 3f;
 														vector228.Y += ((float)num1662 - 4.5f) * 1f;
 														vector228 *= 1.2f;
-                                                        int DMG = CalculateDamage((int)((float)1 * 1.75f), this.Level);
+                                                        int DMG = CalculateDamage((int)((float)1 * 1.50f), this.Level);
                                                         Projectile.NewProjectile(base.Center.X, base.Center.Y, vector228.X, vector228.Y, 454, DMG, 1f, Main.myPlayer, 0f, (float)this.whoAmI);
 													}
 													Vector2 vector229 = Vector2.SmoothStep(value41, value41 + value42, (this.ai[1] - 30f) / 180f) - base.Center;
@@ -42833,7 +42833,7 @@ namespace Terraria
 												this.ai[0] = -3f;
 												return;
                                             }
-                                            this.damage = CalculateDamage((int)((float)80 * 1.75f), this.Level);
+                                            this.damage = CalculateDamage((int)((float)80 * 1.50f), this.Level);
                                             this.dontTakeDamage = true;
 											this.ai[1] += 1f;
 											if (this.ai[1] >= 32f)
@@ -42932,7 +42932,7 @@ namespace Terraria
 														num1683 = 1f;
 													}
 													vector234 = vector234.RotatedBy((double)(-(double)num1683 * 6.28318548f / 6f), default(Vector2));
-                                                    int DMG = CalculateDamage((int)((float)75 * 1.75f), this.Level);
+                                                    int DMG = CalculateDamage((int)((float)75 * 1.50f), this.Level);
                                                     Projectile.NewProjectile(base.Center.X, base.Center.Y, vector234.X, vector234.Y, 455, DMG, 0f, Main.myPlayer, num1683 * 6.28318548f / 540f, (float)this.whoAmI);
 													this.ai[2] = (vector234.ToRotation() + 9.424778f) * num1683;
 													this.netUpdate = true;
@@ -43019,7 +43019,7 @@ namespace Terraria
 											{
 												Vector2 vector235 = Utils.Vector2FromElipse(this.localAI[0].ToRotationVector2(), value43 * this.localAI[1]);
 												Vector2 vector236 = Vector2.Normalize(v5) * 8f;
-                                                int DMG = CalculateDamage((int)((float)30 * 1.75f), this.Level);
+                                                int DMG = CalculateDamage((int)((float)30 * 1.50f), this.Level);
                                                 Projectile.NewProjectile(base.Center.X + vector235.X, base.Center.Y + vector235.Y, vector236.X, vector236.Y, 462, DMG, 0f, Main.myPlayer, 0f, 0f);
 											}
 										}
@@ -43088,7 +43088,7 @@ namespace Terraria
 											{
 												Vector2 vector238 = num1693.ToRotationVector2();
 												vector238 = Vector2.One;
-                                                int DMG = CalculateDamage((int)((float)1 * 1.75f), this.Level);
+                                                int DMG = CalculateDamage((int)((float)1 * 1.50f), this.Level);
                                                 Projectile.NewProjectile(base.Center.X, base.Center.Y, vector238.X, vector238.Y, 455, DMG, 0f, Main.myPlayer, 0.0104719754f, (float)this.whoAmI);
 											}
 											this.ai[1] += 1f;
@@ -43126,7 +43126,7 @@ namespace Terraria
 												value43 = new Vector2(27f, 59f);
 												Vector2 vector241 = Utils.Vector2FromElipse(this.localAI[0].ToRotationVector2(), value43 * this.localAI[1]);
 												Vector2 vector242 = Vector2.Normalize(v7) * 8f;
-                                                int DMG = CalculateDamage((int)((float)5 * 1.75f), this.Level);
+                                                int DMG = CalculateDamage((int)((float)5 * 1.50f), this.Level);
                                                 Projectile.NewProjectile(base.Center.X + vector241.X, base.Center.Y + vector241.Y, vector242.X, vector242.Y, 462, DMG, 0f, Main.myPlayer, 0f, 0f);
 											}
 											if (this.ai[1] >= 90f)
@@ -43376,7 +43376,7 @@ namespace Terraria
 												{
 													Vector2 vector244 = Utils.Vector2FromElipse(this.localAI[0].ToRotationVector2(), value50 * this.localAI[1]);
 													Vector2 vector245 = Vector2.Normalize(v9) * 8f;
-                                                    int DMG = CalculateDamage((int)((float)35 * 1.75f), this.Level);
+                                                    int DMG = CalculateDamage((int)((float)35 * 1.50f), this.Level);
                                                     Projectile.NewProjectile(base.Center.X + vector244.X, base.Center.Y + vector244.Y, vector245.X, vector245.Y, 462, DMG, 0f, Main.myPlayer, 0f, 0f);
 													return;
 												}
@@ -43445,7 +43445,7 @@ namespace Terraria
 															vec7 = Vector2.UnitY * -1f;
 														}
 														vec7 *= 4f;
-                                                        int DMG = CalculateDamage((int)((float)55 * 1.75f), this.Level);
+                                                        int DMG = CalculateDamage((int)((float)55 * 1.50f), this.Level);
                                                         Projectile.NewProjectile(base.Center.X + vector246.X, base.Center.Y + vector246.Y, vec7.X, vec7.Y, 454, DMG, 0f, Main.myPlayer, 30f, (float)this.whoAmI);
 														return;
 													}
@@ -43566,7 +43566,7 @@ namespace Terraria
 														Vector2 vector248 = base.Center + Vector2.Normalize(vector247) * value50.Length() * 0.4f;
 														Vector2 vector249 = Vector2.Normalize(vector247) * 8f;
 														float ai3 = (6.28318548f * (float)Main.rand.NextDouble() - 3.14159274f) / 30f + 0.0174532924f * this.ai[2];
-                                                        int DMG = CalculateDamage((int)((float)35 * 1.75f), this.Level);
+                                                        int DMG = CalculateDamage((int)((float)35 * 1.50f), this.Level);
                                                         Projectile.NewProjectile(vector248.X, vector248.Y, vector249.X, vector249.Y, 452, DMG, 0f, Main.myPlayer, 0f, ai3);
 														return;
 													}
@@ -43612,7 +43612,7 @@ namespace Terraria
 																num1719 = 1f;
 															}
 															vector251 = vector251.RotatedBy((double)(-(double)num1719 * 6.28318548f / 6f), default(Vector2));
-                                                            int DMG = CalculateDamage((int)((float)50 * 1.75f), this.Level);
+                                                            int DMG = CalculateDamage((int)((float)50 * 1.50f), this.Level);
                                                             Projectile.NewProjectile(base.Center.X, base.Center.Y, vector251.X, vector251.Y, 455, DMG, 0f, Main.myPlayer, num1719 * 6.28318548f / 540f, (float)this.whoAmI);
 															this.ai[2] = (vector251.ToRotation() + 9.424778f) * num1719;
 															this.netUpdate = true;
@@ -44058,7 +44058,7 @@ namespace Terraria
 													this.life = 0;
 													this.HitEffect(0, 10.0);
 													this.active = false;
-													NetMessage.SendData(28, -1, -1, "", this.whoAmI, -1f, 0f, 0f, 0, 0, 0);
+													NetMessage.SendData(28, -1, -1, "", this.whoAmI, -1f, 0f, 0f, 0, 256, 0);
 													List<int> list2 = new List<int>();
 													list2.Add(this.whoAmI);
 													for (int num1780 = 0; num1780 < 200; num1780++)
@@ -44068,7 +44068,7 @@ namespace Terraria
 															Main.npc[num1780].life = 0;
 															Main.npc[num1780].HitEffect(0, 10.0);
 															Main.npc[num1780].active = false;
-															NetMessage.SendData(28, -1, -1, "", this.whoAmI, -1f, 0f, 0f, 0, 0, 0);
+															NetMessage.SendData(28, -1, -1, "", this.whoAmI, -1f, 0f, 0f, 0, 256, 0);
 														}
 													}
 												}
@@ -55945,6 +55945,7 @@ namespace Terraria
 			}
 			if (this.life <= 0)
 			{
+                bool[,] SharedXP = new bool[6, 256];
 				if (this.type == 397 || this.type == 396)
 				{
 					if (this.ai[0] != -2f)
@@ -55986,7 +55987,7 @@ namespace Terraria
                     for (int i = 0; i < 255; i++)
                     {
                         int bossdown = 0;
-                        if (this.tag[i] >= this.defaultHP * 0.5f && this.tapped[i])
+                        if (this.tag[i] >= this.defaultHP * 0.5f)
                         {
                             if (this.type == 50) { bossdown = 1; }//King Slime
                             if (this.type == 4) { bossdown = 2; } //Eye of Cthulhu
@@ -56057,16 +56058,22 @@ namespace Terraria
                             {
                                 this.Exp = 1;
                             }
-                            if (this.Dead == 0 && this.tapped[i] && this.ExptoGive > 0)
+                            if (this.Dead == 0 && this.ExptoGive > 0)
                             {
                                 if (this.tag[i] >= this.defaultHP * 0.5f)
                                 {
+                                    if (!this.tapped[i])
+                                    {
+                                        this.Exp = (int)((double)this.Exp * 0.10d);
+                                        if (this.Exp < 1)
+                                            this.Exp = 1;
+                                    }
                                     if (Main.player[i].team != 0)
                                     {
                                         if (teamxp[Main.player[i].team] < this.Exp)
                                             teamxp[Main.player[i].team] = this.Exp;
                                     }
-                                    NetMessage.SendData(108, -1, -1, "", i, (float)this.Exp, 0f, 0f, 0);
+                                    NetMessage.SendData(108, -1, -1, "", i, (float)this.Exp, this.BannerID(), 0f, 0);
                                     if (this.type == 398 && Main.player[i].Level == 1 && Main.expertMode)
                                     {
                                         NetMessage.SendData(110, -1, -1, "", i, 0, 0f, 0f, 0);
@@ -56078,39 +56085,49 @@ namespace Terraria
                                     if (this.boss)
                                         NetMessage.SendData(25, -1, -1, Main.player[i].name + " helped slay " + this.displayName + ", dealt " + this.tag[i] + " damage (" + String.Format("{0:f2}", (double)(this.tag[i] / (double)this.lifeMax) * 100d) + "%) and gained " + (int)((float)this.Exp * (100 - Main.player[i].EXPRate) / 100f) + " EXP.", 255, 25f, 127f, 255f, 0);
                                 }
-                                else if (this.tag[i] > 0 && this.tapped[i] && this.ExptoGive > 0)
+                                else if (this.tag[i] > 0 && this.ExptoGive > 0)
                                 {
+                                    if (!this.tapped[i])
+                                    {
+                                        int xp = (int)(((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5)))));
+                                        if (xp < 1)
+                                            xp = 1;
+                                        if (xp > (int)((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5)))))
+                                            xp = (int)((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5))));
+                                        this.Exp = xp;
+                                    }
+                                    else
+                                    {
+                                        int xp = (int)(((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5)))));
+                                        if (xp < 1)
+                                            xp = 1;
+                                        this.Exp = xp;
+                                    }
                                     if (this.boss)
                                         NetMessage.SendData(25, -1, -1, Main.player[i].name + " helped slay " + this.displayName + ", dealt " + this.tag[i] + " damage (" + String.Format("{0:f2}", (double)(this.tag[i] / (double)this.lifeMax) * 100d) + "%) and gained " + (int)((float)this.Exp * (100 - Main.player[i].EXPRate) / 100f) + " EXP.", 255, 25f, 127f, 255f, 0);
-                                    NetMessage.SendData(108, -1, -1, "", i, (float)((int)Math.Ceiling((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5))))), 0f, 0f, 0);
+                                    NetMessage.SendData(108, -1, -1, "", i, (float)((int)Math.Ceiling((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5))))), this.BannerID(), 0f, 0);
                                     if (Main.player[i].team != 0)
                                     {
-                                        if (teamxp[Main.player[i].team] < (int)Math.Ceiling((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5)))))
-                                            teamxp[Main.player[i].team] = (int)Math.Ceiling((double)this.Exp * (((double)this.tag[i] / ((double)this.defaultHP * 0.5))));
+                                        if (teamxp[Main.player[i].team] < this.Exp)
+                                            teamxp[Main.player[i].team] = this.Exp;
                                     }
                                 }
                                 if (teamxp[Main.player[i].team] > 0)
                                 {
                                     for (int i2 = 0; i2 < 255; i2++)
                                     {
-                                        for (int i3 = 1; i3 < 5; i3++)
+                                        for (int i3 = 1; i3 < 6; i3++)
                                         {
                                             int XP = 0;
-                                            if (Main.player[i2].team == Main.player[i].team)
+                                            if (Main.player[i2].team == Main.player[i].team && this.Exp >= teamxp[i3] && this.Exp != 0)
                                             {
                                                 if (i2 != i && (Main.player[i2].CheckAbility(38)) && Main.player[i2].team == i3)
                                                 {
-                                                    XP += (int)((float)teamxp[i3] * 0.1f);
-                                                    if (XP < 1) { XP = 1; }
+                                                    SharedXP[i3, i2] = true;
                                                 }
                                                 if (i2 != i && (Main.player[i2].CheckAbility(39)) && Main.player[i2].team == i3)
                                                 {
-                                                    XP += (int)((float)teamxp[i3] * 0.25f);
-                                                    if (XP < 1) { XP = 1; }
-                                                }
-                                                if (i2 != i && XP > 0 && Main.player[i2].team == i3)
-                                                {
-                                                    NetMessage.SendData(108, -1, -1, "", i2, (float)XP, 0f, 0f, 0);
+                                                    SharedXP[i3, i2] = true;
                                                 }
                                             }
                                         }
@@ -56119,6 +56136,30 @@ namespace Terraria
                             }
                         }
                         this.tag[i] = 0;
+                    }
+                    for (int i2 = 0; i2 < 255; i2++)
+                    {
+                        for (int i3 = 1; i3 < 6; i3++)
+                        {
+                            int XP = 0;
+                            if (Main.player[i2].team == i3 && SharedXP[i3, i2])
+                            {
+                                if ((Main.player[i2].CheckAbility(38)) && Main.player[i2].team == i3)
+                                {
+                                    XP += (int)((float)teamxp[i3] * 0.1f);
+                                    if (XP < 1) { XP = 1; }
+                                }
+                                if ((Main.player[i2].CheckAbility(39)) && Main.player[i2].team == i3)
+                                {
+                                    XP += (int)((float)teamxp[i3] * 0.25f);
+                                    if (XP < 1) { XP = 1; }
+                                }
+                                if (XP > 0 && Main.player[i2].team == i3)
+                                {
+                                    NetMessage.SendData(108, -1, -1, "", i2, (float)XP, this.BannerID(), 0f, 0);
+                                }
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -60166,7 +60207,8 @@ namespace Terraria
 				if (Main.player[num74].statMana < Main.player[num74].statManaMax3)
 				{
 					DropLoot(this.position, this.width, this.height, 184, 1, false, 0, false, false);
-				}
+                    Console.WriteLine("Mana: " + Main.player[num74].statMana);
+                }
 			}
 			float num75 = this.value;
 			if (this.midas)
@@ -64931,18 +64973,18 @@ namespace Terraria
 			}
 			return armorPenetration;
 		}
-		public double StrikeNPCNoInteraction(int Damage, float knockBack, int hitDirection, bool crit = false, bool noEffect = false, bool fromNet = false, int PlayerStrike = 256, bool Tap = false)
+		public double StrikeNPCNoInteraction(int Damage, float knockBack, int hitDirection, bool crit = false, bool noEffect = false, bool fromNet = false, int PlayerStrike = 256, bool Tap = false, bool Banner = false)
 		{
 			if (Main.netMode == 0)
 			{
 				NPC.ignorePlayerInteractions++;
 			}
-			return this.StrikeNPC(Damage, knockBack, hitDirection, crit, noEffect, fromNet, null, PlayerStrike, Tap);
+			return this.StrikeNPC(Damage, knockBack, hitDirection, crit, noEffect, fromNet, null, PlayerStrike, Tap, Banner);
 		}
-		public double StrikeNPC(int Damage, float knockBack, int hitDirection, bool crit = false, bool noEffect = false, bool fromNet = false, Player player = null, int PlayerStrike = 256, bool Tap = false)
+		public double StrikeNPC(int Damage, float knockBack, int hitDirection, bool crit = false, bool noEffect = false, bool fromNet = false, Player player = null, int PlayerStrike = 256, bool Tap = false, bool Banner = false)
 		{
 
-            bool handled = ServerApi.Hooks.InvokeNpcStrike(this, ref Damage, ref knockBack, ref hitDirection, ref crit, ref noEffect, ref fromNet, player);
+            bool handled = ServerApi.Hooks.InvokeNpcStrike(this, ref Damage, ref knockBack, ref hitDirection, ref crit, ref noEffect, ref fromNet, player, ref PlayerStrike, ref Tap, ref Banner);
 			if (handled)
 				return 0.0;
 
@@ -64972,7 +65014,18 @@ namespace Terraria
             {
                 num = Main.CalculateDamage((int)num, this.defense);
             }
-			if (crit)
+            if (Banner)
+            {
+                if (Main.expertMode)
+                {
+                    num *= 2;
+                }
+                else
+                {
+                    num = (int)((double)num * 1.5);
+                }
+            }
+            if (crit)
 			{
 				num *= 2.0;
 			}
@@ -65094,7 +65147,7 @@ namespace Terraria
                         {
                             Main.npc[this.realLife].life = 0;
                         }
-                        if (PlayerStrike < 255 && this.tapped[PlayerStrike])
+                        if (PlayerStrike < 255)
                         {
                             Main.npc[this.realLife].tag[PlayerStrike] += (int)num;
                         }
@@ -65106,7 +65159,7 @@ namespace Terraria
                         {
                             this.life = 0;
                         }
-                        if (PlayerStrike < 255 && this.tapped[PlayerStrike])
+                        if (PlayerStrike < 255)
                         {
                             this.tag[PlayerStrike] += (int)num;
                         }
@@ -67034,7 +67087,7 @@ namespace Terraria
                                     Main.npc[whoAmI].StrikeNPCNoInteraction(9999, 0f, 0, false, false, false);
                                     if (Main.netMode == 2)
                                     {
-                                        NetMessage.SendData(28, -1, -1, "", whoAmI, 9999f, 0f, 0f, 0, 0, 0);
+                                        NetMessage.SendData(28, -1, -1, "", whoAmI, 9999f, 0f, 0f, 0, 256, 0);
                                     }
                                 }
                             }
@@ -67065,7 +67118,7 @@ namespace Terraria
                                     Main.npc[whoAmI2].StrikeNPCNoInteraction(9999, 0f, 0, false, false, false);
                                     if (Main.netMode == 2)
                                     {
-                                        NetMessage.SendData(28, -1, -1, "", whoAmI2, 9999f, 0f, 0f, 0, 0, 0);
+                                        NetMessage.SendData(28, -1, -1, "", whoAmI2, 9999f, 0f, 0f, 0, 256, 0);
                                     }
                                 }
                             }
@@ -67284,7 +67337,7 @@ namespace Terraria
 									double num43 = Main.npc[i].StrikeNPCNoInteraction(num40, (float)num41, num42, false, false, false);
 									if (Main.netMode != 0)
 									{
-										NetMessage.SendData(28, -1, -1, "", i, (float)num40, (float)num41, (float)num42, 0, 0, 0);
+										NetMessage.SendData(28, -1, -1, "", i, (float)num40, (float)num41, (float)num42, 0, 256, 0);
 									}
 									this.netUpdate = true;
 									this.immune[255] = 30;
@@ -67296,7 +67349,7 @@ namespace Terraria
 										Main.npc[num39].StrikeNPCNoInteraction(num40, (float)num41, num42, false, false, false);
 										if (Main.netMode != 0)
 										{
-											NetMessage.SendData(28, -1, -1, "", num39, (float)num40, (float)num41, (float)num42, 0, 0, 0);
+											NetMessage.SendData(28, -1, -1, "", num39, (float)num40, (float)num41, (float)num42, 0, 256, 0);
 										}
 										Main.npc[num39].netUpdate = true;
 										Main.npc[num39].immune[255] = 30;
@@ -67325,7 +67378,7 @@ namespace Terraria
                             this.StrikeNPCNoInteraction(90 + (this.Level * 3), 0f, 0, false, false, false);
                             if (Main.netMode == 2 && Main.netMode != 0)
 							{
-								NetMessage.SendData(28, -1, -1, "", this.whoAmI, 90 + (this.Level * 3), 0f, 0f, 0, 0, 0);
+								NetMessage.SendData(28, -1, -1, "", this.whoAmI, 90 + (this.Level * 3), 0f, 0f, 0, 256, 0);
 							}
 						}
 					}
@@ -69661,7 +69714,7 @@ namespace Terraria
 								this.StrikeNPCNoInteraction(2, 0f, 0, false, false, false);
 								if (Main.netMode != 0)
 								{
-									NetMessage.SendData(28, -1, -1, "", this.whoAmI, 2f, 0f, 0f, 0, 0, 0);
+									NetMessage.SendData(28, -1, -1, "", this.whoAmI, 2f, 0f, 0f, 0, 256, 0);
 								}
 							}
 						}
